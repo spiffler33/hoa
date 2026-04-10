@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yes Lifers — Launch Wedge Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0b0f1a;
+    --surface: #131825;
+    --surface-2: #1a2035;
+    --border: #242d42;
+    --text: #e4e8f1;
+    --text-dim: #8892a8;
+    --text-muted: #5a6380;
+    --accent: #6c5ce7;
+    --accent-glow: rgba(108, 92, 231, 0.15);
+    --accent-2: #00cec9;
+    --accent-2-glow: rgba(0, 206, 201, 0.12);
+    --warning: #fdcb6e;
+    --success: #00b894;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --max-w: 720px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Layout ───────────────────────────── */
+  .container {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ── Header ───────────────────────────── */
+  header {
+    padding: 48px 0 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .brand-mark {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 16px; color: #fff;
+  }
+  .brand-name {
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.02em;
+  }
+  .header-subtitle {
+    color: var(--text-dim);
+    font-size: 14px;
+    margin-top: 4px;
+  }
+
+  /* ── Sections ─────────────────────────── */
+  section {
+    padding: 56px 0 0;
+  }
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    margin-bottom: 24px;
+  }
+
+  /* ── Part 1: Context ──────────────────── */
+  .context-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .context-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .context-bullet {
+    flex-shrink: 0;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--accent-glow);
+    border: 1px solid rgba(108, 92, 231, 0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: var(--accent);
+    margin-top: 2px;
+  }
+  .context-list li p {
+    color: var(--text-dim);
+    font-size: 15px;
+    line-height: 1.65;
+  }
+  .context-list li p strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  /* ── Part 2: Wedge Card ───────────────── */
+  .wedge-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    margin-bottom: 32px;
+  }
+  .wedge-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--accent-2);
+    letter-spacing: -0.01em;
+  }
+  .wedge-card p {
+    color: var(--text-dim);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* ── Fit Table ────────────────────────── */
+  .fit-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 8px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .fit-table th,
+  .fit-table td {
+    text-align: left;
+    padding: 14px 18px;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .fit-table th {
+    background: var(--surface-2);
+    font-weight: 600;
+    color: var(--text-dim);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .fit-table tr:last-child td { border-bottom: none; }
+  .fit-table td:first-child {
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+  }
+  .fit-table td:last-child {
+    color: var(--text-dim);
+  }
+  .fit-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(0, 184, 148, 0.12);
+    color: var(--success);
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  /* ── Lead Messages ────────────────────── */
+  .lead-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .lead-msg {
+    background: var(--surface-2);
+    border-left: 3px solid var(--accent);
+    padding: 16px 20px;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  /* ── Form ─────────────────────────────── */
+  .form-section {
+    padding-bottom: 80px;
+  }
+  .question-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 28px 24px;
+    margin-bottom: 24px;
+  }
+  .question-why {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.55;
+    margin-bottom: 12px;
+    padding: 8px 12px;
+    background: var(--accent-glow);
+    border-radius: var(--radius-sm);
+    border-left: 2px solid var(--accent);
+  }
+  .question-text {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    letter-spacing: -0.01em;
+  }
+  .question-number {
+    color: var(--accent);
+    margin-right: 4px;
+  }
+
+  /* Radio + Checkbox */
+  .option-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .option-group.horizontal {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .option-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    font-size: 14px;
+    color: var(--text-dim);
+  }
+  .option-label:hover {
+    border-color: var(--accent);
+    background: var(--accent-glow);
+  }
+  .option-label input[type="radio"],
+  .option-label input[type="checkbox"] {
+    accent-color: var(--accent);
+    width: 16px; height: 16px;
+    cursor: pointer;
+  }
+  .option-label.selected {
+    border-color: var(--accent);
+    background: var(--accent-glow);
+    color: var(--text);
+  }
+
+  /* Text inputs */
+  textarea, input[type="text"] {
+    width: 100%;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.6;
+    resize: vertical;
+    transition: border-color 0.15s;
+  }
+  textarea:focus, input[type="text"]:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+  textarea::placeholder, input[type="text"]::placeholder {
+    color: var(--text-muted);
+  }
+  .conditional-field {
+    display: none;
+    margin-top: 12px;
+  }
+  .conditional-field.visible {
+    display: block;
+  }
+  .field-spacer { margin-top: 12px; }
+  .field-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+
+  /* Submit */
+  .submit-wrap {
+    text-align: center;
+    padding: 8px 0 0;
+  }
+  .submit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 48px;
+    background: linear-gradient(135deg, var(--accent), #8b7cf7);
+    color: #fff;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 700;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: transform 0.12s, box-shadow 0.2s;
+    box-shadow: 0 4px 24px rgba(108, 92, 231, 0.3);
+  }
+  .submit-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 32px rgba(108, 92, 231, 0.45);
+  }
+  .submit-btn:active { transform: translateY(0); }
+  .submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .submit-btn .spinner {
+    display: none;
+    width: 18px; height: 18px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+  .submit-btn.loading .spinner { display: inline-block; }
+  .submit-btn.loading .btn-text { display: none; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Thank you */
+  .thank-you {
+    display: none;
+    text-align: center;
+    padding: 80px 24px;
+  }
+  .thank-you.visible { display: block; }
+  .thank-you-icon {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: rgba(0, 184, 148, 0.12);
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+  .thank-you h2 {
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 12px;
+  }
+  .thank-you p {
+    color: var(--text-dim);
+    font-size: 15px;
+    max-width: 460px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* Error banner */
+  .error-banner {
+    display: none;
+    background: rgba(214, 48, 49, 0.1);
+    border: 1px solid rgba(214, 48, 49, 0.3);
+    border-radius: var(--radius-sm);
+    padding: 14px 18px;
+    color: #ff7675;
+    font-size: 14px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .error-banner.visible { display: block; }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 56px 0 0;
+  }
+
+  /* Footer */
+  footer {
+    padding: 32px 0 48px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+
+  /* ── Responsive ───────────────────────── */
+  @media (max-width: 600px) {
+    .container { padding: 0 16px; }
+    header { padding: 32px 0 20px; }
+    section { padding: 40px 0 0; }
+    .section-title { font-size: 22px; }
+    .wedge-card { padding: 20px; }
+    .question-block { padding: 20px; }
+    .fit-table th, .fit-table td { padding: 10px 12px; font-size: 13px; }
+    .option-group.horizontal { flex-direction: column; }
+    .submit-btn { width: 100%; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════
+     GOOGLE APPS SCRIPT SETUP INSTRUCTIONS
+     ════════════════════════════════════════════
+
+  1. Create a new Google Sheet
+     → Go to https://sheets.google.com → Blank spreadsheet
+     → Name it "Yes Lifers — Founder Wedge Feedback"
+     → In Row 1, add these headers (one per column):
+       A: Timestamp
+       B: Name
+       C: Wedge Match
+       D: Wedge Match — Alt Segment
+       E: Weakest Dimensions
+       F: Weakest Dimensions — Why
+       G: Messaging Fit
+       H: Messaging — Changes
+       I: Overlooked Wedge
+       J: Hard Constraints
+
+  2. Open Apps Script
+     → In your Sheet: Extensions → Apps Script
+     → Delete any existing code in Code.gs
+
+  3. Paste this code into Code.gs:
+
+     ─────── START APPS SCRIPT CODE ───────
+
+     function doPost(e) {
+       var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+       var data = JSON.parse(e.postData.contents);
+
+       sheet.appendRow([
+         new Date().toISOString(),
+         data.name || "",
+         data.wedge_match || "",
+         data.wedge_match_alt || "",
+         (data.weakest_dimensions || []).join(", "),
+         data.weakest_why || "",
+         data.messaging_fit || "",
+         data.messaging_changes || "",
+         data.overlooked_wedge || "",
+         data.hard_constraints || ""
+       ]);
+
+       return ContentService
+         .createTextOutput(JSON.stringify({ status: "ok" }))
+         .setMimeType(ContentService.MimeType.JSON);
+     }
+
+     ─────── END APPS SCRIPT CODE ─────────
+
+  4. Deploy as web app
+     → Click "Deploy" → "New deployment"
+     → Type: "Web app"
+     → Execute as: "Me"
+     → Who has access: "Anyone"
+     → Click "Deploy"
+     → Authorize when prompted (Review Permissions → your account → Allow)
+     → Copy the Web app URL
+
+  5. Paste the URL below (search for REPLACE_WITH_YOUR_GOOGLE_APPS_SCRIPT_URL)
+
+     Done! Form submissions will appear as rows in your Sheet.
+
+     ════════════════════════════════════════════ -->
+
+<div class="container">
+
+  <!-- ── Header ──────────────────────────── -->
+  <header>
+    <div class="brand">
+      <div class="brand-mark">YL</div>
+      <div class="brand-name">Yes Lifers</div>
+    </div>
+    <p class="header-subtitle">Launch Wedge Review &mdash; Founder Input Needed</p>
+  </header>
+
+  <!-- ── Part 1: Why I Need 5 Minutes ────── -->
+  <section>
+    <div class="section-label">Part 1</div>
+    <h2 class="section-title">Why I need 5 minutes from you</h2>
+    <ul class="context-list">
+      <li>
+        <span class="context-bullet">1</span>
+        <p><strong>"Indian earners aged 25-45" is the eventual market — not the launch audience.</strong> We can't go broad on day one. A community-first strategy dies if the first cohort is too diffuse.</p>
+      </li>
+      <li>
+        <span class="context-bullet">2</span>
+        <p><strong>We need a tight beachhead</strong> where pain is acute, identity is strong, founder credibility lands hard, and word-of-mouth travels fast through existing networks.</p>
+      </li>
+      <li>
+        <span class="context-bullet">3</span>
+        <p><strong>I'm proposing a specific wedge below.</strong> I need you to pressure-test it before I build the full GTM plan around it. Poke holes now — not after launch.</p>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ── Part 2: The Proposed Wedge ──────── -->
+  <section>
+    <div class="section-label">Part 2</div>
+    <h2 class="section-title">The proposed wedge</h2>
+
+    <!-- WHO -->
+    <div class="wedge-card">
+      <h3>Who we're targeting first</h3>
+      <p>
+        <strong>Tech couples &amp; senior ICs</strong> in Bangalore, Mumbai, Pune. Age 28-38. Combined household income ₹3L-8L/month. Dual income or single high earner. 0-1 young child. Already investing (SIPs, some equity) but have <strong>no financial plan</strong>. Making big life-money decisions reactively.
+      </p>
+    </div>
+
+    <!-- WHY — Fit Table -->
+    <div class="wedge-card">
+      <h3>Why them first — wedge fit scorecard</h3>
+      <table class="fit-table">
+        <thead>
+          <tr>
+            <th>Dimension</th>
+            <th>Fit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Pain intensity</td>
+            <td><span class="fit-tag">High</span>Earning well but no plan — "quiet uncertainty" about whether they're doing it right</td>
+          </tr>
+          <tr>
+            <td>Identity readiness</td>
+            <td><span class="fit-tag">High</span>Already self-identify as "intentional" about careers, health, lifestyle</td>
+          </tr>
+          <tr>
+            <td>Founder credibility</td>
+            <td><span class="fit-tag">High</span>SEBI registration + advisory track record lands hardest with this cohort</td>
+          </tr>
+          <tr>
+            <td>Distribution density</td>
+            <td><span class="fit-tag">High</span>Concentrated in tech networks, LinkedIn, Bangalore/Mumbai circles</td>
+          </tr>
+          <tr>
+            <td>Willingness to pay</td>
+            <td><span class="fit-tag">High</span>₹2,999-4,999 is trivial at this income; barrier is trust, not price</td>
+          </tr>
+          <tr>
+            <td>Decision urgency</td>
+            <td><span class="fit-tag">High</span>Actively facing home purchase, ESOP exercise, career switches, first child planning</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Lead Messages -->
+    <div class="wedge-card">
+      <h3>Lead messages for this wedge</h3>
+      <div class="lead-messages">
+        <div class="lead-msg">"You optimise your code reviews. When did you last optimise your money?"</div>
+        <div class="lead-msg">"Your FIRE spreadsheet assumes 14% returns. Want to know what actually works?"</div>
+        <div class="lead-msg">"Bangalore real estate: the ₹1.5 Cr decision you're making on vibes"</div>
+        <div class="lead-msg">"Your ESOPs vested. Now what?"</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Part 3 + 4: Your Input (Form) ───── -->
+  <section class="form-section" id="form-section">
+    <div class="section-label">Part 3</div>
+    <h2 class="section-title">Your input</h2>
+
+    <form id="founder-form" novalidate>
+
+      <!-- Q1: Wedge Match -->
+      <div class="question-block">
+        <div class="question-why">Why I'm asking: If your current advisory clients already skew this way, it validates the hypothesis. If not, I need to know.</div>
+        <p class="question-text"><span class="question-number">1.</span> Does this wedge match your gut sense of who responds best to House of Alpha today?</p>
+        <div class="option-group" id="q1-options">
+          <label class="option-label">
+            <input type="radio" name="wedge_match" value="Yes strongly"> Yes strongly
+          </label>
+          <label class="option-label">
+            <input type="radio" name="wedge_match" value="Mostly yes"> Mostly yes
+          </label>
+          <label class="option-label">
+            <input type="radio" name="wedge_match" value="Not really"> Not really
+          </label>
+          <label class="option-label">
+            <input type="radio" name="wedge_match" value="No — our best clients look different"> No — our best clients look different
+          </label>
+        </div>
+        <div class="conditional-field" id="q1-followup">
+          <div class="field-label">Who do you think responds best?</div>
+          <textarea name="wedge_match_alt" rows="3" placeholder="Describe the segment you see responding strongest…"></textarea>
+        </div>
+      </div>
+
+      <!-- Q2: Weakest Dimensions -->
+      <div class="question-block">
+        <div class="question-why">Why I'm asking: I want to stress-test the weakest links before building the plan around this.</div>
+        <p class="question-text"><span class="question-number">2.</span> Of the 6 dimensions — which 1-2 feel weakest to you?</p>
+        <div class="option-group" id="q2-options">
+          <label class="option-label">
+            <input type="checkbox" name="weakest_dimensions" value="Pain intensity"> Pain intensity
+          </label>
+          <label class="option-label">
+            <input type="checkbox" name="weakest_dimensions" value="Identity readiness"> Identity readiness
+          </label>
+          <label class="option-label">
+            <input type="checkbox" name="weakest_dimensions" value="Founder credibility"> Founder credibility
+          </label>
+          <label class="option-label">
+            <input type="checkbox" name="weakest_dimensions" value="Distribution density"> Distribution density
+          </label>
+          <label class="option-label">
+            <input type="checkbox" name="weakest_dimensions" value="Willingness to pay"> Willingness to pay
+          </label>
+          <label class="option-label">
+            <input type="checkbox" name="weakest_dimensions" value="Decision urgency"> Decision urgency
+          </label>
+        </div>
+        <div class="field-spacer">
+          <div class="field-label">Why do these feel weak?</div>
+          <textarea name="weakest_why" rows="3" placeholder="What makes you doubt these dimensions for this segment?"></textarea>
+        </div>
+      </div>
+
+      <!-- Q3: Messaging Fit -->
+      <div class="question-block">
+        <div class="question-why">Why I'm asking: If founders aren't excited about the messaging angle, we need to fix it now — not after launch.</div>
+        <p class="question-text"><span class="question-number">3.</span> Do the lead messages above feel like things you'd be proud to put out under the Yes Lifers brand?</p>
+        <div class="option-group" id="q3-options">
+          <label class="option-label">
+            <input type="radio" name="messaging_fit" value="Yes, love them"> Yes, love them
+          </label>
+          <label class="option-label">
+            <input type="radio" name="messaging_fit" value="Mostly, with tweaks"> Mostly, with tweaks
+          </label>
+          <label class="option-label">
+            <input type="radio" name="messaging_fit" value="Not really our voice"> Not really our voice
+          </label>
+        </div>
+        <div class="field-spacer">
+          <div class="field-label">Any messaging you'd change or add?</div>
+          <textarea name="messaging_changes" rows="3" placeholder="Specific tweaks, alternative angles, lines that don't land…"></textarea>
+        </div>
+      </div>
+
+      <!-- Q4: Overlooked Wedge -->
+      <div class="question-block">
+        <div class="question-why">Why I'm asking: You know the market. I might be anchored on tech because of the data. Challenge me.</div>
+        <p class="question-text"><span class="question-number">4.</span> Is there a wedge segment you think we're overlooking that might be even better?</p>
+        <textarea name="overlooked_wedge" rows="4" placeholder="A different segment, geography, life-stage, profession…"></textarea>
+      </div>
+
+      <!-- Q5: Hard Constraints -->
+      <div class="question-block">
+        <div class="question-why">Why I'm asking: I don't want to build a plan that hits a wall you already know about.</div>
+        <p class="question-text"><span class="question-number">5.</span> Any hard constraints I should know about?</p>
+        <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 12px;">e.g., "we cannot do X in Bangalore", "we already tried Y and it failed", "our SEBI registration limits Z"</p>
+        <textarea name="hard_constraints" rows="4" placeholder="Regulatory limits, past failures, partnership constraints…"></textarea>
+      </div>
+
+      <!-- Submit -->
+      <div class="error-banner" id="error-banner"></div>
+      <div class="submit-wrap">
+        <button type="submit" class="submit-btn" id="submit-btn">
+          <span class="btn-text">Submit feedback</span>
+          <span class="spinner"></span>
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Thank You -->
+  <div class="thank-you" id="thank-you">
+    <div class="thank-you-icon">&#10003;</div>
+    <h2>Got it. Thank you.</h2>
+    <!-- UPDATE the date below before sharing -->
+    <p>This goes straight into the GTM plan. I'll share the final Section 1 with you by <strong>Friday, April 17</strong>.</p>
+  </div>
+
+  <div class="divider"></div>
+  <footer>
+    Yes Lifers &middot; House of Alpha &middot; Launch Strategy 2026
+  </footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  // ── Google Apps Script endpoint ──────────
+  // REPLACE_WITH_YOUR_GOOGLE_APPS_SCRIPT_URL
+  var ENDPOINT = 'https://script.google.com/macros/s/AKfycbwQWTf0IQbGGv-yXf3YPaN4IimFTOUCnKYJySfApzlaGgOg_9GjXmWDm61nMwwMuBUxoA/exec';
+
+  // ── Interactive option styling ───────────
+  document.querySelectorAll('.option-label input').forEach(function (input) {
+    input.addEventListener('change', function () {
+      var group = input.closest('.option-group');
+      if (input.type === 'radio') {
+        group.querySelectorAll('.option-label').forEach(function (l) { l.classList.remove('selected'); });
+      }
+      if (input.checked) {
+        input.closest('.option-label').classList.add('selected');
+      } else {
+        input.closest('.option-label').classList.remove('selected');
+      }
+    });
+  });
+
+  // ── Q1 conditional follow-up ─────────────
+  var q1Radios = document.querySelectorAll('input[name="wedge_match"]');
+  var q1Followup = document.getElementById('q1-followup');
+  q1Radios.forEach(function (r) {
+    r.addEventListener('change', function () {
+      var val = document.querySelector('input[name="wedge_match"]:checked').value;
+      if (val === 'Not really' || val === 'No — our best clients look different') {
+        q1Followup.classList.add('visible');
+      } else {
+        q1Followup.classList.remove('visible');
+      }
+    });
+  });
+
+  // ── Form submission ──────────────────────
+  var form = document.getElementById('founder-form');
+  var btn = document.getElementById('submit-btn');
+  var errorBanner = document.getElementById('error-banner');
+  var thankYou = document.getElementById('thank-you');
+  var formSection = document.getElementById('form-section');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    errorBanner.classList.remove('visible');
+
+    // Collect data
+    var wedgeMatch = getRadioValue('wedge_match');
+    var weakestDims = [];
+    document.querySelectorAll('input[name="weakest_dimensions"]:checked').forEach(function (cb) {
+      weakestDims.push(cb.value);
+    });
+
+    var payload = {
+      name: 'Bhuvana',
+      wedge_match: wedgeMatch || '',
+      wedge_match_alt: form.elements.wedge_match_alt ? form.elements.wedge_match_alt.value.trim() : '',
+      weakest_dimensions: weakestDims,
+      weakest_why: form.elements.weakest_why.value.trim(),
+      messaging_fit: getRadioValue('messaging_fit') || '',
+      messaging_changes: form.elements.messaging_changes.value.trim(),
+      overlooked_wedge: form.elements.overlooked_wedge.value.trim(),
+      hard_constraints: form.elements.hard_constraints.value.trim()
+    };
+
+    // Submit
+    btn.classList.add('loading');
+    btn.disabled = true;
+
+    fetch(ENDPOINT, {
+      method: 'POST',
+      mode: 'no-cors',          // Apps Script doesn't support CORS preflight on custom domains
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(function () {
+      // no-cors returns opaque response; treat as success
+      formSection.style.display = 'none';
+      thankYou.classList.add('visible');
+      window.scrollTo({ top: thankYou.offsetTop - 80, behavior: 'smooth' });
+    })
+    .catch(function () {
+      showError('Something went wrong. Check your connection and try again.');
+      btn.classList.remove('loading');
+      btn.disabled = false;
+    });
+  });
+
+  function getRadioValue(name) {
+    var el = document.querySelector('input[name="' + name + '"]:checked');
+    return el ? el.value : '';
+  }
+
+  function showError(msg) {
+    errorBanner.textContent = msg;
+    errorBanner.classList.add('visible');
+    errorBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+})();
+</script>
+</body>
+</html>
