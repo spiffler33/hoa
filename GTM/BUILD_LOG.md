@@ -12,7 +12,7 @@ A single-page React application that serves as the daily operating cockpit for t
 - [x] Task 3: Static data files — contentBriefs, referenceContent, killCriteria
 - [x] Task 4: Data layer — sheetsApi, localStore, offline fallback
 - [x] Task 5: Settings view — Sheet connection, phase config
-- [ ] Task 6: Today view — Daily cadence, alerts, content due
+- [x] Task 6: Today view — Daily cadence, alerts, content due
 - [ ] Task 7: Weekly Review view — Metric input, status badges, save
 - [ ] Task 8: Weekly Review view — Trend sparklines, copy-to-clipboard
 - [ ] Task 9: Playbook view — Phase tabs, checklists, exit criteria, progress
@@ -134,6 +134,22 @@ A single-page React application that serves as the daily operating cockpit for t
 **Files created/modified:**
 - `gtm-app/src/views/SettingsView.jsx` (modified — placeholder → full view)
 - `gtm-app/src/views/SettingsView.css` (new)
+
+### Task 6 — Today View: Daily cadence, alerts, content due (2026-04-10)
+
+**What was done:**
+- Replaced TodayView placeholder with a four-section view (Phase Banner, Alerts, Daily Checklist, Content Due) using useState + useEffect with async data loading
+- Phase banner: Time-of-day greeting, phase label (Phase 0 — Foundation, etc.), computed week number from `phaseStartDate`, day name, and phase objective from phaseChecklists
+- Alerts section: Loads latest metrics via `loadMetrics({ latest: true })`, compares each value against stageGates thresholds for the current phase. Displays traffic-light dots (green/amber/red/none) with value and target. Summary badge counts for red and amber. Click-to-expand reveals prescribed action text. Handles both single-object and array-of-rows metric responses.
+- Daily checklist: Resolves today's tasks from cadence.js using phase-aware lookup — Phase 0 uses `cadence.phase_0[weekNum][dayKey]` (week-specific), Phase 1+ uses `cadence.phase_1[dayKey]` (recurring rhythm). Checkboxes toggle local state only (daily reset, not persisted). Shows time and owner metadata.
+- Content due: Loads content calendar via `loadContentCalendar()`, filters to items where dueDate <= today and status !== 'published'. Overdue items get a red left border and "overdue" badge alongside the status badge.
+- Handles empty/loading/no-data states gracefully for all sections. Phases 2–3 have no cadence data — shows "No daily cadence defined for this phase."
+- Created TodayView.css: banner styling, card layout, alert dots and expand animation, checklist with accent-colored checkboxes, content items with status badges (drafted/scheduled/published/pending/overdue) — all using CSS custom properties
+- Build verified: `npm run build` passes (51 modules, 567ms — CSS nearly doubled to 9.27 KB with new view styles)
+
+**Files created/modified:**
+- `gtm-app/src/views/TodayView.jsx` (modified — placeholder → full view)
+- `gtm-app/src/views/TodayView.css` (new)
 
 ---
 
