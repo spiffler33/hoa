@@ -11,7 +11,7 @@ A single-page React application that serves as the daily operating cockpit for t
 - [x] Task 2: Static data files — stageGates, cadence, phaseChecklists
 - [x] Task 3: Static data files — contentBriefs, referenceContent, killCriteria
 - [x] Task 4: Data layer — sheetsApi, localStore, offline fallback
-- [ ] Task 5: Settings view — Sheet connection, phase config
+- [x] Task 5: Settings view — Sheet connection, phase config
 - [ ] Task 6: Today view — Daily cadence, alerts, content due
 - [ ] Task 7: Weekly Review view — Metric input, status badges, save
 - [ ] Task 8: Weekly Review view — Trend sparklines, copy-to-clipboard
@@ -119,6 +119,21 @@ A single-page React application that serves as the daily operating cockpit for t
 - `gtm-app/src/utils/sheetsApi.js` (4.1 KB)
 - `gtm-app/src/utils/localStore.js` (2.4 KB)
 - `gtm-app/src/utils/dataLayer.js` (4.6 KB)
+
+### Task 5 — Settings View: Sheet connection, phase config, status (2026-04-10)
+
+**What was done:**
+- Replaced SettingsView placeholder with a full three-section view using React hooks (useState, useEffect, useCallback)
+- Connection section: Apps Script URL and Sheet ID inputs, "Test Connection" button that saves config to localStorage then calls `loadConfig()` to verify the remote round-trip, "Save" button that persists all settings via `setConfig()`
+- Phase section: Dropdown to select current phase (0–3) showing week ranges from phaseChecklists data, date picker for phase start date, dynamic display of phase objective and collapsible exit criteria list
+- Status section: Connection status badge (green/red/muted for connected/disconnected/not configured), write queue length from `getWriteQueue()`, conditional "Flush Queue" button that calls `flushWriteQueue()` and reports flushed/failed counts
+- Created SettingsView.css with card layout, field styles, button components (.btn, .btn--primary, .btn--outline), inline toast messages, phase description panel, and status grid — all using CSS custom properties from index.css
+- Imports: `loadConfig` and `flushWriteQueue` from dataLayer (remote-aware); `setConfig`, `getConfig`, `getWriteQueue` from localStore (local-only operations); `phaseChecklists` from data
+- Build verified: `npm run build` passes (48 modules, 563ms — first view now pulls in data layer + static data via real imports)
+
+**Files created/modified:**
+- `gtm-app/src/views/SettingsView.jsx` (modified — placeholder → full view)
+- `gtm-app/src/views/SettingsView.css` (new)
 
 ---
 

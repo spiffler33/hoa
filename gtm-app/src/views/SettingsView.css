@@ -1,0 +1,201 @@
+/* ── SettingsView ── */
+
+.settings-view {
+  display: flex;
+  flex-direction: column;
+  gap: var(--section-gap);
+}
+
+/* ── Card ── */
+
+.settings-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: var(--card-padding);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.settings-card__title {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+}
+
+.settings-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ── Fields ── */
+
+.settings-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.settings-field__label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.settings-field__input {
+  width: 100%;
+}
+
+.settings-row {
+  display: flex;
+  gap: 16px;
+}
+
+.settings-field--half {
+  flex: 1;
+}
+
+/* ── Buttons ── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: var(--radius-button);
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn--primary {
+  background: var(--accent-blue);
+  color: #fff;
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: #2563eb;
+}
+
+.btn--outline {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+}
+
+.btn--outline:hover:not(:disabled) {
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+}
+
+/* ── Toast messages ── */
+
+.settings-toast {
+  font-size: 12px;
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+}
+
+.settings-toast--success {
+  color: var(--status-green);
+}
+
+.settings-toast--error {
+  color: var(--status-red);
+}
+
+/* ── Phase description ── */
+
+.settings-phase-desc {
+  background: var(--bg-primary);
+  border-radius: var(--radius-badge);
+  padding: 12px;
+}
+
+.settings-phase-desc__objective {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.settings-phase-desc__details {
+  margin-top: 8px;
+}
+
+.settings-phase-desc__details summary {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--accent-blue);
+  cursor: pointer;
+}
+
+.settings-phase-desc__list {
+  list-style: none;
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.settings-phase-desc__list li {
+  font-size: 12px;
+  color: var(--text-secondary);
+  padding-left: 14px;
+  position: relative;
+}
+
+.settings-phase-desc__list li::before {
+  content: '\2014';
+  position: absolute;
+  left: 0;
+  color: var(--text-muted);
+}
+
+/* ── Status grid ── */
+
+.settings-status-grid {
+  display: flex;
+  gap: 24px;
+}
+
+.settings-status-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.settings-status-item__label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.settings-status-item__value {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.status--green {
+  color: var(--status-green);
+}
+
+.status--red {
+  color: var(--status-red);
+}
+
+.status--muted {
+  color: var(--text-muted);
+}
