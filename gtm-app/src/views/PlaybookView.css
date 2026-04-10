@@ -341,3 +341,40 @@
 .playbook-advance__btn--disabled:hover {
   background: var(--bg-surface-hover);
 }
+
+/* ── Transitions ── */
+
+.playbook-card {
+  transition: box-shadow 0.2s ease;
+}
+
+.playbook-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.playbook-progress__fill {
+  transition: width 0.4s ease;
+}
+
+.playbook-week__tasks {
+  animation: slideDown 0.15s ease;
+}
+
+/* ── Responsive: Tablet ── */
+
+@media (max-width: 768px) {
+  .playbook-tabs { flex-wrap: wrap; }
+  .playbook-tab { flex: 1 1 45%; min-width: 120px; }
+  .playbook-tab__weeks { display: none; }
+}
+
+/* ── Responsive: Mobile ── */
+
+@media (max-width: 480px) {
+  .playbook-tabs { flex-direction: column; }
+  .playbook-tab { flex: 1 1 100%; }
+  .playbook-tab__weeks { display: inline; }
+  .playbook-advance__btn { font-size: 12px; }
+  .playbook-week__task { flex-direction: column; gap: 2px; }
+  .playbook-week__day { min-width: auto; }
+}

@@ -433,3 +433,41 @@
   gap: 8px;
   margin-top: 8px;
 }
+
+/* ── Transitions ── */
+
+.ref-section__body {
+  animation: slideDown 0.2s ease;
+}
+
+.partnership-card {
+  transition: border-color 0.15s, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.partnership-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.partnership-card__status {
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+/* ── Responsive: Tablet ── */
+
+@media (max-width: 768px) {
+  .ref-pills { gap: 6px; }
+  .ref-pill { font-size: 0.78rem; padding: 5px 10px; }
+  .ref-definitions__entry { flex-direction: column; gap: 4px; }
+  .ref-definitions__entry dt { min-width: auto; }
+}
+
+/* ── Responsive: Mobile ── */
+
+@media (max-width: 480px) {
+  .ref-section__header { font-size: 0.95rem; padding: 12px var(--card-padding); }
+  .partnership-card__header { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .compliance-checklist__header { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .partnership-modal__actions { flex-direction: column; }
+  .partnership-modal__actions .btn { width: 100%; }
+}

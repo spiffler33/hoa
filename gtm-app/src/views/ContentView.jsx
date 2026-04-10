@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { loadContentCalendar, saveContentEntry } from '../utils/dataLayer';
 import contentBriefs from '../data/contentBriefs';
+import LoadingSpinner from '../components/LoadingSpinner';
+import EmptyState from '../components/EmptyState';
 import './ContentView.css';
 
 const DAY_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -432,13 +434,20 @@ export default function ContentView() {
   const [saving, setSaving] = useState(null);
   const [briefItem, setBriefItem] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [error, setError] = useState(null);
 
   /* ── load data ─────────────────────────────── */
 
   const loadData = useCallback(async () => {
-    const result = await loadContentCalendar();
-    if (result.data) {
-      setAllItems(Array.isArray(result.data) ? result.data : []);
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await loadContentCalendar();
+      if (result.data) {
+        setAllItems(Array.isArray(result.data) ? result.data : []);
+      }
+    } catch (err) {
+      setError(err.message || 'Failed to load content calendar.');
     }
     setLoading(false);
   }, []);
@@ -542,7 +551,23 @@ export default function ContentView() {
     return (
       <div className="view content-view">
         <h1 className="view-title">Content</h1>
-        <p className="view-placeholder">Loading\u2026</p>
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="view content-view">
+        <h1 className="view-title">Content</h1>
+        <EmptyState
+          icon="\u26A0"
+          message="Failed to load content calendar"
+          hint={error}
+          actionLabel="Retry"
+          onAction={loadData}
+          variant="error"
+        />
       </div>
     );
   }
@@ -576,14 +601,13 @@ export default function ContentView() {
 
       {/* ── Calendar Grid or Empty State ───── */}
       {weekItems.length === 0 ? (
-        <div className="content-empty">
-          <p className="content-empty__text">
-            No content scheduled for this week.
-          </p>
-          <p className="content-empty__hint">
-            Content items will appear here once added to the calendar.
-          </p>
-        </div>
+        <EmptyState
+          icon="\uD83D\uDCC5"
+          message="No content scheduled for this week."
+          hint="Content items will appear here once added to the calendar."
+          actionLabel="+ Add Content Item"
+          onAction={() => setShowAddForm(true)}
+        />
       ) : (
         <div className="content-calendar">
           {weekDays.map((day, i) => {

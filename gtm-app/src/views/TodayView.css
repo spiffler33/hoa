@@ -310,3 +310,38 @@
   background: var(--status-red-bg);
   color: var(--status-red);
 }
+
+/* ── Transitions ── */
+
+.today-card {
+  transition: box-shadow 0.2s ease;
+}
+
+.today-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.today-alert__detail {
+  animation: slideDown 0.15s ease;
+}
+
+.status-badge {
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* ── Responsive: Tablet ── */
+
+@media (max-width: 768px) {
+  .today-banner__greeting { font-size: 18px; }
+  .today-alert__row { flex-wrap: wrap; }
+}
+
+/* ── Responsive: Mobile ── */
+
+@media (max-width: 480px) {
+  .today-banner__greeting { font-size: 16px; }
+  .today-banner__phase { display: block; margin-top: 4px; }
+  .today-content-item { flex-wrap: wrap; gap: 4px; }
+  .today-checklist__item { flex-direction: column; gap: 4px; }
+  .today-checklist__meta { align-self: flex-start; padding-left: 26px; }
+}

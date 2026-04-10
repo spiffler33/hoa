@@ -6,6 +6,7 @@ import {
   loadPartnerships,
   savePartnership,
 } from '../utils/dataLayer';
+import EmptyState from '../components/EmptyState';
 import './ReferenceView.css';
 
 const SECTION_KEYS = ['icp', 'roles', 'compliance', 'community', 'monetisation', 'vocabulary'];
@@ -195,9 +196,13 @@ export default function ReferenceView() {
       </div>
 
       {partnerships.length === 0 ? (
-        <p className="partnership-tracker__empty">
-          No partnerships tracked yet. Add one to get started.
-        </p>
+        <EmptyState
+          icon="\uD83E\uDD1D"
+          message="No partnerships tracked yet."
+          hint="Add one to get started."
+          actionLabel="+ Add Partnership"
+          onAction={() => setShowPartnershipModal(true)}
+        />
       ) : (
         <div className="partnership-tracker__cards">
           {partnerships.map((p) => (

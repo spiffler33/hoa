@@ -610,3 +610,49 @@
   padding-top: 8px;
   border-top: 1px solid var(--border);
 }
+
+/* ── Transitions ── */
+
+.content-modal-overlay {
+  animation: fadeIn 0.15s ease;
+}
+
+.content-modal {
+  animation: scaleIn 0.2s ease;
+}
+
+.content-item {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.content-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.content-item__status {
+  transition: color 0.2s, border-color 0.2s, background-color 0.2s;
+}
+
+.content-buffer__dot {
+  transition: background-color 0.3s ease;
+}
+
+/* ── Responsive: Tablet ── */
+
+@media (max-width: 768px) {
+  .content-calendar { grid-template-columns: 1fr; }
+  .content-day { min-height: auto; }
+  .brief-template__row { grid-template-columns: 1fr; gap: 2px; }
+}
+
+/* ── Responsive: Mobile ── */
+
+@media (max-width: 480px) {
+  .content-header__title { font-size: 18px; }
+  .content-week-nav { flex-wrap: wrap; }
+  .content-buffer__row { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .content-buffer__label { min-width: auto; }
+  .content-add-form__actions { flex-direction: column; }
+  .content-add-form__actions .btn { width: 100%; }
+}

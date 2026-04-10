@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { loadConfig, loadMetrics, loadContentCalendar } from '../utils/dataLayer';
 import cadence from '../data/cadence';
 import stageGates from '../data/stageGates';
 import phaseChecklists from '../data/phaseChecklists';
+import LoadingSpinner from '../components/LoadingSpinner';
+import EmptyState from '../components/EmptyState';
 import './TodayView.css';
 
 const DAY_KEYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
@@ -78,10 +80,13 @@ export default function TodayView() {
   const [checked, setChecked] = useState({});
   const [expandedAlert, setExpandedAlert] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   /* load all data on mount */
-  useEffect(() => {
-    async function init() {
+  const init = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
       const cfgResult = await loadConfig();
       setConfigState(cfgResult.data || {});
 
@@ -92,17 +97,20 @@ export default function TodayView() {
 
       if (mRes.status === 'fulfilled' && mRes.value.data) {
         const raw = mRes.value.data;
-        // Handle both single object and array-of-rows from the sheet
         setMetrics(Array.isArray(raw) ? raw[raw.length - 1] : raw);
       }
       if (cRes.status === 'fulfilled' && cRes.value.data) {
         setContentItems(Array.isArray(cRes.value.data) ? cRes.value.data : []);
       }
-
-      setLoading(false);
+    } catch (err) {
+      setError(err.message || 'Failed to load data.');
     }
-    init();
+    setLoading(false);
   }, []);
+
+  useEffect(() => {
+    init();
+  }, [init]);
 
   const toggleCheck = (i) =>
     setChecked((prev) => ({ ...prev, [i]: !prev[i] }));
@@ -135,12 +143,28 @@ export default function TodayView() {
     return due <= today;
   });
 
-  /* ── loading state ─────────────────────────── */
+  /* ── loading / error states ──────────────────── */
   if (loading) {
     return (
       <div className="view today-view">
         <h1 className="view-title">Today</h1>
-        <p className="view-placeholder">Loading\u2026</p>
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="view today-view">
+        <h1 className="view-title">Today</h1>
+        <EmptyState
+          icon="\u26A0"
+          message="Failed to load data"
+          hint={error}
+          actionLabel="Retry"
+          onAction={init}
+          variant="error"
+        />
       </div>
     );
   }
@@ -181,14 +205,13 @@ export default function TodayView() {
         </h2>
 
         {metrics === null ? (
-          <p className="today-empty">
-            No metrics data yet — connect a sheet in Settings or enter data in
-            Weekly Review.
-          </p>
+          <EmptyState
+            icon="\u2014"
+            message="No metrics data yet"
+            hint="Connect a sheet in Settings or enter data in Weekly Review."
+          />
         ) : alerts.length === 0 ? (
-          <p className="today-empty">
-            No stage gates defined for this phase.
-          </p>
+          <EmptyState icon="\u2205" message="No stage gates defined for this phase." />
         ) : (
           <ul className="today-alerts">
             {alerts.map((a) => (
@@ -243,11 +266,14 @@ export default function TodayView() {
         <h2 className="today-card__title">Today&rsquo;s Cadence</h2>
 
         {todayTasks.length === 0 ? (
-          <p className="today-empty">
-            {cadence[phaseKey]
-              ? 'No tasks scheduled for today.'
-              : 'No daily cadence defined for this phase.'}
-          </p>
+          <EmptyState
+            icon="\u2713"
+            message={
+              cadence[phaseKey]
+                ? 'No tasks scheduled for today.'
+                : 'No daily cadence defined for this phase.'
+            }
+          />
         ) : (
           <ul className="today-checklist">
             {todayTasks.map((task, i) => (
@@ -284,7 +310,7 @@ export default function TodayView() {
         <h2 className="today-card__title">Content Due Today</h2>
 
         {contentDue.length === 0 ? (
-          <p className="today-empty">No content due today.</p>
+          <EmptyState icon="\u2713" message="No content due today." />
         ) : (
           <ul className="today-content-list">
             {contentDue.map((item, i) => {

@@ -21,7 +21,7 @@ A single-page React application that serves as the daily operating cockpit for t
 - [x] Task 12: Control view — Stage gates, kill criteria, funnel model
 - [x] Task 13: Reference view — Accordion sections, static content rendering
 - [x] Task 14: Reference view — Interactive partnerships + compliance checklist
-- [ ] Task 15: Polish — Responsive, transitions, loading/error/empty states
+- [x] Task 15: Polish — Responsive, transitions, loading/error/empty states
 - [ ] Task 16: Deployment — GitHub Pages setup, final QA
 
 ---
@@ -279,6 +279,50 @@ A single-page React application that serves as the daily operating cockpit for t
 - `gtm-app/src/utils/dataLayer.js` (added loadPartnerships, savePartnership; modified loadPhaseChecklist + saveChecklistEntry to support tab parameter)
 - `gtm-app/src/views/ReferenceView.jsx` (added useEffect, dataLayer imports, compliance checklist state/handlers/renderer, partnership state/handlers/tracker/modal)
 - `gtm-app/src/views/ReferenceView.css` (added compliance checklist, partnership tracker, partnership card, and modal form styles)
+
+### Task 15 — Polish: Responsive, Transitions, Loading/Error/Empty States (2026-04-10)
+
+**What was done:**
+- Created shared `LoadingSpinner` component — CSS-animated ring spinner (border-top trick with `@keyframes spin`) with optional label text. Uses `--accent-blue` for the spinning arc and `--border` for the track. Centered flex layout with 28px ring and mono-font label.
+- Created shared `EmptyState` component — icon + message + optional hint + optional action button. Supports a `variant="error"` mode that adds a red border and red-bg background for retry-able error cards. Used across all views to replace inline text.
+- Added responsive breakpoints to `index.css` (global) and all 7 view CSS files:
+  - **Tablet (≤768px):** CSS custom properties overridden on `:root` (reduced `--card-padding` to 12px, `--section-gap` to 16px, `--page-padding-x` to 16px). Navbar wordmark hidden, tab font reduced. Content calendar grid → single column. Trend sparklines → single column. Playbook tabs → 2×2 wrap. Funnel model → vertical stack with rotated arrows. Reference definition list → stacked. Settings fields stack vertically.
+  - **Mobile (≤480px):** Further reduced padding/gaps. Root font-size to 12px. Navbar tabs shrunk to 11px/5px padding. All modals go full-screen (border-radius: 0, max-height: 100%). Playbook tabs → single column. Metric rows stack vertically. Form action buttons go full-width. Kill criteria padding-left removed.
+- Added transition and animation polish across all views:
+  - **Global keyframes:** `fadeIn` (opacity), `scaleIn` (opacity + scale + translateY), `slideDown` (opacity + translateY), `spin` (rotate).
+  - **Accordion expand/collapse:** `animation: slideDown 0.2s ease` on `.ref-section__body` (ReferenceView) and `.playbook-week__tasks` (PlaybookView) for smooth open animation.
+  - **Card hover lift:** Subtle `box-shadow: 0 2px 8px` on `.today-card`, `.weekly-card`, `.playbook-card`, `.settings-card`, `.control-panel` hover. Interactive cards (`.content-item`, `.control-kill`, `.partnership-card`) get `translateY(-1px)` + shadow on hover.
+  - **Badge/status transitions:** `transition: background-color 0.3s ease` on all traffic-light dots (`.dot--green/amber/red/none`), control badges, buffer dots, status dropdowns (color + border-color + background-color).
+  - **Modal open/close:** `animation: fadeIn 0.15s` on overlay, `animation: scaleIn 0.2s` on modal container. Applied to both ContentView modals and shared `.modal-overlay`/`.modal-container`.
+  - **Nav tab active state:** Added `background: rgba(59, 130, 246, 0.06)` to `.navbar-tab--active` and `background-color 0.15s` to the tab transition list for a subtle fade effect.
+  - **Funnel stage hover:** Border-color + box-shadow on `.control-funnel__stage:hover`.
+- Replaced all "Loading…" text across 5 views (Today, Weekly Review, Playbook, Content, Control) with `<LoadingSpinner />` component.
+- Replaced all inline empty-state messages across 6 views with `<EmptyState />` component, providing contextual icons and messages.
+- Added error state handling (`error` useState + try/catch) to all 5 data-loading views. On load failure, shows a retry-able `<EmptyState variant="error" />` with warning icon, error message, and "Retry" button that re-triggers the load function.
+- Added shared modal base styles (`.modal-overlay`, `.modal-container`) to `index.css` — fixes the unstyled partnership modal in ReferenceView that was using these classes without CSS.
+- Build verified: `npm run build` passes (63 modules, 869ms — CSS grew from 39.36 KB to 46.72 KB with responsive, transition, and component styles)
+
+**Files created:**
+- `gtm-app/src/components/LoadingSpinner.jsx` (new)
+- `gtm-app/src/components/LoadingSpinner.css` (new)
+- `gtm-app/src/components/EmptyState.jsx` (new)
+- `gtm-app/src/components/EmptyState.css` (new)
+
+**Files modified:**
+- `gtm-app/src/index.css` (added nav tab active bg, transition list, keyframes, shared dot transitions, modal base, tablet + mobile breakpoints)
+- `gtm-app/src/views/TodayView.jsx` (added LoadingSpinner/EmptyState imports, error state + useCallback init, replaced loading/empty/error displays)
+- `gtm-app/src/views/TodayView.css` (added card hover, alert detail animation, status badge transition, tablet + mobile breakpoints)
+- `gtm-app/src/views/WeeklyReviewView.jsx` (added LoadingSpinner/EmptyState imports, error state, replaced loading/empty displays)
+- `gtm-app/src/views/WeeklyReviewView.css` (added card hover, badge transition, tablet + mobile breakpoints)
+- `gtm-app/src/views/PlaybookView.jsx` (added LoadingSpinner/EmptyState imports, error state + useCallback init, replaced loading display)
+- `gtm-app/src/views/PlaybookView.css` (added card hover, progress fill transition, week tasks animation, tablet + mobile breakpoints)
+- `gtm-app/src/views/ContentView.jsx` (added LoadingSpinner/EmptyState imports, error state, replaced loading/empty displays)
+- `gtm-app/src/views/ContentView.css` (added modal animation, content item hover lift, status/buffer dot transitions, tablet + mobile breakpoints)
+- `gtm-app/src/views/ControlView.jsx` (added LoadingSpinner/EmptyState imports, error state + useCallback init, replaced loading/empty displays)
+- `gtm-app/src/views/ControlView.css` (added panel hover, badge/kill/funnel transitions, tablet + mobile breakpoints)
+- `gtm-app/src/views/ReferenceView.jsx` (added EmptyState import, replaced partnership empty state)
+- `gtm-app/src/views/ReferenceView.css` (added accordion animation, partnership card hover lift, status transition, tablet + mobile breakpoints)
+- `gtm-app/src/views/SettingsView.css` (added card hover, tablet + mobile breakpoints)
 
 ---
 

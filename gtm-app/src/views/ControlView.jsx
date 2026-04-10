@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { loadMetrics, loadConfig } from '../utils/dataLayer';
 import stageGates from '../data/stageGates';
 import killCriteria from '../data/killCriteria';
 import phaseChecklists from '../data/phaseChecklists';
+import LoadingSpinner from '../components/LoadingSpinner';
+import EmptyState from '../components/EmptyState';
 import './ControlView.css';
 
 const PHASE_KEYS = ['phase_0', 'phase_1', 'phase_2', 'phase_3'];
@@ -144,33 +146,37 @@ export default function ControlView() {
     weeksRemaining = Math.max(0, totalWeeks - weekNum);
   }
 
-  /* Load config + latest metrics on mount */
-  useEffect(() => {
-    async function init() {
-      setLoading(true);
-      try {
-        const [configRes, metricsRes] = await Promise.all([
-          loadConfig(),
-          loadMetrics(),
-        ]);
-        setConfig(configRes.data || {});
+  const [error, setError] = useState(null);
 
-        if (metricsRes.data) {
-          const rows = Array.isArray(metricsRes.data)
-            ? metricsRes.data
-            : [metricsRes.data];
-          const sorted = rows
-            .filter((r) => r.weekOf)
-            .sort((a, b) => b.weekOf.localeCompare(a.weekOf));
-          if (sorted.length > 0) setLatestValues(sorted[0]);
-        }
-      } catch {
-        /* graceful degradation — view stays in empty state */
+  /* Load config + latest metrics on mount */
+  const init = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const [configRes, metricsRes] = await Promise.all([
+        loadConfig(),
+        loadMetrics(),
+      ]);
+      setConfig(configRes.data || {});
+
+      if (metricsRes.data) {
+        const rows = Array.isArray(metricsRes.data)
+          ? metricsRes.data
+          : [metricsRes.data];
+        const sorted = rows
+          .filter((r) => r.weekOf)
+          .sort((a, b) => b.weekOf.localeCompare(a.weekOf));
+        if (sorted.length > 0) setLatestValues(sorted[0]);
       }
-      setLoading(false);
+    } catch (err) {
+      setError(err.message || 'Failed to load control data.');
     }
-    init();
+    setLoading(false);
   }, []);
+
+  useEffect(() => {
+    init();
+  }, [init]);
 
   /* Alert levels for current-phase metrics */
   const metricAlerts = {};
@@ -230,12 +236,28 @@ export default function ControlView() {
     }
   });
 
-  /* ── Loading gate ── */
+  /* ── Loading / error gate ── */
   if (loading) {
     return (
       <div className="view control-view">
         <h1 className="view-title">Control</h1>
-        <p className="view-placeholder">Loading&hellip;</p>
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="view control-view">
+        <h1 className="view-title">Control</h1>
+        <EmptyState
+          icon="\u26A0"
+          message="Failed to load control data"
+          hint={error}
+          actionLabel="Retry"
+          onAction={init}
+          variant="error"
+        />
       </div>
     );
   }
@@ -290,7 +312,7 @@ export default function ControlView() {
           Stage Gates ({PHASE_LABELS[currentPhase].split(' \u2014 ')[0]})
         </h2>
         {metricGroups.length === 0 ? (
-          <p className="control-empty">No metrics defined for this phase.</p>
+          <EmptyState icon="\u2205" message="No metrics defined for this phase." />
         ) : (
           metricGroups.map((group) => (
             <div key={group.category} className="control-category">

@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import phaseChecklists from '../data/phaseChecklists';
 import { loadPhaseChecklist, saveChecklistEntry, saveConfig } from '../utils/dataLayer';
 import { getConfig, setConfig } from '../utils/localStore';
+import LoadingSpinner from '../components/LoadingSpinner';
+import EmptyState from '../components/EmptyState';
 import './PlaybookView.css';
 
 const PHASE_KEYS = ['phase_0', 'phase_1', 'phase_2', 'phase_3'];
@@ -12,10 +14,13 @@ export default function PlaybookView() {
   const [checkedItems, setCheckedItems] = useState({});
   const [loading, setLoading] = useState(true);
   const [advanceMsg, setAdvanceMsg] = useState('');
+  const [error, setError] = useState(null);
 
   /* ── load config + saved checklist state ────── */
-  useEffect(() => {
-    async function init() {
+  const init = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
       const cfg = getConfig();
       if (cfg?.currentPhase !== undefined) {
         setActivePhase(Number(cfg.currentPhase));
@@ -29,10 +34,15 @@ export default function PlaybookView() {
         });
         setCheckedItems(map);
       }
-      setLoading(false);
+    } catch (err) {
+      setError(err.message || 'Failed to load checklist data.');
     }
-    init();
+    setLoading(false);
   }, []);
+
+  useEffect(() => {
+    init();
+  }, [init]);
 
   const phaseKey = PHASE_KEYS[activePhase];
   const phase = phaseChecklists[phaseKey];
@@ -75,7 +85,23 @@ export default function PlaybookView() {
     return (
       <div className="view">
         <h1 className="view-title">Playbook</h1>
-        <p className="view-placeholder">Loading…</p>
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="view">
+        <h1 className="view-title">Playbook</h1>
+        <EmptyState
+          icon="\u26A0"
+          message="Failed to load checklist data"
+          hint={error}
+          actionLabel="Retry"
+          onAction={init}
+          variant="error"
+        />
       </div>
     );
   }

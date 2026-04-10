@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { loadMetrics, saveWeeklyMetrics, loadConfig } from '../utils/dataLayer';
 import stageGates from '../data/stageGates';
 import phaseChecklists from '../data/phaseChecklists';
+import LoadingSpinner from '../components/LoadingSpinner';
+import EmptyState from '../components/EmptyState';
 import './WeeklyReviewView.css';
 
 const PHASE_KEYS = ['phase_0', 'phase_1', 'phase_2', 'phase_3'];
@@ -140,6 +142,7 @@ export default function WeeklyReviewView() {
   const [loading, setLoading] = useState(true);
   const [trendRows, setTrendRows] = useState([]);
   const [copied, setCopied] = useState(false);
+  const [error, setError] = useState(null);
 
   const currentPhase = config?.currentPhase ?? 0;
   const phaseKey = PHASE_KEYS[currentPhase];
@@ -155,6 +158,7 @@ export default function WeeklyReviewView() {
   const loadWeekData = useCallback(async () => {
     setLoading(true);
     setSaveMsg(null);
+    setError(null);
     try {
       const res = await loadMetrics();
       if (res.data) {
@@ -193,8 +197,8 @@ export default function WeeklyReviewView() {
           setFounderSummary('');
         }
       }
-    } catch {
-      // load failed — form stays empty
+    } catch (err) {
+      setError(err.message || 'Failed to load metrics.');
     }
     setLoading(false);
   }, [weekKey, config]);
@@ -304,12 +308,28 @@ export default function WeeklyReviewView() {
     }
   };
 
-  /* ── loading gate ─────────────────────────── */
+  /* ── loading / error gate ────────────────────── */
   if (loading && config === null) {
     return (
       <div className="view weekly-view">
         <h1 className="view-title">Weekly Review</h1>
-        <p className="view-placeholder">Loading&hellip;</p>
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
+  if (error && config === null) {
+    return (
+      <div className="view weekly-view">
+        <h1 className="view-title">Weekly Review</h1>
+        <EmptyState
+          icon="\u26A0"
+          message="Failed to load data"
+          hint={error}
+          actionLabel="Retry"
+          onAction={loadWeekData}
+          variant="error"
+        />
       </div>
     );
   }
@@ -353,9 +373,9 @@ export default function WeeklyReviewView() {
       <section className="weekly-card">
         <h2 className="weekly-card__title">Stage Gate Metrics</h2>
         {loading ? (
-          <p className="weekly-empty">Loading metrics&hellip;</p>
+          <LoadingSpinner label="Loading metrics\u2026" />
         ) : phaseMetrics.length === 0 ? (
-          <p className="weekly-empty">No metrics defined for this phase.</p>
+          <EmptyState icon="\u2205" message="No metrics defined for this phase." />
         ) : (
           <div className="weekly-metrics">
             {phaseMetrics.map((m) => {
@@ -559,9 +579,10 @@ export default function WeeklyReviewView() {
       <section className="weekly-card">
         <h2 className="weekly-card__title">Trend (last 8 weeks)</h2>
         {trendRows.length < 2 ? (
-          <p className="weekly-empty">
-            Need at least 2 weeks of data to show trends.
-          </p>
+          <EmptyState
+            icon="\u2014"
+            message="Need at least 2 weeks of data to show trends."
+          />
         ) : (
           <div className="trend-grid">
             {phaseMetrics
