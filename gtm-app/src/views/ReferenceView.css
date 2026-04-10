@@ -195,3 +195,241 @@
   font-size: 0.9rem;
   line-height: 1.5;
 }
+
+/* ── Compliance Checklist (interactive) ── */
+
+.compliance-checklist__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.compliance-checklist__count {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--accent-blue);
+  font-weight: 500;
+  background: var(--accent-blue-soft);
+  padding: 3px 10px;
+  border-radius: 10px;
+}
+
+.compliance-checklist__clear {
+  font-size: 0.78rem;
+  padding: 4px 12px;
+}
+
+.compliance-checklist__clear:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.compliance-checklist__items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.compliance-checklist__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--bg-primary);
+  border-radius: var(--radius-badge);
+  cursor: pointer;
+  transition: opacity 0.15s, background 0.12s;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.compliance-checklist__item:hover {
+  background: var(--bg-surface-hover);
+}
+
+.compliance-checklist__item--checked {
+  opacity: 0.55;
+}
+
+.compliance-checklist__item--checked span {
+  text-decoration: line-through;
+}
+
+.compliance-checklist__item input[type="checkbox"] {
+  accent-color: var(--accent-blue);
+  margin-top: 3px;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+/* ── Partnership Tracker ── */
+
+.partnership-tracker {
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+
+.partnership-tracker__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.partnership-tracker__add {
+  font-size: 0.8rem;
+  padding: 6px 14px;
+}
+
+.partnership-tracker__empty {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-style: italic;
+  padding: 16px 0;
+}
+
+.partnership-tracker__cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.partnership-card {
+  padding: 14px 16px;
+  background: var(--bg-primary);
+  border-radius: var(--radius-badge);
+  border-left: 3px solid var(--border);
+  transition: border-color 0.15s;
+}
+
+.partnership-card--prospect {
+  border-left-color: var(--text-muted);
+}
+
+.partnership-card--active {
+  border-left-color: var(--status-green);
+}
+
+.partnership-card--completed {
+  border-left-color: var(--accent-blue);
+}
+
+.partnership-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.partnership-card__name {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.partnership-card__status {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  padding: 2px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  text-transform: capitalize;
+}
+
+.partnership-card__status--prospect {
+  background: var(--bg-surface-hover);
+  color: var(--text-secondary);
+}
+
+.partnership-card__status--active {
+  background: rgba(34, 197, 94, 0.12);
+  color: var(--status-green);
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+.partnership-card__status--completed {
+  background: rgba(59, 130, 246, 0.12);
+  color: var(--accent-blue);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.partnership-card__type {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.partnership-card__notes {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* ── Partnership Modal ── */
+
+.partnership-modal h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+}
+
+.partnership-modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.partnership-modal__field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.partnership-modal__field > span {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.partnership-modal__field input,
+.partnership-modal__field select,
+.partnership-modal__field textarea {
+  padding: 8px 12px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-badge);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+}
+
+.partnership-modal__field input:focus,
+.partnership-modal__field select:focus,
+.partnership-modal__field textarea:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 2px var(--accent-blue-soft);
+}
+
+.partnership-modal__field textarea {
+  resize: vertical;
+  min-height: 60px;
+  font-family: var(--font-body);
+}
+
+.partnership-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}

@@ -16,6 +16,8 @@ import {
   fetchPhaseChecklist,
   saveChecklistItem,
   fetchConfig as fetchRemoteConfig,
+  fetchPartnerships,
+  savePartnershipItem,
 } from './sheetsApi';
 
 import {
@@ -89,9 +91,10 @@ export async function loadContentCalendar(opts = {}) {
   );
 }
 
-export async function loadPhaseChecklist() {
-  return readThrough('phase_checklist', () =>
-    fetchPhaseChecklist(sheetId()),
+export async function loadPhaseChecklist(opts = {}) {
+  const tab = opts.tab || 'phase_checklist';
+  return readThrough(tab, () =>
+    fetchPhaseChecklist(sheetId(), opts),
   );
 }
 
@@ -146,9 +149,28 @@ export async function saveContentEntry(item) {
 }
 
 export async function saveChecklistEntry(item) {
+  const tab = item.tab || 'phase_checklist';
   return writeThrough(
-    { action: 'update', tab: 'phase_checklist', id: item.id, data: item },
+    { action: 'update', tab, id: item.id, data: item },
     () => saveChecklistItem(sheetId(), item),
+  );
+}
+
+export async function loadPartnerships() {
+  return readThrough('partnerships', () =>
+    fetchPartnerships(sheetId()),
+  );
+}
+
+export async function savePartnership(item) {
+  return writeThrough(
+    {
+      action: item.id && !item.id.startsWith('local_') ? 'update' : 'write',
+      tab: 'partnerships',
+      id: item.id,
+      data: item,
+    },
+    () => savePartnershipItem(sheetId(), item),
   );
 }
 

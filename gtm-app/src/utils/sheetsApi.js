@@ -89,14 +89,27 @@ export async function fetchContentCalendar(sheetId, opts = {}) {
 }
 
 /**
- * Fetch all phase_checklist rows.
+ * Fetch checklist rows from a given tab (default: phase_checklist).
  * @param {string} sheetId
+ * @param {{ tab?: string }} [opts]
  */
-export async function fetchPhaseChecklist(sheetId) {
+export async function fetchPhaseChecklist(sheetId, opts = {}) {
   const conn = getConnection();
   if (!conn) return null;
 
-  return sheetGet(conn.url, { action: 'read', tab: 'phase_checklist' });
+  const tab = opts.tab || 'phase_checklist';
+  return sheetGet(conn.url, { action: 'read', tab });
+}
+
+/**
+ * Fetch all partnerships rows.
+ * @param {string} sheetId
+ */
+export async function fetchPartnerships(sheetId) {
+  const conn = getConnection();
+  if (!conn) return null;
+
+  return sheetGet(conn.url, { action: 'read', tab: 'partnerships' });
 }
 
 /**
@@ -155,18 +168,45 @@ export async function saveContentItem(sheetId, item) {
 }
 
 /**
- * Update a phase_checklist item's completed status.
+ * Update a checklist item's completed status.
+ * Uses item.tab if provided, otherwise defaults to phase_checklist.
  * @param {string} sheetId
- * @param {object} item  — { phase, item, completed }
+ * @param {object} item  — { id, completed, tab? }
  */
 export async function saveChecklistItem(sheetId, item) {
   const conn = getConnection();
   if (!conn) return null;
 
+  const tab = item.tab || 'phase_checklist';
   return sheetPost(conn.url, {
     action: 'update',
-    tab: 'phase_checklist',
+    tab,
     id: item.id,
+    data: item,
+  });
+}
+
+/**
+ * Save or update a partnership item.
+ * @param {string} sheetId
+ * @param {object} item
+ */
+export async function savePartnershipItem(sheetId, item) {
+  const conn = getConnection();
+  if (!conn) return null;
+
+  if (item.id && !item.id.startsWith('local_')) {
+    return sheetPost(conn.url, {
+      action: 'update',
+      tab: 'partnerships',
+      id: item.id,
+      data: item,
+    });
+  }
+
+  return sheetPost(conn.url, {
+    action: 'write',
+    tab: 'partnerships',
     data: item,
   });
 }

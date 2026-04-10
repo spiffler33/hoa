@@ -20,7 +20,7 @@ A single-page React application that serves as the daily operating cockpit for t
 - [x] Task 11: Content view — Brief modals, add content form, buffer status
 - [x] Task 12: Control view — Stage gates, kill criteria, funnel model
 - [x] Task 13: Reference view — Accordion sections, static content rendering
-- [ ] Task 14: Reference view — Interactive partnerships + compliance checklist
+- [x] Task 14: Reference view — Interactive partnerships + compliance checklist
 - [ ] Task 15: Polish — Responsive, transitions, loading/error/empty states
 - [ ] Task 16: Deployment — GitHub Pages setup, final QA
 
@@ -262,6 +262,23 @@ A single-page React application that serves as the daily operating cockpit for t
 **Files modified:**
 - `gtm-app/src/views/ReferenceView.jsx` (modified — placeholder → full view)
 - `gtm-app/src/views/ReferenceView.css` (new)
+
+### Task 14 — Reference View Part 2: Interactive partnerships + compliance checklist (2026-04-10)
+
+**What was done:**
+- Added interactive pre-publication compliance checklist within the Compliance Framework section. The 8-item checklist from `compliance_checklist` subsection now renders as clickable checkboxes instead of static bullets. Each toggle saves to the `compliance_log` sheet tab via `saveChecklistEntry()` with `tab: 'compliance_log'`. Saved state loaded on mount via `loadPhaseChecklist({ tab: 'compliance_log' })`. Shows a completion badge ("5/8 checked") in mono font with blue background, and a "Clear All" reset button (disabled when nothing checked). Checked items show strikethrough and reduced opacity.
+- Added interactive partnership tracker within the Community section. Loads partnership data from the `partnerships` sheet tab via new `loadPartnerships()` dataLayer function. Each partnership renders as a card with name (bold), type (mono font label), status badge (inline dropdown with color coding: prospect=muted, active=green, completed=blue), and notes. Left border color reflects status. Inline status updates — changing the dropdown immediately saves via `savePartnership()`.
+- Added "+ Add Partnership" button that opens a modal form with name text input, type dropdown (Co-branded content, Cross-pollination, Corporate tie-in, Podcast/media, Other), status dropdown (prospect/active/completed), and notes textarea. Modal closes on overlay click or Escape key. New partnerships get `local_` prefixed IDs for offline-first write-through. Save button disabled until name is filled.
+- Extended sheetsApi.js with `fetchPartnerships()` and `savePartnershipItem()` — same pattern as existing fetch/save functions, targeting the `partnerships` sheet tab.
+- Extended dataLayer.js with `loadPartnerships()` (read-through cache) and `savePartnership()` (write-through with offline queue). Modified `loadPhaseChecklist()` and `saveChecklistEntry()` to accept an optional `tab` parameter (defaults to `phase_checklist`), enabling reuse for `compliance_log` without duplicating the read/write pipeline.
+- Updated ReferenceView.css with ~180 lines: compliance checklist (header with count badge + clear button, checkbox items with hover/checked states), partnership cards (status-colored left borders, inline status dropdown with three color variants), partnership modal form (field labels, inputs, focus states, actions row).
+- Build verified: `npm run build` passes (59 modules, 1.15s — CSS grew from 35.52 KB to 39.36 KB with interactive component styles)
+
+**Files modified:**
+- `gtm-app/src/utils/sheetsApi.js` (added fetchPartnerships, savePartnershipItem; modified fetchPhaseChecklist + saveChecklistItem to support tab parameter)
+- `gtm-app/src/utils/dataLayer.js` (added loadPartnerships, savePartnership; modified loadPhaseChecklist + saveChecklistEntry to support tab parameter)
+- `gtm-app/src/views/ReferenceView.jsx` (added useEffect, dataLayer imports, compliance checklist state/handlers/renderer, partnership state/handlers/tracker/modal)
+- `gtm-app/src/views/ReferenceView.css` (added compliance checklist, partnership tracker, partnership card, and modal form styles)
 
 ---
 
