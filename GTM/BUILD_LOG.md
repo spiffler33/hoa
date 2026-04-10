@@ -10,7 +10,7 @@ A single-page React application that serves as the daily operating cockpit for t
 - [x] Task 1: Scaffold — Vite + React + Router + CSS + Layout + Nav
 - [x] Task 2: Static data files — stageGates, cadence, phaseChecklists
 - [x] Task 3: Static data files — contentBriefs, referenceContent, killCriteria
-- [ ] Task 4: Data layer — sheetsApi, localStore, offline fallback
+- [x] Task 4: Data layer — sheetsApi, localStore, offline fallback
 - [ ] Task 5: Settings view — Sheet connection, phase config
 - [ ] Task 6: Today view — Daily cadence, alerts, content due
 - [ ] Task 7: Weekly Review view — Metric input, status badges, save
@@ -106,6 +106,19 @@ A single-page React application that serves as the daily operating cockpit for t
 - `gtm-app/src/data/contentBriefs.js` (19 KB)
 - `gtm-app/src/data/referenceContent.js` (21 KB)
 - `gtm-app/src/data/killCriteria.js` (1.6 KB)
+
+### Task 4 — Data Layer: sheetsApi, localStore, dataLayer (2026-04-10)
+
+**What was done:**
+- Created `sheetsApi.js` — 7 async functions (fetchMetrics, saveMetrics, fetchContentCalendar, saveContentItem, fetchPhaseChecklist, saveChecklistItem, fetchConfig) that call a Google Apps Script web app URL. Reads connection config (appsScriptUrl, sheetId) from localStorage. Each call has a 10-second AbortController timeout, HTTP error checking, and JSON parsing. Returns null gracefully when no connection is configured.
+- Created `localStore.js` — localStorage wrapper with `yeslifers_` prefix. Cache layer stores `{ data, timestamp }` so views can display staleness. Write queue stores pending saves with unique queueIds for offline→online sync. Includes `isOffline()` using `navigator.onLine` heuristic.
+- Created `dataLayer.js` — The single import point for all views. Implements read-through caching (try remote → update cache on success → serve cache on failure) and write-through queuing (try remote → queue on failure or offline). 9 exported functions: loadMetrics, saveWeeklyMetrics, loadContentCalendar, saveContentEntry, loadPhaseChecklist, saveChecklistEntry, loadConfig, saveConfig, flushWriteQueue. Config merge logic combines remote Sheet config (key/value rows) with local connection settings.
+- Build verified: `npm run build` passes (43 modules, 547ms — new utils not yet imported by views, so tree-shaken; files are valid JS)
+
+**Files created:**
+- `gtm-app/src/utils/sheetsApi.js` (4.1 KB)
+- `gtm-app/src/utils/localStore.js` (2.4 KB)
+- `gtm-app/src/utils/dataLayer.js` (4.6 KB)
 
 ---
 
