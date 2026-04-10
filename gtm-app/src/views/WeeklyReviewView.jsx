@@ -74,6 +74,59 @@ function cadenceStatus(value, check) {
 
 /* ── component ───────────────────────────────── */
 
+/** Simple SVG sparkline: dots + line + dashed target. */
+function Sparkline({ points, target, width = 200, height = 56 }) {
+  const pad = 8;
+  const plotW = width - pad * 2;
+  const plotH = height - pad * 2;
+
+  const allVals = [...points.map((p) => p.value), target].filter(
+    (v) => v != null && !isNaN(v),
+  );
+  const minVal = Math.min(...allVals);
+  const maxVal = Math.max(...allVals);
+  const range = maxVal - minVal || 1;
+
+  const x = (i) =>
+    pad +
+    (points.length === 1 ? plotW / 2 : (i / (points.length - 1)) * plotW);
+  const y = (v) => pad + plotH - ((v - minVal) / range) * plotH;
+
+  const polyPoints = points
+    .map((p, i) => `${x(i)},${y(p.value)}`)
+    .join(' ');
+  const targetY = target != null ? y(target) : null;
+
+  return (
+    <svg
+      className="sparkline"
+      viewBox={`0 0 ${width} ${height}`}
+      width={width}
+      height={height}
+    >
+      {targetY != null && (
+        <line
+          x1={pad}
+          y1={targetY}
+          x2={width - pad}
+          y2={targetY}
+          className="sparkline__target"
+        />
+      )}
+      <polyline points={polyPoints} className="sparkline__line" />
+      {points.map((p, i) => (
+        <circle
+          key={i}
+          cx={x(i)}
+          cy={y(p.value)}
+          r="3"
+          className="sparkline__dot"
+        />
+      ))}
+    </svg>
+  );
+}
+
 export default function WeeklyReviewView() {
   const [weekOf, setWeekOf] = useState(() => getMonday(new Date()));
   const [values, setValues] = useState({});
@@ -85,6 +138,8 @@ export default function WeeklyReviewView() {
   const [saving, setSaving] = useState(false);
   const [saveMsg, setSaveMsg] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [trendRows, setTrendRows] = useState([]);
+  const [copied, setCopied] = useState(false);
 
   const currentPhase = config?.currentPhase ?? 0;
   const phaseKey = PHASE_KEYS[currentPhase];
@@ -104,6 +159,13 @@ export default function WeeklyReviewView() {
       const res = await loadMetrics();
       if (res.data) {
         const rows = Array.isArray(res.data) ? res.data : [res.data];
+
+        // Last 8 weeks sorted chronologically for trend sparklines
+        const sorted = [...rows]
+          .filter((r) => r.weekOf)
+          .sort((a, b) => a.weekOf.localeCompare(b.weekOf));
+        setTrendRows(sorted.slice(-8));
+
         const row = rows.find((r) => r.weekOf === weekKey);
         if (row) {
           const phaseKey_ = PHASE_KEYS[config?.currentPhase ?? 0];
@@ -194,6 +256,53 @@ export default function WeeklyReviewView() {
   const weekEnd = new Date(weekOf);
   weekEnd.setDate(weekEnd.getDate() + 6);
   const isCurrentWeek = toISO(getMonday(new Date())) === weekKey;
+
+  /* build plain-text summary for clipboard */
+  const buildSummaryText = () => {
+    const lines = [
+      `Weekly Review — ${PHASE_LABELS[currentPhase]}`,
+      `Week of ${formatDate(weekOf)} — ${formatDate(weekEnd)}`,
+      '',
+      '── Stage Gate Metrics ──',
+    ];
+    phaseMetrics.forEach((m) => {
+      const val = values[m.id] ?? '—';
+      const level = alertLevel(val, m);
+      const flag =
+        level === 'amber' || level === 'red'
+          ? ` [${level.toUpperCase()}]`
+          : '';
+      lines.push(
+        `  ${m.label}: ${val}${m.unit === '%' ? '%' : ''} (target: ${m.target}${m.unit === '%' ? '%' : ''})${flag}`,
+      );
+    });
+    lines.push('', '── Cadence Check ──');
+    CADENCE_CHECKS.forEach((c) => {
+      const val = cadenceValues[c.id] ?? '—';
+      const level = cadenceStatus(val, c);
+      const flag =
+        level === 'amber' || level === 'red'
+          ? ` [${level.toUpperCase()}]`
+          : '';
+      lines.push(`  ${c.label}: ${val}${flag}`);
+    });
+    if (blockers) lines.push('', '── Blockers ──', blockers);
+    if (priorities) lines.push('', '── Priorities ──', priorities);
+    if (founderSummary)
+      lines.push('', '── Founder Summary ──', founderSummary);
+    return lines.join('\n');
+  };
+
+  /* copy summary to clipboard */
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(buildSummaryText());
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // clipboard API may fail in insecure context
+    }
+  };
 
   /* ── loading gate ─────────────────────────── */
   if (loading && config === null) {
@@ -422,7 +531,7 @@ export default function WeeklyReviewView() {
         />
       </section>
 
-      {/* ── Save ───────────────────────────── */}
+      {/* ── Save + Copy ────────────────────── */}
       <div className="weekly-save-row">
         <button
           className="btn btn--primary"
@@ -430,6 +539,12 @@ export default function WeeklyReviewView() {
           disabled={saving}
         >
           {saving ? 'Saving\u2026' : 'Save Weekly Review'}
+        </button>
+        <button
+          className={`weekly-copy-btn${copied ? ' weekly-copy-btn--copied' : ''}`}
+          onClick={handleCopy}
+        >
+          {copied ? 'Copied!' : 'Copy Summary'}
         </button>
         {saveMsg && (
           <span
@@ -439,6 +554,33 @@ export default function WeeklyReviewView() {
           </span>
         )}
       </div>
+
+      {/* ── Trend ──────────────────────────── */}
+      <section className="weekly-card">
+        <h2 className="weekly-card__title">Trend (last 8 weeks)</h2>
+        {trendRows.length < 2 ? (
+          <p className="weekly-empty">
+            Need at least 2 weeks of data to show trends.
+          </p>
+        ) : (
+          <div className="trend-grid">
+            {phaseMetrics
+              .filter((m) => m.unit !== 'boolean' && m.unit !== 'currency')
+              .map((m) => {
+                const pts = trendRows
+                  .map((r) => ({ value: Number(r[m.id]) }))
+                  .filter((p) => !isNaN(p.value));
+                if (pts.length < 2) return null;
+                return (
+                  <div key={m.id} className="trend-item">
+                    <span className="trend-item__label">{m.label}</span>
+                    <Sparkline points={pts} target={m.target} />
+                  </div>
+                );
+              })}
+          </div>
+        )}
+      </section>
     </div>
   );
 }

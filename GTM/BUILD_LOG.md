@@ -14,7 +14,7 @@ A single-page React application that serves as the daily operating cockpit for t
 - [x] Task 5: Settings view — Sheet connection, phase config
 - [x] Task 6: Today view — Daily cadence, alerts, content due
 - [x] Task 7: Weekly Review view — Metric input, status badges, save
-- [ ] Task 8: Weekly Review view — Trend sparklines, copy-to-clipboard
+- [x] Task 8: Weekly Review view — Trend sparklines, copy-to-clipboard
 - [ ] Task 9: Playbook view — Phase tabs, checklists, exit criteria, progress
 - [ ] Task 10: Content view — Calendar grid, status dropdowns, week nav
 - [ ] Task 11: Content view — Brief modals, add content form, pre-populate
@@ -168,6 +168,19 @@ A single-page React application that serves as the daily operating cockpit for t
 **Files created/modified:**
 - `gtm-app/src/views/WeeklyReviewView.jsx` (modified — placeholder → full view)
 - `gtm-app/src/views/WeeklyReviewView.css` (new)
+
+### Task 8 — Weekly Review View Part 2: Trend Sparklines, Copy-to-Clipboard (2026-04-10)
+
+**What was done:**
+- Added `Sparkline` component — a pure SVG mini-chart that renders dots connected by a polyline, with a dashed horizontal target line. Takes `points` (array of `{value}`), `target`, optional `width`/`height`. Uses linear scaling with padding, inverts Y-axis for SVG coordinate space. Filters out boolean and currency metrics (only numeric metrics get sparklines).
+- Trend section: Renders below the save button inside a `weekly-card`. Loads last 8 weeks of data from the same `loadMetrics()` call used for form pre-fill — rows are sorted by `weekOf` and sliced to the last 8. Each numeric metric gets its own sparkline in a 2-column CSS grid. Shows "Need at least 2 weeks of data" placeholder when insufficient history.
+- Copy Summary button: Sits next to the Save button in the action row. Builds a plain-text summary with phase, week range, all metric values with targets and alert flags (`[AMBER]`/`[RED]`), cadence check status, blockers, priorities, and founder summary. Uses `navigator.clipboard.writeText()` with a 2-second "Copied!" confirmation state. Degrades silently if clipboard API is unavailable.
+- Added CSS: `.weekly-copy-btn` with hover/copied states, `.trend-grid` (2-column grid), `.trend-item` (label + sparkline card), `.sparkline` SVG classes (`.sparkline__target` dashed line, `.sparkline__line` blue polyline, `.sparkline__dot` blue circles). All using existing CSS custom properties.
+- Build verified: `npm run build` passes (52 modules, 698ms — CSS grew to 13.65 KB)
+
+**Files modified:**
+- `gtm-app/src/views/WeeklyReviewView.jsx` (added Sparkline component, trendRows/copied state, buildSummaryText, handleCopy, trend section JSX, copy button)
+- `gtm-app/src/views/WeeklyReviewView.css` (added copy-button and sparkline/trend styles)
 
 ---
 
