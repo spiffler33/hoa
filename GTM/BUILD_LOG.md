@@ -9,7 +9,7 @@ A single-page React application that serves as the daily operating cockpit for t
 - [x] Task 0: Setup & plan
 - [x] Task 1: Scaffold — Vite + React + Router + CSS + Layout + Nav
 - [x] Task 2: Static data files — stageGates, cadence, phaseChecklists
-- [ ] Task 3: Static data files — contentBriefs, referenceContent, killCriteria
+- [x] Task 3: Static data files — contentBriefs, referenceContent, killCriteria
 - [ ] Task 4: Data layer — sheetsApi, localStore, offline fallback
 - [ ] Task 5: Settings view — Sheet connection, phase config
 - [ ] Task 6: Today view — Daily cadence, alerts, content due
@@ -93,6 +93,19 @@ A single-page React application that serves as the daily operating cockpit for t
 - `gtm-app/src/data/stageGates.js` (10.5 KB)
 - `gtm-app/src/data/cadence.js` (9 KB)
 - `gtm-app/src/data/phaseChecklists.js` (9.3 KB)
+
+### Task 3 — Static Data Files: contentBriefs, referenceContent, killCriteria (2026-04-10)
+
+**What was done:**
+- Created `contentBriefs.js` — 4 channels (linkedin, instagram, email, community) with format definitions. LinkedIn has 4 format types (philosophy, story, framework, engagement), each with type, frequency, purpose, tone, structure array, and briefTemplate. Also includes 3 examplePosts, 4 engagementExamples, and the 12-week Friday framework rotation (weekRotation). Instagram has 3 formats (carousel, reel, stories). Email has welcome drip (4-email sequence with day/subject/content/cta) and ongoing newsletter. Community has 3 formats (sayYesMoment with 5 rotating prompts, hellYesDecision thread template, podCheckIn).
+- Created `referenceContent.js` — 6 sections (icp, roles, compliance, community, monetisation, vocabulary) with subsections. ICP: 5 subsections from Sections 1.2–1.4. Roles: 4 subsections from Sections 2.2–2.5 (role map, RACI, founder time, hiring triggers). Compliance: 7 subsections from Sections 3.2–3.8 (SEBI context, disclosure, claims, testimonials, boundary, checklist, cadence). Community: 5 subsections from Sections 4.8–4.11 (platform/channels, entry flow, pods, rituals, partnerships). Monetisation: 4 subsections from Sections 6.1–6.4 (revenue, unit economics, advisory capacity, pricing). Vocabulary: 10 terms from Appendix A.
+- Created `killCriteria.js` — 5 kill criteria from Section 8.4, each with id, condition, signal, and action. Covers: wedge wrong, community model failure, app bridge broken, revenue model failure, founder burnout.
+- Build verified: `npm run build` passes (43 modules, 641ms)
+
+**Files created:**
+- `gtm-app/src/data/contentBriefs.js` (19 KB)
+- `gtm-app/src/data/referenceContent.js` (21 KB)
+- `gtm-app/src/data/killCriteria.js` (1.6 KB)
 
 ---
 

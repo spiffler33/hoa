@@ -1,0 +1,349 @@
+/**
+ * Reference content for the Reference view — extracted from gtm_content.md
+ * Sections 1.2–1.4 (ICP & wedge), 2.2–2.5 (roles & RACI), 3.2–3.8 (compliance),
+ * 4.8–4.11 (community structure & rituals), 6.1–6.4 (monetisation), Appendix A (vocabulary)
+ *
+ * Each section: { title, subsections: [{ id, heading, content }] }
+ * Content is a string (prose) or array of strings (list items / table rows).
+ */
+
+const referenceContent = {
+  /* ─────────────────── ICP & WEDGE (Sections 1.2–1.4) ──────────────── */
+  icp: {
+    title: "Launch ICP & Wedge",
+    subsections: [
+      {
+        id: "icp_primary",
+        heading: "Primary ICP — Phase 0 & 1",
+        content:
+          "Tech couples and senior individual contributors in Bangalore, Mumbai, and Pune. Age 28–38. Combined household income ₹3L–8L/month. Dual income or single high earner. Zero to one young child (or planning). Already investing — SIPs running, some direct equity, possibly some crypto. No financial plan. Making decisions reactively — home purchase, ESOP exercise, parental support — without a framework.",
+      },
+      {
+        id: "icp_why",
+        heading: "Why This Segment First",
+        content: [
+          "Pain intensity — High: earning well but no plan. 'Quiet uncertainty' is their exact emotional state.",
+          "Identity readiness — They already self-identify as 'intentional.' Yes Lifer identity maps naturally.",
+          "Founder credibility — SEBI registration and advisory track record land hardest with this audience.",
+          "Distribution density — Concentrated in tech company networks, LinkedIn communities, Bangalore/Mumbai circles.",
+          "Willingness to pay — ₹2,999–₹4,999 is trivial at this income. The barrier is trust, not price.",
+          "Decision urgency — Actively facing Hell Yes! Decisions: home purchase, career change, first child, FIRE aspirations.",
+        ],
+      },
+      {
+        id: "icp_secondary",
+        heading: "Secondary ICP — Phase 2 Expansion",
+        content:
+          "Salaried professionals in Tier 1 cities. Age 30–42. ₹1.5L–4L/month income. Married with children. The 'Rajesh' and 'Vikram & Priya' profiles. Broader, but community proof and content library from Phase 1 make this segment reachable.",
+      },
+      {
+        id: "icp_messaging",
+        heading: "Wedge-Specific Messaging",
+        content: [
+          "Earning well ≠ building well — 'You optimise your code reviews. When did you last optimise your money?'",
+          "FIRE curiosity without rigour — 'Your FIRE spreadsheet assumes 14% returns. Want to know what actually works?'",
+          "Home purchase paralysis — 'Bangalore real estate: the ₹1.5 Cr decision you're making on vibes'",
+          "Guilt spending — 'You just bought a ₹3L vacation and felt weird about it. Why?'",
+          "ESOP confusion — 'Your ESOPs vested. Now what?'",
+        ],
+      },
+      {
+        id: "icp_validation",
+        heading: "Wedge Validation Criteria",
+        content: [
+          "70%+ of Phase 1 community members match the primary ICP profile",
+          "Message testing shows >3% engagement on wedge-specific content (not just broad philosophical content)",
+          "At least 5 organic community referrals from within tech company networks (member-to-member)",
+          "Quiz completion data shows wedge segment has meaningfully higher completion rates than other segments",
+          "At least 3 community members have brought a Hell Yes! Decision that maps to the app's decision categories",
+        ],
+      },
+    ],
+  },
+
+  /* ─────────────── ROLES & OWNERSHIP (Sections 2.2–2.5) ─────────── */
+  roles: {
+    title: "Operating Model & Ownership",
+    subsections: [
+      {
+        id: "roles_map",
+        heading: "Role Map — Phase 0 & 1",
+        content: [
+          "GTM Lead — 35–40 hrs/week — Overall GTM execution, weekly review, funnel monitoring, stage gates, content calendar, partnerships, metrics, course corrections",
+          "Founder (content face) — 8–10 hrs/week — 2 LinkedIn posts/week (ghostwritten), 1 live session/month, guest appearances, community tone approval, advisory calls",
+          "Community Manager — 15–20 hrs/week (hire by Week 5) — Daily moderation, onboarding DMs, pod coordination, ritual facilitation, advice-boundary escalation",
+          "Content Producer — 10–15 hrs/week (freelancer) — Carousel design, Instagram content, reel editing, PDF templates, community graphics",
+          "Compliance Reviewer — 2–3 hrs/week — Pre-publication review against checklist, testimonial approval, boundary-issue flagging",
+          "Designer — 5–8 hrs/week (freelancer) — Brand assets, landing page, app-community screens, event graphics (batch work)",
+        ],
+      },
+      {
+        id: "roles_raci",
+        heading: "RACI Matrix — Key Workstreams",
+        content: [
+          "Content calendar & publishing — GTM Lead: A,R | Founder: C | CM: I | Content Producer: R | Compliance: C",
+          "Community daily operations — GTM Lead: A | Founder: I | CM: R | Compliance: C",
+          "Accountability pods — GTM Lead: A | Founder: I | CM: R",
+          "Partnership outreach — GTM Lead: R,A | Founder: C | Content Producer: R | Compliance: C",
+          "Waitlist & email nurture — GTM Lead: R,A | Founder: C | Content Producer: R | Compliance: C",
+          "Message testing & optimisation — GTM Lead: R,A | Founder: C | CM: I | Content Producer: R | Compliance: C",
+          "Funnel monitoring & stage gates — GTM Lead: R,A | Founder: I | CM: I",
+          "App onboarding community path — GTM Lead: R,A | Founder: C | CM: C",
+          "Advisory pipeline & handoff — Founder: R,A | GTM Lead: C | CM: I | Compliance: C",
+          "Compliance review — Compliance: R | Founder: A | GTM Lead: C | CM: C",
+          "Landing page & quiz — GTM Lead: R,A | Founder: C | Content Producer: R | Compliance: C",
+          "Weekly GTM review — GTM Lead: R,A | Founder: I | CM: C",
+        ],
+      },
+      {
+        id: "roles_founder_time",
+        heading: "Founder Time Budget",
+        content: [
+          "Review & publish LinkedIn posts (ghostwritten) — 30 min × 2/week — Never delegated",
+          "Record short-form video (reels, talking head) — 1 hr × 1/week (batched monthly) — Delegate Month 6",
+          "Host Clarity Circle or live session — 1 hr × 1/month — Veteran members co-host Month 4",
+          "Guest podcast/LinkedIn Live appearances — 1.5 hrs × 2/month — Never delegated",
+          "Review content for compliance — 30 min × 1/week — Delegate when external advisor onboarded",
+          "Advisory calls (Option 3 clients) — 1 hr as needed — Never delegated (revenue engine)",
+          "GTM weekly review (read summary, flag issues) — 15 min × 1/week — Never delegated",
+        ],
+      },
+      {
+        id: "roles_hiring",
+        heading: "Hiring Triggers",
+        content: [
+          "Community Manager (PT → FT) — Community exceeds 500 members OR daily moderation >2 hrs/day — Phase 1, Week 8–10",
+          "Second content creator — Missing >2 calendar slots/week for 2 consecutive weeks — Phase 1, Week 12+",
+          "GTM analyst — Metric input and dashboard maintenance exceeds 5 hrs/week — Phase 2",
+          "Sales/advisory coordinator — Advisory pipeline exceeds 20 qualified leads/month — Phase 3",
+        ],
+      },
+    ],
+  },
+
+  /* ──────────────── COMPLIANCE (Sections 3.2–3.8) ──────────────── */
+  compliance: {
+    title: "Compliance Framework",
+    subsections: [
+      {
+        id: "compliance_sebi",
+        heading: "SEBI Regulatory Context",
+        content: [
+          "SEBI (Investment Advisers) Regulations, 2013 (as amended) — governs IA conduct, advice delivery, fee structures",
+          "SEBI Master Circular for Investment Advisers (February 6, 2026) — consolidated guidance on conduct, advertising, onboarding",
+          "SEBI Circular on Social Media Disclosure (February 26, 2026) — registered entities must disclose name and registration number",
+          "SEBI Advertisement Code for IAs — governs claims, testimonials, promotional content",
+        ],
+      },
+      {
+        id: "compliance_disclosure",
+        heading: "Social Media Disclosure Requirements",
+        content: [
+          "Mandatory on every platform: Registered name + SEBI Registration Number (INA number) in bio/about",
+          "Per-post: Any post referencing financial planning, investment strategy, or advice must include the registration disclosure",
+        ],
+      },
+      {
+        id: "compliance_claims",
+        heading: "Approved Claims Library",
+        content: [
+          "ALWAYS ALLOWED — General financial literacy, Yes Lifers philosophy, 7-step journey as framework, statistics with source citation, Yes Budget as budgeting philosophy",
+          "ALLOWED WITH DISCLOSURE — 'SEBI Registered Investment Adviser' (with reg number), 'Personalised financial plan' (no guaranteed outcomes), pricing, 'Complimentary advisor call'",
+          "NEVER ALLOWED — Specific return promises, performance guarantees, fund/stock recommendations in public, unsubstantiated comparisons, personalised advice outside regulated relationship, market-timing urgency",
+          "CAUTION ZONE — Member testimonials, 'What Could Be' scenarios with numbers, Hell Yes! Decision discussions, profile card stories with figures, before/after comparisons",
+        ],
+      },
+      {
+        id: "compliance_testimonials",
+        heading: "Testimonial Rules",
+        content: [
+          "Members may share experience of the process (feelings, clarity, emotional impact) — experiential, not advice",
+          "Members may NOT share specific returns, portfolio performance, or fund recommendations",
+          "Members may NOT imply results are typical or guaranteed",
+          "Every testimonial in marketing must include: 'Individual experiences may vary. Past results are not indicative of future performance.'",
+          "Video testimonials: disclaimer in description and ideally spoken/displayed",
+          "Community share template must never prompt members to share numbers, returns, or fund names",
+        ],
+      },
+      {
+        id: "compliance_boundary",
+        heading: "Education-to-Advice Boundary",
+        content: [
+          "EDUCATION (community, content, free app) — General principles, frameworks (7 steps, Yes Budget, Hell Yes!), free financial snapshot (shows picture, not recommendation), community discussions at framework level",
+          "ADVICE (paid plan, investment advisory, implementation) — Personalised recommendations (specific funds, allocation, SIP amounts), portfolio buy/sell/hold, tax optimisation, any 'you should do X' for a specific user",
+          "Moderation protocol: Redirect warmly ('Great question — and one that deserves personalised analysis'), DM repeated offenders privately, escalate to compliance reviewer if clearly advice",
+        ],
+      },
+      {
+        id: "compliance_checklist",
+        heading: "Pre-Publication Checklist",
+        content: [
+          "Does the post include SEBI disclosure (registration name + number) where required?",
+          "Does the post avoid specific return promises or performance guarantees?",
+          "Does the post avoid specific fund/stock/product recommendations?",
+          "If testimonial content is included, does it include the required disclaimer?",
+          "If before/after scenarios are shown, are they marked as illustrative?",
+          "Does the post avoid urgency/fear language about markets?",
+          "If the post references app or advisory services, is pricing disclosed accurately?",
+          "Has the post been reviewed by the compliance reviewer?",
+        ],
+      },
+      {
+        id: "compliance_cadence",
+        heading: "Compliance Review Cadence",
+        content: [
+          "Content pre-publication review — Every externally published post — GTM Lead drafts, Compliance Reviewer approves",
+          "Community audit — Weekly: scan for advice-boundary violations — CM flags, GTM Lead reviews",
+          "Testimonial review — Before each use in marketing — Compliance Reviewer approves",
+          "Approved claims library update — Monthly — GTM Lead updates, Compliance Reviewer approves",
+          "Full compliance review with external advisor — Quarterly — Founder + GTM Lead + External Advisor",
+        ],
+      },
+    ],
+  },
+
+  /* ──────── COMMUNITY STRUCTURE & RITUALS (Sections 4.8–4.11) ──────── */
+  community: {
+    title: "Community Structure & Rituals",
+    subsections: [
+      {
+        id: "community_platform",
+        heading: "Platform & Channel Structure",
+        content: [
+          "#introductions — New member onboarding. Template: 'I'm [name], I'm saying yes to [aspiration], and my first step is [action].' (Light moderation)",
+          "#clarity-moments (Step 1) — Members share how it felt to see their financial picture. Not numbers — feelings. (Moderate moderation)",
+          "#yes-list (Step 2) — Members share their Yes Lists. Experiences, freedoms, milestones they refuse to defer. (Light)",
+          "#yes-budget-wins (Step 3) — Wins from living the Yes Budget. The dinner said yes to. The SIP not skipped. (Light)",
+          "#hell-yes-decisions (Step 4) — Big decisions brought for structured discussion. Anonymised if needed. (Heavy — compliance actively managed)",
+          "#accountability-pods — Pod-specific threads. Private sub-channels for each pod. (Moderate — CM checks weekly)",
+          "#general — Open discussion. Community building. (Light)",
+          "#resources — Curated resources, articles, tools. GTM lead and CM post only. (Curated — no member posting)",
+        ],
+      },
+      {
+        id: "community_entry",
+        heading: "Entry Flow",
+        content: [
+          "1. Waitlist signup → email drip completes → community invite email with personalised link",
+          "2. New member lands on Circle → onboarding DM from Community Manager with welcome + template prompt",
+          "3. Member posts in #introductions using template",
+          "4. Community Manager replies with warm welcome and suggests first channel based on their intro",
+          "5. After 7 days, prompt to join an accountability pod",
+        ],
+      },
+      {
+        id: "community_pods",
+        heading: "Accountability Pods",
+        content: [
+          "Small groups: 4–6 members matched by life stage and financial goals",
+          "6-week sprint commitment with shared goal (e.g., 'build a 3-month emergency fund')",
+          "Weekly async check-in in private pod channel: What did I commit to? Did I do it? What's next?",
+          "Pod completion celebrated publicly in the community",
+          "At sprint end: option to continue with same pod, join new pod, or take a break",
+          "Matching criteria: life stage, primary goal (from intro post), location (same city preferred), availability",
+          "Facilitation: Weeks 5–12 by Community Manager; Weeks 12+ veteran members trained as facilitators",
+        ],
+      },
+      {
+        id: "community_rituals",
+        heading: "Community Rituals",
+        content: [
+          "Clarity Circle — Weekly, Thu 9 PM IST — Live audio — Founder 1x/month, CM other weeks — Share wins, ask questions, get support",
+          "Say Yes Moment — Daily — Community post prompt — CM — Normalises intentional spending",
+          "Hell Yes! Decision Thread — Bi-weekly — Structured thread — CM facilitates — One member presents a big decision",
+          "Monthly Retrospective — Monthly — Written post + live discussion — GTM Lead + Founder — Community growth, wins, upcoming plans",
+          "Pod Completion Celebration — At sprint end — Public post + badges — CM — Celebrate pod graduates, social proof for next cohort",
+        ],
+      },
+      {
+        id: "community_partnerships",
+        heading: "Strategic Partnerships — Phase 1",
+        content: [
+          "Co-branded content — 2–3 Indian finance/lifestyle creators (10K–100K followers) — Joint carousels or live sessions, co-creation not sponsorship",
+          "Cross-pollination — Adjacent communities (Finshots, ET Money, Kuvera forums) — Guest posts offering Yes Budget template as value-add",
+          "Corporate tie-ins — 2–3 mid-size tech companies (HR/wellness) — 'Yes Lifers for Teams' 60-min workshop, free, captures leads",
+          "Podcast/media — 3–5 appearances across Phase 1 — Founder appears on Indian PF/lifestyle podcasts",
+        ],
+      },
+    ],
+  },
+
+  /* ─────────────── MONETISATION (Sections 6.1–6.4) ──────────────── */
+  monetisation: {
+    title: "Monetisation & Service Design",
+    subsections: [
+      {
+        id: "monetisation_revenue",
+        heading: "Revenue Architecture",
+        content: [
+          "Option 1 — Financial Plan — ₹2,999 one-time — Trigger: app snapshot completed → upgrade prompt — Target: 150 plans/month by Month 12",
+          "Option 2 — Plan + Advisory — ₹4,999 one-time — Trigger: plan delivered → 'which fund exactly?' moment (Day 5–7) — Target: 60 upgrades/month",
+          "Option 3 — Implementation — Fee or commission (user chooses) — Trigger: advisory delivered → actions not completed (Day 14+) — Target: 20 clients/month",
+          "Advisory (ongoing) — AUM-based or fixed fee — Trigger: implementation clients → ongoing relationship — Target: 100 total clients by Month 12",
+        ],
+      },
+      {
+        id: "monetisation_unit_economics",
+        heading: "Unit Economics (Working Estimates)",
+        content: [
+          "Community → app conversion: 30% (pre-sold members convert better)",
+          "Cold → app conversion: 10–15% (standard for fintech)",
+          "Snapshot completion → paid plan: 15% (strong if 'What Could Be' card lands)",
+          "Plan → advisory upgrade: 25–30% ('which fund exactly?' is a natural moment)",
+          "Advisory → implementation: 30–40% (highest intent, highest value)",
+          "Average revenue per community member (Year 1): ₹450–₹600 blended",
+          "CAC (community path): Near-zero (organic, time cost not included)",
+          "CAC (paid acquisition, if used): ₹200–₹500 (validate in Phase 2)",
+        ],
+      },
+      {
+        id: "monetisation_advisory_capacity",
+        heading: "Advisory Capacity Planning",
+        content: [
+          "Advisor capacity: 25–30 active clients per advisor",
+          "Number of advisors needed: 3–4 (including founder) for 100 clients",
+          "Average onboarding time: 3 hours (call + plan review + setup)",
+          "Ongoing service per client: 1 hour/month (quarterly review + ad hoc)",
+          "Revenue per client (annual): ₹4,999 (plan) + advisory fees (₹10,000–₹30,000/year estimated)",
+          "Total advisory revenue potential (100 clients): ₹15L–₹35L/year",
+          "Hiring trigger: Pipeline exceeds 30 qualified leads/month with founder handling all calls → hire first dedicated advisor",
+        ],
+      },
+      {
+        id: "monetisation_pricing_validation",
+        heading: "Pricing Validation",
+        content: [
+          "Monitor conversion rates at each price point weekly",
+          "If Option 1 conversion <10%, test lower entry point (₹1,999) or time-limited offer",
+          "If Option 1 → Option 2 upgrade <15%, the 'which fund exactly?' moment isn't landing — revise upgrade prompt copy",
+          "Consider annual pricing for ongoing advisory (₹9,999/year or similar) vs one-time",
+        ],
+      },
+    ],
+  },
+
+  /* ─────────────── VOCABULARY (Appendix A) ──────────────────────── */
+  vocabulary: {
+    title: "Community Vocabulary",
+    subsections: [
+      {
+        id: "vocabulary_terms",
+        heading: "Standard Terms — Use Consistently Across All Communications",
+        content: [
+          "Yes Lifer — The member identity",
+          "Say Yes to Life! — The rallying cry",
+          "The Yes Life — The life members are designing",
+          "Say Yes moment — A win worth celebrating",
+          "The calibration — The ongoing act of balancing life and wealth",
+          "Hell Yes! Decision — A big call made with full clarity",
+          "The method — The 7-step journey",
+          "Wealth engine — The automated investment system",
+          "Life-rich — Rich in experience and in wealth",
+          "Yes Budget — A budget built around desire, not restriction",
+        ],
+      },
+    ],
+  },
+};
+
+export default referenceContent;
