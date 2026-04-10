@@ -19,7 +19,7 @@ A single-page React application that serves as the daily operating cockpit for t
 - [x] Task 10: Content view — Calendar grid, status dropdowns, week nav
 - [x] Task 11: Content view — Brief modals, add content form, buffer status
 - [x] Task 12: Control view — Stage gates, kill criteria, funnel model
-- [ ] Task 13: Reference view — Accordion sections, static content rendering
+- [x] Task 13: Reference view — Accordion sections, static content rendering
 - [ ] Task 14: Reference view — Interactive partnerships + compliance checklist
 - [ ] Task 15: Polish — Responsive, transitions, loading/error/empty states
 - [ ] Task 16: Deployment — GitHub Pages setup, final QA
@@ -247,6 +247,21 @@ A single-page React application that serves as the daily operating cockpit for t
 **Files modified:**
 - `gtm-app/src/views/ControlView.jsx` (modified — placeholder → full view)
 - `gtm-app/src/views/ControlView.css` (new)
+
+### Task 13 — Reference View Part 1: Accordion sections, static content rendering (2026-04-10)
+
+**What was done:**
+- Replaced ReferenceView placeholder with a full accordion-based reference library implementing spec Section 6.6 (Part 1 — static content rendering; interactive partnerships + compliance checklist deferred to Task 14)
+- Pill navigation bar: Horizontal scrollable bar with 6 pills (Launch ICP & Wedge, Operating Model & Ownership, Compliance Framework, Community Structure & Rituals, Monetisation & Service Design, Community Vocabulary). Active pill highlighted with blue accent background and blue border. Clicking a pill opens that section and scrolls to it smoothly.
+- Accordion sections: 6 collapsible sections rendered from all keys in `referenceContent.js` (icp, roles, compliance, community, monetisation, vocabulary). Single-expand behavior — only one section open at a time. Open section gets a blue outline glow. Each header shows a chevron indicator (▸/▾), section title, and subsection count badge in mono font.
+- Subsection rendering: Within each expanded section, subsections render with a blue-accented heading and body content. String content renders as a paragraph. Array content renders as a styled bullet list with custom dot markers. Subsections separated by subtle dividers.
+- Vocabulary section: 10 terms from Appendix A rendered as a definition list. Each entry is a card with a blue left border, term in mono font (fixed width) and definition alongside. Terms split from definitions on the " — " separator.
+- Created ReferenceView.css: Pill bar (horizontal scroll, rounded pills with active state), accordion sections (card style with hover headers), chevron + count badge, subsection layout (heading + body + list), definition list entries (card with blue left border), all using CSS custom properties from index.css.
+- Build verified: `npm run build` passes (59 modules, 1.15s — CSS grew from 32.80 KB to 35.52 KB with new view styles)
+
+**Files modified:**
+- `gtm-app/src/views/ReferenceView.jsx` (modified — placeholder → full view)
+- `gtm-app/src/views/ReferenceView.css` (new)
 
 ---
 
