@@ -8,7 +8,7 @@ A single-page React application that serves as the daily operating cockpit for t
 
 - [x] Task 0: Setup & plan
 - [x] Task 1: Scaffold — Vite + React + Router + CSS + Layout + Nav
-- [ ] Task 2: Static data files — stageGates, cadence, phaseChecklists
+- [x] Task 2: Static data files — stageGates, cadence, phaseChecklists
 - [ ] Task 3: Static data files — contentBriefs, referenceContent, killCriteria
 - [ ] Task 4: Data layer — sheetsApi, localStore, offline fallback
 - [ ] Task 5: Settings view — Sheet connection, phase config
@@ -80,6 +80,19 @@ A single-page React application that serves as the daily operating cockpit for t
 - `gtm-app/src/views/SettingsView.jsx` — placeholder
 - `gtm-app/vite.config.js` — base path set to `/hoa/`
 - Empty dirs created: `src/data/`, `src/utils/` (for Tasks 2–4)
+
+### Task 2 — Static Data Files: stageGates, cadence, phaseChecklists (2026-04-10)
+
+**What was done:**
+- Created `stageGates.js` — 29 metrics across 4 phases, each with id, label, target, unit, amber/red thresholds, prescribed actions, and applicableFrom. Phase 0–2 have full threshold data from Sections 4.4, 4.13, 4.20. Phase 3 KPIs from Section 4.27 have targets only (no amber/red in source doc, set to null).
+- Created `cadence.js` — Phase 0 keyed by week (1–4) then by day with task arrays (from Section 4.2). Phase 1 keyed by day-of-week (mon–sun) with recurring rhythm (from Section 4.7). Multi-day tasks (Mon–Tue) split across individual day entries.
+- Created `phaseChecklists.js` — All 4 phases with objective, weeks, infrastructure array, exitCriteria array. Phase 0 includes 12 infrastructure items (Section 4.3), 8 exit criteria (Section 4.5), and weekByWeek breakdown. Phase 1 has 9 exit criteria (Section 4.14). Phase 2 has 7 exit criteria (Section 4.21). Phase 3 has 4 exit criteria (from Phase overview table).
+- Build verified: `npm run build` passes (43 modules, 543ms)
+
+**Files created:**
+- `gtm-app/src/data/stageGates.js` (10.5 KB)
+- `gtm-app/src/data/cadence.js` (9 KB)
+- `gtm-app/src/data/phaseChecklists.js` (9.3 KB)
 
 ---
 
