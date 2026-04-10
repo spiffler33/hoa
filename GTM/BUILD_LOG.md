@@ -18,7 +18,7 @@ A single-page React application that serves as the daily operating cockpit for t
 - [x] Task 9: Playbook view — Phase tabs, checklists, exit criteria, progress
 - [x] Task 10: Content view — Calendar grid, status dropdowns, week nav
 - [x] Task 11: Content view — Brief modals, add content form, buffer status
-- [ ] Task 12: Control view — Stage gates, kill criteria, funnel model
+- [x] Task 12: Control view — Stage gates, kill criteria, funnel model
 - [ ] Task 13: Reference view — Accordion sections, static content rendering
 - [ ] Task 14: Reference view — Interactive partnerships + compliance checklist
 - [ ] Task 15: Polish — Responsive, transitions, loading/error/empty states
@@ -231,6 +231,22 @@ A single-page React application that serves as the daily operating cockpit for t
 **Files modified:**
 - `gtm-app/src/views/ContentView.jsx` (added contentBriefs import, BriefModal + AddContentModal subcomponents, buffer computation, brief/add state, View Brief button in calendar items, buffer status bar, add content button + modals)
 - `gtm-app/src/views/ContentView.css` (added ~220 lines: modal overlay/container, brief meta/section/template/example/email styles, content item row + brief button, buffer status bar, add content form)
+
+### Task 12 — Control View: Stage gates, kill criteria, funnel model (2026-04-10)
+
+**What was done:**
+- Replaced ControlView placeholder with a three-panel read-only alarm view implementing spec Section 6.5
+- Phase header card: Current phase label (from config), computed week number and weeks remaining (from `phaseStartDate` + `phaseChecklists` week ranges), summary badges counting red/amber/green metrics
+- Stage Gates panel: Renders all metrics from `stageGates.js` for the current phase (5 for Phase 0, 8 for Phase 1, 6 for Phase 2, 10 for Phase 3). Metrics grouped by semantic category (Growth, Engagement, Distribution, Validation, Activation, Revenue, Retention, Satisfaction) using an ID→category mapping. Each metric shows label, target, latest value (from most recent `loadMetrics` row), unit, and a traffic-light badge using the same `alertLevel()` threshold logic as WeeklyReviewView. Amber/red metrics show prescribed action text inline with a subtle colored background.
+- Kill Criteria panel: Renders all 5 kill criteria from `killCriteria.js`. Each card shows condition, signal description, and prescribed action. Three-state status system: `triggered` (red 2px border + red background when a related metric is at red alert), `clear` (green checkmark when related metrics have data and none are red), `pending` (muted + "Not yet testable" when no metric data exists). Cross-phase matching via `KILL_METRIC_MAP` maps each kill criterion to its related stage gate metric IDs.
+- Funnel Model panel: Five-stage horizontal flow (Awareness → Waitlist → Community → Active Users → Paying) with bordered stage cards and arrow separators. Each stage shows a label and a value slot — populated from the best matching metric when data is available, otherwise displays an em-dash placeholder. Wraps on smaller viewports.
+- Data loading: `Promise.all` for `loadConfig` + `loadMetrics` on mount. Latest values extracted by sorting all metric rows by `weekOf` descending and taking the first row.
+- Created ControlView.css: Header card, summary badges (red/amber/green with status-colored backgrounds), panel sections, category groups with labeled separators, metric rows with hover states and amber/red backgrounds, traffic-light badge dots with box-shadow glow, kill criteria cards with three-state borders and status dot indicators, funnel stage cards with arrows — all using CSS custom properties from index.css.
+- Build verified: `npm run build` passes (57 modules, 1.00s — CSS grew from 27.37 KB to 32.80 KB with new view styles)
+
+**Files modified:**
+- `gtm-app/src/views/ControlView.jsx` (modified — placeholder → full view)
+- `gtm-app/src/views/ControlView.css` (new)
 
 ---
 
