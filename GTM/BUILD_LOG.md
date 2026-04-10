@@ -13,7 +13,7 @@ A single-page React application that serves as the daily operating cockpit for t
 - [x] Task 4: Data layer — sheetsApi, localStore, offline fallback
 - [x] Task 5: Settings view — Sheet connection, phase config
 - [x] Task 6: Today view — Daily cadence, alerts, content due
-- [ ] Task 7: Weekly Review view — Metric input, status badges, save
+- [x] Task 7: Weekly Review view — Metric input, status badges, save
 - [ ] Task 8: Weekly Review view — Trend sparklines, copy-to-clipboard
 - [ ] Task 9: Playbook view — Phase tabs, checklists, exit criteria, progress
 - [ ] Task 10: Content view — Calendar grid, status dropdowns, week nav
@@ -150,6 +150,24 @@ A single-page React application that serves as the daily operating cockpit for t
 **Files created/modified:**
 - `gtm-app/src/views/TodayView.jsx` (modified — placeholder → full view)
 - `gtm-app/src/views/TodayView.css` (new)
+
+### Task 7 — Weekly Review View Part 1: Metric Input, Status Badges, Save (2026-04-10)
+
+**What was done:**
+- Replaced WeeklyReviewView placeholder with a full seven-section view implementing spec Section 6.2 (minus sparkline trends, which are Task 8)
+- Header section: Phase indicator (reads currentPhase from config), prev/next week navigation defaulting to current Monday, "current" badge when viewing this week. Week range displayed in mono font.
+- Stage Gate Metrics section: Renders all metrics from `stageGates.js` for the current phase (5 for Phase 0, 8 for Phase 1, 6 for Phase 2, 10 for Phase 3). Each metric row has label, target, number input (or Yes/No select for boolean metrics), unit suffix for %, and a live traffic-light badge computed via `alertLevel()` — same threshold logic as TodayView.
+- Cadence Check section: 4 operational discipline inputs (content buffer dropdown 0/1/2+, posts on schedule, rituals completed, pod check-in done) with green/amber/red badge logic.
+- Stage Gate Alerts section: Auto-computed from metric inputs — only appears when at least one metric is amber or red. Shows metric name, current value, alert level, and the prescribed action text from stageGates.js. Card border color is red if any red alerts, amber otherwise.
+- Text sections: Blockers, This Week's Priorities, and Founder Summary textareas with placeholder guidance text.
+- Save button: Calls `saveWeeklyMetrics()` from dataLayer.js, serializes all form fields (metrics + cadence + text) with weekOf key. Shows "saved" or "queued (offline)" toast feedback.
+- Data loading: On mount and week change, calls `loadMetrics()`, finds the row matching `weekOf`, and pre-fills all inputs. Clears form when no data exists for the selected week.
+- Created WeeklyReviewView.css: Header, week nav, card, metric row, input group, select, badge, gate alert, textarea, save row styles — all using CSS custom properties from index.css. Reuses `.btn` and `.settings-toast` classes from SettingsView.css (globally available since all views are eagerly imported in App.jsx).
+- Build verified: `npm run build` passes (52 modules, 846ms — CSS grew to 12.67 KB with new view styles)
+
+**Files created/modified:**
+- `gtm-app/src/views/WeeklyReviewView.jsx` (modified — placeholder → full view)
+- `gtm-app/src/views/WeeklyReviewView.css` (new)
 
 ---
 

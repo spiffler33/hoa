@@ -1,0 +1,253 @@
+/* ── WeeklyReviewView ── */
+
+.weekly-view {
+  display: flex;
+  flex-direction: column;
+  gap: var(--section-gap);
+}
+
+/* ── Header ── */
+
+.weekly-header {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: var(--card-padding);
+}
+
+.weekly-header__top {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.weekly-header__title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.weekly-header__phase {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--accent-blue);
+}
+
+/* ── Week navigation ── */
+
+.weekly-week-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.weekly-week-nav__btn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-button);
+  color: var(--text-secondary);
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.weekly-week-nav__btn:hover {
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+}
+
+.weekly-week-nav__label {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.weekly-week-nav__current {
+  font-size: 11px;
+  margin-left: 6px;
+  padding: 1px 6px;
+  background: var(--accent-blue-soft);
+  color: var(--accent-blue);
+  border-radius: var(--radius-badge);
+}
+
+/* ── Cards ── */
+
+.weekly-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: var(--card-padding);
+}
+
+.weekly-card__title {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.weekly-card--alerts {
+  border-color: var(--status-amber);
+}
+
+.weekly-card--alerts-red {
+  border-color: var(--status-red);
+}
+
+.weekly-empty {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+/* ── Metric rows ── */
+
+.weekly-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.weekly-metric {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px;
+  background: var(--bg-primary);
+  border-radius: var(--radius-badge);
+}
+
+.weekly-metric__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.weekly-metric__label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.weekly-metric__target {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.weekly-metric__input-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.weekly-metric__input {
+  width: 100px;
+  text-align: right;
+  font-family: var(--font-mono);
+}
+
+.weekly-metric__select {
+  width: 100px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-button);
+  padding: 8px 12px;
+}
+
+.weekly-metric__select:focus {
+  outline: none;
+  border-color: var(--border-active);
+}
+
+.weekly-metric__unit {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.weekly-metric__badge {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── Stage gate alerts ── */
+
+.weekly-gate-alerts {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.weekly-gate-alert {
+  padding: 10px;
+  border-radius: var(--radius-badge);
+}
+
+.weekly-gate-alert--amber {
+  background: var(--status-amber-bg);
+}
+
+.weekly-gate-alert--red {
+  background: var(--status-red-bg);
+}
+
+.weekly-gate-alert__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.weekly-gate-alert__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.weekly-gate-alert__label {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.weekly-gate-alert__action {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* ── Textareas ── */
+
+.weekly-textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 64px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* ── Save row ── */
+
+.weekly-save-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
