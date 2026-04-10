@@ -17,7 +17,7 @@ A single-page React application that serves as the daily operating cockpit for t
 - [x] Task 8: Weekly Review view — Trend sparklines, copy-to-clipboard
 - [x] Task 9: Playbook view — Phase tabs, checklists, exit criteria, progress
 - [x] Task 10: Content view — Calendar grid, status dropdowns, week nav
-- [ ] Task 11: Content view — Brief modals, add content form, pre-populate
+- [x] Task 11: Content view — Brief modals, add content form, buffer status
 - [ ] Task 12: Control view — Stage gates, kill criteria, funnel model
 - [ ] Task 13: Reference view — Accordion sections, static content rendering
 - [ ] Task 14: Reference view — Interactive partnerships + compliance checklist
@@ -217,6 +217,20 @@ A single-page React application that serves as the daily operating cockpit for t
 **Files created/modified:**
 - `gtm-app/src/views/ContentView.jsx` (modified — placeholder → full view)
 - `gtm-app/src/views/ContentView.css` (new)
+
+### Task 11 — Content View Part 2: Brief modals, add content form, buffer status (2026-04-10)
+
+**What was done:**
+- Added `BriefModal` component — opens when clicking "Brief" button on any content item card. Looks up the content brief from `contentBriefs.js` via two-level find: channel (lowercased) → formats[].type (case-insensitive match against post_type). Displays purpose, tone, structure (ordered list), brief template (key/value definition list with field names highlighted in blue), and type-specific extras: LinkedIn example posts + engagement examples, community rotating prompts, email welcome drip sequence. Read-only. Closes on overlay click or Escape key.
+- Added `AddContentModal` component — modal form with channel dropdown (LinkedIn, Instagram, Email, Community), post type dropdown (dynamically filtered by selected channel from contentBriefs format definitions), date picker (constrained to viewed week's Mon–Sun range, defaults to next empty day), title text input, and status dropdown (6 states). Channel change auto-resets post type to first available format. Saves new item via `saveContentEntry()` from dataLayer (optimistic UI — item appears immediately in calendar, remote save async). New items get `local_` prefixed IDs so dataLayer uses `action: 'write'`.
+- Added buffer status bar — card below calendar grid with two rows: "This week: X/Y drafted" (counts items with status drafted/in_review/approved/published vs total) and "Buffer: N items across M weeks ahead" with a traffic-light dot (green for 2+ weeks, amber for 1 week, red for 0). Future buffer filters all items after viewed week with status "drafted" or "approved", counts distinct week groups.
+- Added helper functions: `findBrief()` (channel+type lookup), `getPostTypes()` (channel→format types), `formatPostType()` (camelCase→Title Case), `getNextEmptyDay()` (smart day picker default), `norm()` (status normalisation).
+- Updated CSS with modal overlay (fixed full-screen, 60% black backdrop), modal container (560px max, 80vh scrollable), brief sections (purpose/tone/structure/template with definition list layout), example blockquotes (blue left border), form fields (mono font inputs, vertical label layout), buffer status bar (label/stat rows with traffic-light dots), and "Brief" button on content items (mono font, hover-to-blue).
+- Build verified: `npm run build` passes (55 modules, 1.35s — CSS grew from 22.23 KB to 27.37 KB with modal/form/buffer styles)
+
+**Files modified:**
+- `gtm-app/src/views/ContentView.jsx` (added contentBriefs import, BriefModal + AddContentModal subcomponents, buffer computation, brief/add state, View Brief button in calendar items, buffer status bar, add content button + modals)
+- `gtm-app/src/views/ContentView.css` (added ~220 lines: modal overlay/container, brief meta/section/template/example/email styles, content item row + brief button, buffer status bar, add content form)
 
 ---
 

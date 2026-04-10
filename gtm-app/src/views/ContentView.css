@@ -248,3 +248,365 @@
   font-size: 13px;
   color: var(--text-muted);
 }
+
+/* ── Content item row (status + brief button) ── */
+
+.content-item__row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.content-item__brief-btn {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 2px 6px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--text-muted);
+  background: transparent;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.content-item__brief-btn:hover {
+  color: var(--accent-blue);
+  border-color: var(--accent-blue);
+}
+
+/* ── Buffer status bar ── */
+
+.content-buffer {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 12px var(--card-padding);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.content-buffer__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.content-buffer__label {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  min-width: 80px;
+}
+
+.content-buffer__stat {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.content-buffer__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.content-buffer__dot--green {
+  background: var(--status-green);
+}
+
+.content-buffer__dot--amber {
+  background: var(--status-amber);
+}
+
+.content-buffer__dot--red {
+  background: var(--status-red);
+}
+
+/* ── Add Content button ── */
+
+.content-add-btn {
+  align-self: flex-start;
+}
+
+/* ── Modal overlay + container ── */
+
+.content-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 24px;
+}
+
+.content-modal {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  max-width: 560px;
+  width: 100%;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.content-modal--form {
+  max-width: 440px;
+}
+
+.content-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.content-modal__header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.content-modal__title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.content-modal__close {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-button);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.content-modal__close:hover {
+  color: var(--text-primary);
+  border-color: var(--text-secondary);
+}
+
+.content-modal__body {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.content-modal__empty {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ── Brief meta tags ── */
+
+.brief-meta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.brief-meta__tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 2px 8px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-badge);
+  color: var(--text-secondary);
+}
+
+/* ── Brief sections ── */
+
+.brief-section {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.brief-section:last-child {
+  border-bottom: none;
+}
+
+.brief-section__label {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.brief-section p {
+  font-size: 13px;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.brief-structure {
+  padding-left: 20px;
+  font-size: 13px;
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+.brief-structure li {
+  padding: 2px 0;
+}
+
+/* ── Brief template definition list ── */
+
+.brief-template {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.brief-template__row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.brief-template__row dt {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--accent-blue);
+  text-transform: uppercase;
+  padding-top: 2px;
+}
+
+.brief-template__row dd {
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+/* ── Brief examples + prompts ── */
+
+.brief-example {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  padding: 10px 14px;
+  border-left: 3px solid var(--accent-blue);
+  background: var(--bg-surface);
+  border-radius: 0 var(--radius-badge) var(--radius-badge) 0;
+  margin: 8px 0;
+}
+
+.brief-prompts {
+  padding-left: 18px;
+  font-size: 13px;
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+.brief-prompts li {
+  padding: 2px 0;
+}
+
+/* ── Brief email sequence ── */
+
+.brief-email {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.brief-email:last-child {
+  border-bottom: none;
+}
+
+.brief-email strong {
+  color: var(--text-primary);
+}
+
+.brief-email em {
+  color: var(--accent-blue);
+}
+
+.brief-email p {
+  margin-top: 4px;
+}
+
+.brief-email__cta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+/* ── Add Content form ── */
+
+.content-add-form {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.content-add-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.content-add-form__label {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+}
+
+.content-add-form select,
+.content-add-form input[type="date"],
+.content-add-form input[type="text"] {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-button);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+}
+
+.content-add-form select:focus,
+.content-add-form input:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+}
+
+.content-add-form__actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
