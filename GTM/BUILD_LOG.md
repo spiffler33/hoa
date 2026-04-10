@@ -22,7 +22,7 @@ A single-page React application that serves as the daily operating cockpit for t
 - [x] Task 13: Reference view — Accordion sections, static content rendering
 - [x] Task 14: Reference view — Interactive partnerships + compliance checklist
 - [x] Task 15: Polish — Responsive, transitions, loading/error/empty states
-- [ ] Task 16: Deployment — GitHub Pages setup, final QA
+- [x] Task 16: Deployment — GitHub Pages setup, final QA
 
 ---
 
@@ -323,6 +323,27 @@ A single-page React application that serves as the daily operating cockpit for t
 - `gtm-app/src/views/ReferenceView.jsx` (added EmptyState import, replaced partnership empty state)
 - `gtm-app/src/views/ReferenceView.css` (added accordion animation, partnership card hover lift, status transition, tablet + mobile breakpoints)
 - `gtm-app/src/views/SettingsView.css` (added card hover, tablet + mobile breakpoints)
+
+### Task 16 — Deployment: GitHub Pages Setup, Final QA (2026-04-10)
+
+**What was done:**
+- Installed `gh-pages` as a dev dependency in `gtm-app/`
+- Added `"predeploy": "npm run build"` and `"deploy": "gh-pages -d dist"` scripts to package.json. Running `npm run deploy` now automatically builds then pushes the `dist/` folder to the `gh-pages` branch.
+- Verified `base: '/hoa/'` in vite.config.js matches the GitHub Pages path — confirmed dist/index.html references `/hoa/assets/index-*.js` and `/hoa/assets/index-*.css`
+- Production build verified: 63 modules, 678ms build time. Output: index.html (0.72 KB), CSS (46.78 KB), JS (317.37 KB)
+- Full QA pass across all 7 views (Today, Weekly Review, Content, Playbook, Control, Reference, Settings) — reviewed with 4 parallel code audits covering: imports, state management, CSS class coverage, responsive breakpoints (768px + 480px), loading/error/empty states, modal logic, event handlers, data flow
+- QA fix: ContentView modal overlay `z-index` was 100, same as the sticky navbar — modals would render behind the nav. Fixed to `z-index: 200` (matching the global `.modal-overlay` pattern). Also added `fadeIn` and `scaleIn` animations to ContentView's `.content-modal-overlay` and `.content-modal` for consistency with all other modals.
+- All other QA checks passed: no console-error-producing bugs, all loading spinners and empty states wired up, all CSS classes resolved (shared `.btn`/`.settings-toast` classes globally available via single-file CSS bundle), all responsive breakpoints defined, all interactive elements functional.
+
+**Files modified:**
+- `gtm-app/package.json` (added gh-pages dev dependency, predeploy + deploy scripts)
+- `gtm-app/src/views/ContentView.css` (fixed modal z-index 100→200, added fadeIn/scaleIn animations)
+
+**Deploy command:**
+```
+cd gtm-app && npm run deploy
+```
+This runs `npm run build` (predeploy) then `gh-pages -d dist`, which pushes the built `dist/` folder to the `gh-pages` branch on the remote. GitHub Pages must be configured in the repo settings to serve from the `gh-pages` branch. The app will be live at `https://spiffler33.github.io/hoa/`.
 
 ---
 
