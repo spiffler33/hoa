@@ -52,6 +52,12 @@
   width: 100%;
 }
 
+.settings-field__hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
 .settings-row {
   display: flex;
   gap: 16px;
@@ -162,44 +168,6 @@
   color: var(--text-muted);
 }
 
-/* ── Status grid ── */
-
-.settings-status-grid {
-  display: flex;
-  gap: 24px;
-}
-
-.settings-status-item {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.settings-status-item__label {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-muted);
-}
-
-.settings-status-item__value {
-  font-family: var(--font-mono);
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.status--green {
-  color: var(--status-green);
-}
-
-.status--red {
-  color: var(--status-red);
-}
-
-.status--muted {
-  color: var(--text-muted);
-}
-
 /* ── Transitions ── */
 
 .settings-card {
@@ -212,15 +180,12 @@
 
 /* ── Responsive: Tablet ── */
 
-@media (max-width: 768px) {
-  .settings-status-grid { flex-wrap: wrap; gap: 16px; }
-}
+@media (max-width: 768px) {}
 
 /* ── Responsive: Mobile ── */
 
 @media (max-width: 480px) {
   .settings-row { flex-direction: column; gap: 12px; }
-  .settings-status-grid { flex-direction: column; gap: 12px; }
   .settings-card__actions { flex-direction: column; }
   .settings-card__actions .btn { width: 100%; }
 }
