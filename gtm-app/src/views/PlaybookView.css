@@ -1,0 +1,343 @@
+/* ── PlaybookView ── */
+
+.playbook-view {
+  display: flex;
+  flex-direction: column;
+  gap: var(--section-gap);
+}
+
+/* ── Phase Tab Bar ── */
+
+.playbook-tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 4px;
+}
+
+.playbook-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border: none;
+  border-radius: var(--radius-button);
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.playbook-tab:hover {
+  background: var(--bg-surface-hover);
+  color: var(--text-primary);
+}
+
+.playbook-tab--active {
+  background: var(--accent-blue-soft);
+  color: var(--accent-blue);
+}
+
+.playbook-tab__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.dot--active {
+  background: var(--accent-blue);
+}
+
+.playbook-tab__label {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.playbook-tab__weeks {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.playbook-tab--active .playbook-tab__weeks {
+  color: var(--accent-blue);
+  opacity: 0.7;
+}
+
+/* ── Cards (shared) ── */
+
+.playbook-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: var(--card-padding);
+}
+
+.playbook-card__title {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+/* ── Phase Header ── */
+
+.playbook-header__title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.playbook-header__weeks {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.playbook-header__objective {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ── Progress Bar ── */
+
+.playbook-progress__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.playbook-progress__count {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.playbook-progress__bar {
+  height: 10px;
+  background: var(--bg-primary);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.playbook-progress__fill {
+  height: 100%;
+  background: var(--status-green);
+  border-radius: 5px;
+  transition: width 0.3s ease;
+  min-width: 0;
+}
+
+.playbook-progress__pct {
+  display: block;
+  margin-top: 6px;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--status-green);
+}
+
+/* ── Checklist (infrastructure + exit criteria) ── */
+
+.playbook-checklist {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.playbook-checklist__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px;
+  border-radius: var(--radius-badge);
+  transition: background 0.1s;
+}
+
+.playbook-checklist__item:hover {
+  background: var(--bg-surface-hover);
+}
+
+.playbook-checklist__label {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  flex: 1;
+  cursor: pointer;
+  min-width: 0;
+}
+
+.playbook-checklist__cb {
+  accent-color: var(--accent-blue);
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.playbook-checklist__text {
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.playbook-checklist__text--done {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.playbook-checklist__note {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-style: italic;
+  flex-shrink: 0;
+}
+
+/* ── Exit Criteria Dots ── */
+
+.playbook-exit__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ── Week-by-Week ── */
+
+.playbook-weeks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.playbook-week {
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-badge);
+  overflow: hidden;
+}
+
+.playbook-week__header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.1s;
+  text-align: left;
+}
+
+.playbook-week__header:hover {
+  background: var(--bg-surface-hover);
+}
+
+.playbook-week__chevron {
+  font-size: 12px;
+  color: var(--text-muted);
+  width: 14px;
+  flex-shrink: 0;
+}
+
+.playbook-week__title {
+  flex: 1;
+}
+
+.playbook-week__tasks {
+  list-style: none;
+  padding: 0 12px 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.playbook-week__task {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.playbook-week__task:last-child {
+  border-bottom: none;
+}
+
+.playbook-week__day {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--accent-blue);
+  white-space: nowrap;
+  min-width: 56px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.playbook-week__task-text {
+  flex: 1;
+  line-height: 1.4;
+  color: var(--text-primary);
+}
+
+.playbook-week__owner {
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ── Advance Button ── */
+
+.playbook-advance {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.playbook-advance__btn {
+  flex: 1;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.playbook-advance__btn--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--bg-surface-hover);
+  border-color: var(--border);
+  color: var(--text-muted);
+}
+
+.playbook-advance__btn--disabled:hover {
+  background: var(--bg-surface-hover);
+}

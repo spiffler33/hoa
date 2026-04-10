@@ -15,7 +15,7 @@ A single-page React application that serves as the daily operating cockpit for t
 - [x] Task 6: Today view — Daily cadence, alerts, content due
 - [x] Task 7: Weekly Review view — Metric input, status badges, save
 - [x] Task 8: Weekly Review view — Trend sparklines, copy-to-clipboard
-- [ ] Task 9: Playbook view — Phase tabs, checklists, exit criteria, progress
+- [x] Task 9: Playbook view — Phase tabs, checklists, exit criteria, progress
 - [ ] Task 10: Content view — Calendar grid, status dropdowns, week nav
 - [ ] Task 11: Content view — Brief modals, add content form, pre-populate
 - [ ] Task 12: Control view — Stage gates, kill criteria, funnel model
@@ -181,6 +181,25 @@ A single-page React application that serves as the daily operating cockpit for t
 **Files modified:**
 - `gtm-app/src/views/WeeklyReviewView.jsx` (added Sparkline component, trendRows/copied state, buildSummaryText, handleCopy, trend section JSX, copy button)
 - `gtm-app/src/views/WeeklyReviewView.css` (added copy-button and sparkline/trend styles)
+
+### Task 9 — Playbook View: Phase tabs, checklists, exit criteria, progress (2026-04-10)
+
+**What was done:**
+- Replaced PlaybookView placeholder with a full four-section view implementing spec Section 6.4
+- Phase tab bar: Horizontal 4-tab bar (Phase 0–3), each showing phase number and week range. Defaults to `currentPhase` from config. Active tab highlighted with blue accent background and dot.
+- Phase header card: Phase name, week range in mono font, and full objective text from `phaseChecklists.js`.
+- Progress bar: Green fill bar showing exit criteria completion (done/total count, percentage). Animates on change via CSS transition.
+- Infrastructure checklist: Rendered for phases that have infrastructure items (Phase 0 has 12). Checkboxes toggle local state and persist via `saveChecklistEntry()` which writes to the `phase_checklist` sheet tab (or queues offline). Items show strikethrough when completed. Notes displayed in muted italic.
+- Week-by-week breakdown: Collapsible week cards for phases with `weekByWeek` data (Phase 0 has 4 weeks). Each card shows day, task description, and owner. Chevron toggle to expand/collapse. All expanded by default.
+- Exit criteria: Items with green/grey status dots (green = completed, grey = pending). Checkboxes persist via `saveChecklistEntry()`. Phase 0 has 8 criteria, Phase 1 has 9, Phase 2 has 7, Phase 3 has 4.
+- Advance button: Sits below exit criteria. Disabled (greyed, 50% opacity) until all exit criteria are checked. When enabled, updates `currentPhase` in config (both localStorage and remote), switches active tab, and shows a 3-second toast confirmation. Hidden on Phase 3 (no phase to advance to).
+- Data loading: On mount, reads `currentPhase` from `getConfig()` for default tab, loads saved checklist state from `loadPhaseChecklist()` (remote or cache) to pre-fill checkboxes. Shows "Loading…" during init.
+- Created PlaybookView.css: Tab bar (segmented control style), card layout, checklist with accent checkboxes, progress bar with green fill, week cards with collapsible headers, exit dots, advance button with disabled state — all using CSS custom properties.
+- Build verified: `npm run build` passes (53 modules, 848ms — CSS grew to 18.44 KB with new view styles)
+
+**Files created/modified:**
+- `gtm-app/src/views/PlaybookView.jsx` (modified — placeholder → full view)
+- `gtm-app/src/views/PlaybookView.css` (new)
 
 ---
 
