@@ -16,7 +16,7 @@ A single-page React application that serves as the daily operating cockpit for t
 - [x] Task 7: Weekly Review view — Metric input, status badges, save
 - [x] Task 8: Weekly Review view — Trend sparklines, copy-to-clipboard
 - [x] Task 9: Playbook view — Phase tabs, checklists, exit criteria, progress
-- [ ] Task 10: Content view — Calendar grid, status dropdowns, week nav
+- [x] Task 10: Content view — Calendar grid, status dropdowns, week nav
 - [ ] Task 11: Content view — Brief modals, add content form, pre-populate
 - [ ] Task 12: Control view — Stage gates, kill criteria, funnel model
 - [ ] Task 13: Reference view — Accordion sections, static content rendering
@@ -200,6 +200,23 @@ A single-page React application that serves as the daily operating cockpit for t
 **Files created/modified:**
 - `gtm-app/src/views/PlaybookView.jsx` (modified — placeholder → full view)
 - `gtm-app/src/views/PlaybookView.css` (new)
+
+### Task 10 — Content View Part 1: Calendar grid, status dropdowns, week nav (2026-04-10)
+
+**What was done:**
+- Replaced ContentView placeholder with a full Content Calendar view implementing spec Section 6.3 (Part 1 — calendar grid, status dropdowns, week navigation; briefs/add form deferred to Task 11)
+- Week navigation: Prev/next arrows with Monday date display (`formatShort` for Monday, `formatDate` for Sunday range). "current" badge when viewing this week. Same `getMonday` pattern as WeeklyReviewView.
+- Calendar grid: 7-column CSS grid (Mon–Sun). Each cell shows day abbreviation and date number in a header row, with content items stacked below. Today's column gets a highlighted background (`--bg-surface-hover`) and a blue circle on the date number. Empty days show at reduced opacity.
+- Content items: Each item card shows a color-coded channel pill (LinkedIn #0A66C2, Instagram #E4405F, Email #14B8A6, Community #8B5CF6), post type, title (2-line clamp), and a status dropdown. Title and type gracefully handle missing data.
+- Status dropdown: 6-state workflow (planned → drafted → in_review → approved → published → skipped). Each status has distinct color coding via CSS modifier classes (muted → blue → amber → green → green-bg → muted/dimmed). Changes trigger `saveContentEntry()` from dataLayer with optimistic UI update (state updates immediately, save fires async).
+- Data loading: Loads all content via `loadContentCalendar()` on mount, filters client-side by week range (weekStart ≤ date ≤ weekEnd). Items grouped into `itemsByDate` map for O(1) per-day lookup.
+- Empty state: When no content exists for the selected week, shows a centered card with placeholder message and hint text.
+- Created ContentView.css: Header card, week nav (consistent with WeeklyReviewView pattern), 7-column grid with 2px gap borders, day cells with today highlighting, content item cards, channel pills, status dropdown with 6 color variants, empty state — all using CSS custom properties from index.css.
+- Build verified: `npm run build` passes (54 modules, 1.25s — CSS grew to 22.23 KB with new view styles)
+
+**Files created/modified:**
+- `gtm-app/src/views/ContentView.jsx` (modified — placeholder → full view)
+- `gtm-app/src/views/ContentView.css` (new)
 
 ---
 
