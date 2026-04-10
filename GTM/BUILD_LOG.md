@@ -7,7 +7,7 @@ A single-page React application that serves as the daily operating cockpit for t
 ## Task Checklist
 
 - [x] Task 0: Setup & plan
-- [ ] Task 1: Scaffold — Vite + React + Router + CSS + Layout + Nav
+- [x] Task 1: Scaffold — Vite + React + Router + CSS + Layout + Nav
 - [ ] Task 2: Static data files — stageGates, cadence, phaseChecklists
 - [ ] Task 3: Static data files — contentBriefs, referenceContent, killCriteria
 - [ ] Task 4: Data layer — sheetsApi, localStore, offline fallback
@@ -49,12 +49,46 @@ A single-page React application that serves as the daily operating cockpit for t
 - Offline: localStorage cache + queued writes + disconnected banner
 - Component tree: 11 reusable components, 7 view components, 7 data files, 3 util files
 
+### Task 1 — Scaffold (2026-04-10)
+
+**What was done:**
+- Scaffolded Vite + React project at `hoa/gtm-app/` (see Decision 3 below for naming)
+- Installed react-router-dom
+- Set up `index.css` with all CSS custom properties from the spec: 18 color tokens, 3 font families, spacing/radius vars, reset, base styles, navbar + layout CSS
+- Added Google Fonts link (DM Sans 400/500/700, JetBrains Mono 400/500) to `index.html`
+- Created `createHashRouter` in `App.jsx` with 7 routes, each rendering a placeholder view
+- Created `Layout.jsx` (sticky nav + max-width 960px centered main area) and `NavBar.jsx` (tab-style navigation with active state highlighting)
+- Set `base: '/hoa/'` in `vite.config.js` for GitHub Pages
+- Cleaned out all default Vite boilerplate (logos, counter demo, default CSS)
+- Verified: `npm run build` succeeds, dev server serves correct HTML with fonts
+
+**Files created/modified:**
+- `gtm-app/` — new Vite + React project root
+- `gtm-app/index.html` — custom title, Google Fonts links
+- `gtm-app/src/index.css` — all design tokens + reset + navbar/layout CSS
+- `gtm-app/src/App.css` — emptied (global styles in index.css)
+- `gtm-app/src/App.jsx` — hash router with 7 routes wrapped in Layout
+- `gtm-app/src/main.jsx` — unchanged (Vite default entry)
+- `gtm-app/src/components/Layout.jsx` — NavBar + Outlet
+- `gtm-app/src/components/NavBar.jsx` — 7 tab-style NavLinks with active state
+- `gtm-app/src/views/TodayView.jsx` — placeholder
+- `gtm-app/src/views/WeeklyReviewView.jsx` — placeholder
+- `gtm-app/src/views/ContentView.jsx` — placeholder
+- `gtm-app/src/views/PlaybookView.jsx` — placeholder
+- `gtm-app/src/views/ControlView.jsx` — placeholder
+- `gtm-app/src/views/ReferenceView.jsx` — placeholder
+- `gtm-app/src/views/SettingsView.jsx` — placeholder
+- `gtm-app/vite.config.js` — base path set to `/hoa/`
+- Empty dirs created: `src/data/`, `src/utils/` (for Tasks 2–4)
+
 ---
 
 ## Decisions
 
-1. **Repo structure:** App code will live at `hoa/gtm/` (lowercase). Spec/docs remain at `hoa/GTM/` (uppercase).
+1. **Repo structure:** ~~App code will live at `hoa/gtm/` (lowercase).~~ See Decision 3.
 2. **Build sequence:** Following the 16-task checklist above, which groups static data files (Tasks 2-3) before the data layer (Task 4), allowing views to have real content from the start.
+3. **App directory renamed to `gtm-app/`:** macOS APFS is case-insensitive, so `gtm/` and `GTM/` collide. Changed app directory from `gtm/` to `gtm-app/` to avoid the conflict. Spec docs remain at `GTM/`.
+4. **create-vite v5 used:** Node 18.20.7 is incompatible with create-vite v9+ (requires Node >= 20.19.0). Used create-vite@5 which produces an identical React template.
 
 ---
 

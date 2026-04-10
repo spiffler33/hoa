@@ -1,0 +1,174 @@
+/* ── Yes Lifers GTM — Design Tokens ── */
+
+:root {
+  /* Backgrounds */
+  --bg-primary: #0F172A;
+  --bg-surface: #1E293B;
+  --bg-surface-hover: #334155;
+  --bg-elevated: #0F172A;
+
+  /* Text */
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+
+  /* Accent */
+  --accent-blue: #3B82F6;
+  --accent-blue-soft: #1E3A5F;
+
+  /* Status */
+  --status-green: #22C55E;
+  --status-green-bg: #052E16;
+  --status-amber: #F59E0B;
+  --status-amber-bg: #451A03;
+  --status-red: #EF4444;
+  --status-red-bg: #450A0A;
+
+  /* Borders */
+  --border: #334155;
+  --border-active: #3B82F6;
+
+  /* Typography */
+  --font-display: 'DM Sans', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Spacing */
+  --space-unit: 4px;
+  --card-padding: 16px;
+  --section-gap: 24px;
+  --page-padding-x: 24px;
+  --page-padding-y: 32px;
+
+  /* Radius */
+  --radius-card: 10px;
+  --radius-badge: 4px;
+  --radius-button: 6px;
+}
+
+/* ── Reset & Base ── */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a {
+  color: var(--accent-blue);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button {
+  font-family: var(--font-body);
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: var(--text-primary);
+}
+
+input, select, textarea {
+  font-family: var(--font-body);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-button);
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--border-active);
+}
+
+/* ── NavBar ── */
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 var(--page-padding-x);
+  height: 48px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.navbar-wordmark {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--text-primary);
+  white-space: nowrap;
+  margin-right: 8px;
+}
+
+.navbar-tabs {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+}
+
+.navbar-tab {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 12px 12px;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.navbar-tab:hover {
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.navbar-tab--active {
+  color: var(--accent-blue);
+  border-bottom-color: var(--accent-blue);
+}
+
+/* ── Layout ── */
+
+.main-content {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: var(--page-padding-y) var(--page-padding-x);
+}
+
+/* ── View placeholders ── */
+
+.view-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.view-placeholder {
+  color: var(--text-muted);
+  font-size: 14px;
+}
