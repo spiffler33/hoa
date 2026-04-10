@@ -15,7 +15,7 @@ const cadence = {
           time: "",
           activity:
             "Visual identity finalisation — logo, colour palette, typography, post templates",
-          owner: "Designer + GTM Lead",
+          owner: "Designer + GTM",
           phase: "phase_0",
         },
       ],
@@ -24,7 +24,7 @@ const cadence = {
           time: "",
           activity:
             "Landing page v1 — manifesto, Yes Lifer Code, quiz embed, waitlist CTA",
-          owner: "GTM Lead + Designer",
+          owner: "GTM + Designer",
           phase: "phase_0",
         },
       ],
@@ -33,7 +33,7 @@ const cadence = {
           time: "",
           activity:
             "Email infrastructure — Beehiiv setup, welcome drip sequence drafted",
-          owner: "GTM Lead",
+          owner: "GTM",
           phase: "phase_0",
         },
       ],
@@ -42,7 +42,7 @@ const cadence = {
           time: "",
           activity:
             "Community platform setup — Circle workspace, channels created, moderation rules written",
-          owner: "GTM Lead",
+          owner: "GTM",
           phase: "phase_0",
         },
       ],
@@ -51,7 +51,7 @@ const cadence = {
           time: "",
           activity:
             "Founder LinkedIn profile optimisation — headline, banner, featured section",
-          owner: "GTM Lead + Founder",
+          owner: "GTM + Founder",
           phase: "phase_0",
         },
       ],
@@ -62,7 +62,7 @@ const cadence = {
           time: "",
           activity:
             "Batch-create 20 LinkedIn posts and 15 Instagram carousels from content briefs",
-          owner: "Content Producer + GTM Lead",
+          owner: "Content Producer + GTM",
           phase: "phase_0",
         },
       ],
@@ -71,7 +71,7 @@ const cadence = {
           time: "",
           activity:
             "Batch-create 20 LinkedIn posts and 15 Instagram carousels (continued)",
-          owner: "Content Producer + GTM Lead",
+          owner: "Content Producer + GTM",
           phase: "phase_0",
         },
       ],
@@ -80,7 +80,7 @@ const cadence = {
           time: "",
           activity:
             "Founder's origin post — 'Why I'm building Yes Lifers' — drafted",
-          owner: "GTM Lead (ghostwrite)",
+          owner: "GTM (ghostwrite)",
           phase: "phase_0",
         },
       ],
@@ -97,7 +97,7 @@ const cadence = {
           time: "",
           activity:
             "Quiz — 'What's your money personality?' — built in Typeform, embedded on landing page",
-          owner: "GTM Lead",
+          owner: "GTM",
           phase: "phase_0",
         },
       ],
@@ -108,7 +108,7 @@ const cadence = {
           time: "",
           activity:
             "Launch message test A — LinkedIn carousel (tension framing)",
-          owner: "GTM Lead",
+          owner: "GTM",
           phase: "phase_0",
         },
       ],
@@ -126,7 +126,7 @@ const cadence = {
           time: "",
           activity:
             "Launch message test C — Landing page A/B headline test",
-          owner: "GTM Lead",
+          owner: "GTM",
           phase: "phase_0",
         },
       ],
@@ -135,7 +135,7 @@ const cadence = {
           time: "",
           activity:
             "Launch message test D — LinkedIn text post (Reddit/crowdsourcing angle)",
-          owner: "GTM Lead",
+          owner: "GTM",
           phase: "phase_0",
         },
       ],
@@ -155,7 +155,7 @@ const cadence = {
           time: "",
           activity:
             "Analyse message test results. Identify winning angles per channel.",
-          owner: "GTM Lead",
+          owner: "GTM",
           phase: "phase_0",
         },
       ],
@@ -164,7 +164,7 @@ const cadence = {
           time: "",
           activity:
             "Analyse message test results. Identify winning angles per channel. (continued)",
-          owner: "GTM Lead",
+          owner: "GTM",
           phase: "phase_0",
         },
       ],
@@ -173,7 +173,7 @@ const cadence = {
           time: "",
           activity:
             "Refine content bank based on winners. Update content briefs.",
-          owner: "GTM Lead + Content Producer",
+          owner: "GTM + Content Producer",
           phase: "phase_0",
         },
       ],
@@ -182,7 +182,7 @@ const cadence = {
           time: "",
           activity:
             "Second and third founder guest appearances booked/completed",
-          owner: "Founder + GTM Lead",
+          owner: "Founder + GTM",
           phase: "phase_0",
         },
       ],
@@ -191,7 +191,7 @@ const cadence = {
           time: "",
           activity:
             "Phase 0 exit review — do we meet exit criteria? Decision: proceed to Phase 1 or extend.",
-          owner: "GTM Lead",
+          owner: "GTM",
           phase: "phase_0",
         },
       ],
@@ -217,14 +217,14 @@ const cadence = {
         time: "30 min",
         activity:
           "Weekly GTM review — update metrics, check stage gates, identify blockers",
-        owner: "GTM Lead",
+        owner: "GTM",
         phase: "phase_1",
       },
       {
         time: "15 min",
         activity:
           "Share weekly summary with founder (async — Slack/email)",
-        owner: "GTM Lead",
+        owner: "GTM",
         phase: "phase_1",
       },
     ],
@@ -246,7 +246,7 @@ const cadence = {
         time: "As needed",
         activity:
           "Partnership outreach — 2 new outreach emails/DMs per week",
-        owner: "GTM Lead",
+        owner: "GTM",
         phase: "phase_1",
       },
     ],
@@ -267,7 +267,7 @@ const cadence = {
         time: "30 min",
         activity:
           "Content production review — is next week's content ready?",
-        owner: "GTM Lead + Content Producer",
+        owner: "GTM + Content Producer",
         phase: "phase_1",
       },
       {
@@ -311,14 +311,14 @@ const cadence = {
         time: "30 min",
         activity:
           "Community moderation review — any compliance flags this week?",
-        owner: "GTM Lead",
+        owner: "GTM",
         phase: "phase_1",
       },
       {
         time: "15 min",
         activity:
           "Content bank refill check — do we have 2 weeks of content ahead?",
-        owner: "GTM Lead",
+        owner: "GTM",
         phase: "phase_1",
       },
     ],
@@ -334,7 +334,7 @@ const cadence = {
         time: "",
         activity:
           "Bonus LinkedIn engagement post if capacity allows",
-        owner: "GTM Lead",
+        owner: "GTM",
         phase: "phase_1",
       },
     ],

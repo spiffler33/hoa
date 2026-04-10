@@ -12,7 +12,7 @@ const contentBriefs = {
   linkedin: {
     frequency: "3–4 posts/week",
     voice:
-      "Founder's personal voice (ghostwritten by GTM Lead, founder reviews and publishes)",
+      "Founder's personal voice (ghostwritten by GTM, founder reviews and publishes)",
     formats: [
       /* Monday — Philosophy Post */
       {

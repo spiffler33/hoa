@@ -102,27 +102,27 @@ const phaseChecklists = {
           {
             day: "Mon",
             task: "Visual identity finalisation \u2014 logo, colour palette, typography, post templates",
-            owner: "Designer + GTM Lead",
+            owner: "Designer + GTM",
           },
           {
             day: "Tue",
             task: "Landing page v1 \u2014 manifesto, Yes Lifer Code, quiz embed, waitlist CTA",
-            owner: "GTM Lead + Designer",
+            owner: "GTM + Designer",
           },
           {
             day: "Wed",
             task: "Email infrastructure \u2014 Beehiiv setup, welcome drip sequence drafted",
-            owner: "GTM Lead",
+            owner: "GTM",
           },
           {
             day: "Thu",
             task: "Community platform setup \u2014 Circle workspace, channels created, moderation rules written",
-            owner: "GTM Lead",
+            owner: "GTM",
           },
           {
             day: "Fri",
             task: "Founder LinkedIn profile optimisation \u2014 headline, banner, featured section",
-            owner: "GTM Lead + Founder",
+            owner: "GTM + Founder",
           },
         ],
       },
@@ -133,12 +133,12 @@ const phaseChecklists = {
           {
             day: "Mon\u2013Tue",
             task: "Batch-create 20 LinkedIn posts and 15 Instagram carousels from content briefs",
-            owner: "Content Producer + GTM Lead",
+            owner: "Content Producer + GTM",
           },
           {
             day: "Wed",
             task: "Founder\u2019s origin post \u2014 'Why I\u2019m building Yes Lifers' \u2014 drafted",
-            owner: "GTM Lead (ghostwrite)",
+            owner: "GTM (ghostwrite)",
           },
           {
             day: "Thu",
@@ -148,7 +148,7 @@ const phaseChecklists = {
           {
             day: "Fri",
             task: "Quiz \u2014 'What\u2019s your money personality?' \u2014 built in Typeform, embedded on landing page",
-            owner: "GTM Lead",
+            owner: "GTM",
           },
         ],
       },
@@ -159,7 +159,7 @@ const phaseChecklists = {
           {
             day: "Mon",
             task: "Launch message test A \u2014 LinkedIn carousel (tension framing)",
-            owner: "GTM Lead",
+            owner: "GTM",
           },
           {
             day: "Tue",
@@ -169,12 +169,12 @@ const phaseChecklists = {
           {
             day: "Wed",
             task: "Launch message test C \u2014 Landing page A/B headline test",
-            owner: "GTM Lead",
+            owner: "GTM",
           },
           {
             day: "Thu",
             task: "Launch message test D \u2014 LinkedIn text post (Reddit/crowdsourcing angle)",
-            owner: "GTM Lead",
+            owner: "GTM",
           },
           {
             day: "Fri",
@@ -190,22 +190,22 @@ const phaseChecklists = {
           {
             day: "Mon\u2013Tue",
             task: "Analyse message test results. Identify winning angles per channel.",
-            owner: "GTM Lead",
+            owner: "GTM",
           },
           {
             day: "Wed",
             task: "Refine content bank based on winners. Update content briefs.",
-            owner: "GTM Lead + Content Producer",
+            owner: "GTM + Content Producer",
           },
           {
             day: "Thu",
             task: "Second and third founder guest appearances booked/completed",
-            owner: "Founder + GTM Lead",
+            owner: "Founder + GTM",
           },
           {
             day: "Fri",
             task: "Phase 0 exit review \u2014 do we meet exit criteria? Decision: proceed to Phase 1 or extend.",
-            owner: "GTM Lead",
+            owner: "GTM",
           },
         ],
       },
