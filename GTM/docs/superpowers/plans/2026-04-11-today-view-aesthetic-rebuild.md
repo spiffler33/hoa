@@ -331,6 +331,6 @@ If the build passes, the plan is mechanically correct. Visual verification happe
 
 1. Night mode — `[data-theme="dark"]` block with warm charcoal palette
 2. `DAY | NIGHT` toggle in NavBar + `src/lib/theme.js` helper + pre-React hydration
-3. Rebuild of the remaining views to match the new aesthetic. Done: TodayView (4e98456), WeeklyReviewView (d4ed34e), PlaybookView (7d5cd36), ContentView (983fb4a), ControlView (0fb1812). Remaining: Reference, Settings.
+3. Rebuild of the remaining views to match the new aesthetic. Done: TodayView (4e98456), WeeklyReviewView (d4ed34e), PlaybookView (7d5cd36), ContentView (983fb4a), ControlView (0fb1812), ReferenceView (160712b). Remaining: Settings.
 4. Possibly adding JetBrains Mono weight 700 if emphasis needs a third weight beyond 400/500
 5. Verifying AA contrast in both modes after night mode ships
