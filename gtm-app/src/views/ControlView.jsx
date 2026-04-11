@@ -265,145 +265,155 @@ export default function ControlView() {
   /* ── Render ── */
   return (
     <div className="view control-view">
-      {/* ── Phase Header ──────────────────── */}
-      <header className="control-header">
-        <div className="control-header__top">
-          <h1 className="control-header__title">Control</h1>
-          <span className="control-header__subtitle">
-            Stage Gates &amp; Funnel
-          </span>
-        </div>
-        <div className="control-header__phase">
-          <span className="control-header__phase-label">
-            {PHASE_LABELS[currentPhase]}
-          </span>
+      {/* ── Banner ──────────────────────────────── */}
+      <header className="control-section control-banner">
+        <h1 className="control-banner__title">Control</h1>
+        <p className="control-banner__meta">
+          {PHASE_LABELS[currentPhase]}
           {weekNum != null && totalWeeks != null && (
-            <span className="control-header__week">
-              Week {weekNum} of {totalWeeks}
-              {weeksRemaining != null &&
-                ` \u00b7 ${weeksRemaining} week${weeksRemaining !== 1 ? 's' : ''} to exit target`}
-            </span>
+            <>
+              {' '}
+              <span className="control-banner__sep">{'\u00b7'}</span>{' '}
+              WK {weekNum}/{totalWeeks}
+              {weeksRemaining != null && (
+                <>
+                  {' '}
+                  <span className="control-banner__sep">{'\u00b7'}</span>{' '}
+                  {weeksRemaining} WK{weeksRemaining !== 1 ? 'S' : ''} TO EXIT
+                </>
+              )}
+            </>
           )}
-        </div>
-        {(redCount > 0 || amberCount > 0 || greenCount > 0) && (
-          <div className="control-header__summary">
-            {redCount > 0 && (
-              <span className="control-summary-badge control-summary-badge--red">
-                {redCount} red
-              </span>
-            )}
-            {amberCount > 0 && (
-              <span className="control-summary-badge control-summary-badge--amber">
-                {amberCount} amber
-              </span>
-            )}
-            {greenCount > 0 && (
-              <span className="control-summary-badge control-summary-badge--green">
-                {greenCount} green
-              </span>
-            )}
-          </div>
-        )}
+        </p>
       </header>
 
-      {/* ── Stage Gates ───────────────────── */}
-      <section className="control-panel">
-        <h2 className="control-panel__title">
-          Stage Gates ({PHASE_LABELS[currentPhase].split(' \u2014 ')[0]})
+      {/* ── Stage Gates ─────────────────────────── */}
+      <section className="control-section">
+        <h2 className="control-section__heading">
+          <span>
+            Stage gates{' '}
+            <span className="control-banner__sep">{'\u00b7'}</span>{' '}
+            {PHASE_LABELS[currentPhase].split(' \u2014 ')[0]}
+          </span>
+          {(redCount > 0 || amberCount > 0) && (
+            <span className="control-section__heading-meta">
+              {redCount > 0 && (
+                <span className="control-heading-count control-heading-count--red">
+                  {redCount} priority
+                </span>
+              )}
+              {amberCount > 0 && (
+                <span className="control-heading-count control-heading-count--amber">
+                  {amberCount} active
+                </span>
+              )}
+            </span>
+          )}
         </h2>
+
         {metricGroups.length === 0 ? (
           <EmptyState icon="\u2205" message="No metrics defined for this phase." />
         ) : (
           metricGroups.map((group) => (
             <div key={group.category} className="control-category">
               <h3 className="control-category__label">{group.category}</h3>
-              {group.metrics.map((m) => {
-                const val = latestValues[m.id];
-                const level = metricAlerts[m.id];
-                return (
-                  <div
-                    key={m.id}
-                    className={`control-metric control-metric--${level}`}
-                  >
-                    <div className="control-metric__row">
-                      <div className="control-metric__info">
+              <ul className="control-metrics">
+                {group.metrics.map((m) => {
+                  const val = latestValues[m.id];
+                  const level = metricAlerts[m.id];
+                  return (
+                    <li
+                      key={m.id}
+                      className={`control-metric control-metric--${level}`}
+                    >
+                      <div className="control-metric__row">
                         <span className="control-metric__label">{m.label}</span>
-                        <span className="control-metric__target">
-                          Target: {formatTarget(m.target, m.unit)}
-                        </span>
-                      </div>
-                      <div className="control-metric__right">
+                        <span
+                          className="control-metric__leader"
+                          aria-hidden="true"
+                        />
                         <span className="control-metric__value">
                           {formatValue(val, m.unit)}
                         </span>
-                        <span
-                          className={`control-badge control-badge--${level}`}
-                          title={level}
-                        />
+                        <span className="control-metric__target">
+                          / {formatTarget(m.target, m.unit)}
+                        </span>
                       </div>
-                    </div>
-                    {(level === 'amber' || level === 'red') && (
-                      <p className="control-metric__action">
-                        {level === 'red' ? m.redAction : m.amberAction}
-                      </p>
-                    )}
-                  </div>
-                );
-              })}
+                      {(level === 'amber' || level === 'red') && (
+                        <p className="control-metric__action">
+                          <span className="control-metric__action-label">
+                            {level === 'red' ? 'Priority' : 'Action'}
+                          </span>
+                          {level === 'red' ? m.redAction : m.amberAction}
+                        </p>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
           ))
         )}
       </section>
 
-      {/* ── Kill Criteria ─────────────────── */}
-      <section className="control-panel">
-        <h2 className="control-panel__title">Kill Criteria</h2>
-        <div className="control-kills">
+      {/* ── Kill Criteria ───────────────────────── */}
+      <section className="control-section">
+        <h2 className="control-section__heading">
+          <span>Kill criteria</span>
+        </h2>
+        <ul className="control-kills">
           {killCriteria.map((kc) => {
             const status = killStatus[kc.id];
+            const glyph =
+              status === 'clear'
+                ? '[\u2713]'
+                : status === 'triggered'
+                  ? '[!]'
+                  : '[\u2014]';
             return (
-              <div
+              <li
                 key={kc.id}
                 className={`control-kill control-kill--${status}`}
               >
-                <div className="control-kill__header">
+                <div className="control-kill__row">
                   <span
-                    className={`control-kill__dot control-kill__dot--${status}`}
+                    className={`control-kill__glyph control-kill__glyph--${status}`}
+                    aria-hidden="true"
                   >
-                    {status === 'clear'
-                      ? '\u2713'
-                      : status === 'triggered'
-                        ? '!'
-                        : '\u2014'}
+                    {glyph}
                   </span>
-                  <h3 className="control-kill__condition">{kc.condition}</h3>
+                  <span className="control-kill__condition">{kc.condition}</span>
                 </div>
-                <p className="control-kill__signal">
-                  <strong>Signal:</strong> {kc.signal}
+                <p className="control-kill__line">
+                  <span className="control-kill__line-label">Signal</span>
+                  {kc.signal}
                 </p>
-                <p className="control-kill__action">
-                  <strong>Action:</strong> {kc.action}
+                <p className="control-kill__line">
+                  <span className="control-kill__line-label">Action</span>
+                  {kc.action}
                 </p>
                 {status === 'pending' && (
-                  <span className="control-kill__pending">
-                    Not yet testable
-                  </span>
+                  <p className="control-kill__pending">Not yet testable</p>
                 )}
-              </div>
+              </li>
             );
           })}
-        </div>
+        </ul>
       </section>
 
-      {/* ── Funnel Model ──────────────────── */}
-      <section className="control-panel">
-        <h2 className="control-panel__title">Funnel Model</h2>
+      {/* ── Funnel ──────────────────────────────── */}
+      <section className="control-section">
+        <h2 className="control-section__heading">
+          <span>Funnel</span>
+        </h2>
         <div className="control-funnel">
           {FUNNEL_STAGES.map((stage, i) => (
             <div key={stage.id} className="control-funnel__step">
               <div className="control-funnel__stage">
-                <span className="control-funnel__label">{stage.label}</span>
-                <span className="control-funnel__value">
+                <span className="control-funnel__stage-label">
+                  {stage.label}
+                </span>
+                <span className="control-funnel__stage-value">
                   {funnelValues[stage.id]
                     ? formatValue(
                         funnelValues[stage.id].value,
@@ -413,7 +423,9 @@ export default function ControlView() {
                 </span>
               </div>
               {i < FUNNEL_STAGES.length - 1 && (
-                <span className="control-funnel__arrow">&rarr;</span>
+                <span className="control-funnel__arrow" aria-hidden="true">
+                  {'\u2192'}
+                </span>
               )}
             </div>
           ))}
