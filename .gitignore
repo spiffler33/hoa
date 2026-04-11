@@ -1,0 +1,24 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Separate git repos (managed independently)
+beachhead/
+yeslifers/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
