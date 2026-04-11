@@ -108,57 +108,69 @@ export default function PlaybookView() {
 
   return (
     <div className="view playbook-view">
-      <h1 className="view-title">Playbook</h1>
-
-      {/* ── Phase Tab Bar ── */}
-      <div className="playbook-tabs">
+      {/* ── Phase tabs ──────────────────────────── */}
+      <nav className="playbook-tabs" aria-label="Phase selector">
         {PHASE_KEYS.map((key, i) => {
           const p = phaseChecklists[key];
           const isCurrent = i === activePhase;
           return (
             <button
               key={key}
-              className={`playbook-tab ${isCurrent ? 'playbook-tab--active' : ''}`}
+              type="button"
+              className={`playbook-tab${isCurrent ? ' playbook-tab--active' : ''}`}
               onClick={() => setActivePhase(i)}
+              aria-current={isCurrent ? 'page' : undefined}
             >
-              <span className={`playbook-tab__dot ${isCurrent ? 'dot--active' : ''}`} />
               <span className="playbook-tab__label">Phase {i}</span>
-              <span className="playbook-tab__weeks">Wk {p.weeks}</span>
+              <span className="playbook-tab__weeks">WK {p.weeks}</span>
             </button>
           );
         })}
-      </div>
+      </nav>
 
-      {/* ── Phase Header ── */}
-      <div className="playbook-card playbook-header">
-        <h2 className="playbook-header__title">
+      {/* ── Banner: phase title + objective ─────── */}
+      <header className="playbook-section playbook-banner">
+        <h1 className="playbook-banner__title">
           Phase {activePhase} — {PHASE_NAMES[activePhase]}{' '}
-          <span className="playbook-header__weeks">(Weeks {phase.weeks})</span>
-        </h2>
-        <p className="playbook-header__objective">{phase.objective}</p>
-      </div>
+          <span className="playbook-banner__weeks">WK {phase.weeks}</span>
+        </h1>
+        <p className="playbook-banner__objective">{phase.objective}</p>
+      </header>
 
-      {/* ── Progress Bar ── */}
-      <div className="playbook-card playbook-progress">
-        <div className="playbook-progress__header">
-          <span className="playbook-card__title">Progress</span>
-          <span className="playbook-progress__count">
-            {exitDone}/{exitTotal} exit criteria met
+      {/* ── Progress ────────────────────────────── */}
+      <section className="playbook-section">
+        <h2 className="playbook-section__heading">
+          <span>Progress</span>
+          <span className="playbook-section__heading-meta">
+            <span
+              className={
+                allExitMet
+                  ? 'playbook-section__heading-meta--done'
+                  : undefined
+              }
+            >
+              {exitDone}/{exitTotal} met &middot; {progressPct}%
+            </span>
           </span>
-        </div>
-        <div className="playbook-progress__bar">
+        </h2>
+        <div className="playbook-progress__track" aria-hidden="true">
           <div
             className="playbook-progress__fill"
             style={{ width: `${progressPct}%` }}
           />
         </div>
-        <span className="playbook-progress__pct">{progressPct}%</span>
-      </div>
+      </section>
 
-      {/* ── Infrastructure Checklist ── */}
+      {/* ── Infrastructure ──────────────────────── */}
       {phase.infrastructure.length > 0 && (
-        <div className="playbook-card">
-          <h3 className="playbook-card__title">Infrastructure Checklist</h3>
+        <section className="playbook-section">
+          <h2 className="playbook-section__heading">
+            <span>Infrastructure</span>
+            <span className="playbook-section__heading-meta">
+              {phase.infrastructure.filter((it) => checkedItems[it.id]).length}
+              /{phase.infrastructure.length}
+            </span>
+          </h2>
           <ul className="playbook-checklist">
             {phase.infrastructure.map((item) => {
               const done = !!checkedItems[item.id];
@@ -167,62 +179,103 @@ export default function PlaybookView() {
                   <label className="playbook-checklist__label">
                     <input
                       type="checkbox"
-                      className="playbook-checklist__cb"
+                      className="playbook-checklist__cb-native"
                       checked={done}
                       onChange={() =>
                         handleCheck(item.id, 'infrastructure', item.item)
                       }
                     />
                     <span
-                      className={`playbook-checklist__text ${done ? 'playbook-checklist__text--done' : ''}`}
+                      className="playbook-checklist__cb-text"
+                      aria-hidden="true"
+                    >
+                      {done ? '[x]' : '[ ]'}
+                    </span>
+                    <span
+                      className={
+                        done
+                          ? 'playbook-checklist__text playbook-checklist__text--done'
+                          : 'playbook-checklist__text'
+                      }
                     >
                       {item.item}
                     </span>
+                    <span
+                      className="playbook-checklist__leader"
+                      aria-hidden="true"
+                    />
+                    {item.notes && (
+                      <span className="playbook-checklist__note">
+                        {item.notes}
+                      </span>
+                    )}
                   </label>
-                  {item.notes && (
-                    <span className="playbook-checklist__note">{item.notes}</span>
-                  )}
                 </li>
               );
             })}
           </ul>
-        </div>
+        </section>
       )}
 
-      {/* ── Week-by-Week Breakdown ── */}
+      {/* ── Week-by-week ────────────────────────── */}
       {phase.weekByWeek && phase.weekByWeek.length > 0 && (
-        <div className="playbook-card">
-          <h3 className="playbook-card__title">Week-by-Week Tasks</h3>
-          <div className="playbook-weeks">
+        <section className="playbook-section">
+          <h2 className="playbook-section__heading">
+            <span>Week-by-week</span>
+            <span className="playbook-section__heading-meta">
+              {phase.weekByWeek.length} weeks
+            </span>
+          </h2>
+          <ul className="playbook-weeks">
             {phase.weekByWeek.map((wk) => (
               <WeekCard key={wk.week} week={wk} />
             ))}
-          </div>
-        </div>
+          </ul>
+        </section>
       )}
 
-      {/* ── Exit Criteria ── */}
-      <div className="playbook-card">
-        <h3 className="playbook-card__title">Exit Criteria</h3>
+      {/* ── Exit criteria ───────────────────────── */}
+      <section className="playbook-section">
+        <h2 className="playbook-section__heading">
+          <span>Exit criteria</span>
+          <span className="playbook-section__heading-meta">
+            <span
+              className={
+                allExitMet
+                  ? 'playbook-section__heading-meta--done'
+                  : undefined
+              }
+            >
+              {exitDone}/{exitTotal}
+            </span>
+          </span>
+        </h2>
         <ul className="playbook-checklist">
           {phase.exitCriteria.map((ec) => {
             const done = !!checkedItems[ec.id];
             return (
               <li key={ec.id} className="playbook-checklist__item">
                 <label className="playbook-checklist__label">
-                  <span
-                    className={`playbook-exit__dot ${done ? 'dot--green' : 'dot--none'}`}
-                  />
                   <input
                     type="checkbox"
-                    className="playbook-checklist__cb"
+                    className="playbook-checklist__cb-native"
                     checked={done}
                     onChange={() =>
                       handleCheck(ec.id, 'exit_criteria', ec.item)
                     }
                   />
                   <span
-                    className={`playbook-checklist__text ${done ? 'playbook-checklist__text--done' : ''}`}
+                    className="playbook-checklist__cb-text"
+                    aria-hidden="true"
+                  >
+                    {done ? '[x]' : '[ ]'}
+                  </span>
+                  <span
+                    className={
+                      done
+                        ? 'playbook-checklist__text playbook-checklist__text--done'
+                        : 'playbook-checklist__text'
+                    }
                   >
                     {ec.item}
                   </span>
@@ -232,26 +285,26 @@ export default function PlaybookView() {
           })}
         </ul>
 
-        {/* Advance button */}
         {activePhase < 3 && (
           <div className="playbook-advance">
             <button
-              className={`btn btn--primary playbook-advance__btn ${!allExitMet ? 'playbook-advance__btn--disabled' : ''}`}
+              type="button"
+              className="playbook-advance__btn"
               disabled={!allExitMet}
               onClick={handleAdvance}
             >
               {allExitMet
-                ? `All exit criteria met → Advance to Phase ${activePhase + 1}`
-                : `${exitDone}/${exitTotal} criteria met — complete all to advance`}
+                ? `Advance to Phase ${activePhase + 1} \u2192`
+                : `${exitDone}/${exitTotal} criteria \u2014 complete all to advance`}
             </button>
             {advanceMsg && (
-              <span className="settings-toast settings-toast--success">
+              <span className="playbook-msg playbook-msg--success">
                 {advanceMsg}
               </span>
             )}
           </div>
         )}
-      </div>
+      </section>
     </div>
   );
 }
@@ -262,14 +315,18 @@ function WeekCard({ week }) {
   const [open, setOpen] = useState(true);
 
   return (
-    <div className="playbook-week">
+    <li className="playbook-week">
       <button
+        type="button"
         className="playbook-week__header"
         onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
       >
-        <span className="playbook-week__chevron">{open ? '▾' : '▸'}</span>
+        <span className="playbook-week__chevron" aria-hidden="true">
+          {open ? '\u25BE' : '\u25B8'}
+        </span>
         <span className="playbook-week__title">
-          Week {week.week} — {week.title}
+          Week {week.week} &mdash; {week.title}
         </span>
       </button>
 
@@ -279,6 +336,7 @@ function WeekCard({ week }) {
             <li key={i} className="playbook-week__task">
               <span className="playbook-week__day">{t.day}</span>
               <span className="playbook-week__task-text">{t.task}</span>
+              <span className="playbook-week__leader" aria-hidden="true" />
               {t.owner && (
                 <span className="playbook-week__owner">{t.owner}</span>
               )}
@@ -286,6 +344,6 @@ function WeekCard({ week }) {
           ))}
         </ul>
       )}
-    </div>
+    </li>
   );
 }
