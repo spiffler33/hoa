@@ -150,11 +150,12 @@ export default function ReferenceView() {
           {checkedCount}/{items.length} checked
         </span>
         <button
-          className="compliance-checklist__clear btn btn--outline"
+          type="button"
+          className="ref-btn"
           onClick={handleClearAll}
           disabled={checkedCount === 0}
         >
-          Clear All
+          Clear all
         </button>
       </div>
       <div className="compliance-checklist__items">
@@ -172,8 +173,15 @@ export default function ReferenceView() {
                 type="checkbox"
                 checked={checked}
                 onChange={() => handleComplianceToggle(i)}
+                className="compliance-checklist__cb-native"
               />
-              <span>{item}</span>
+              <span
+                className="compliance-checklist__cb-text"
+                aria-hidden="true"
+              >
+                {checked ? '[x]' : '[ ]'}
+              </span>
+              <span className="compliance-checklist__text">{item}</span>
             </label>
           );
         })}
@@ -184,23 +192,24 @@ export default function ReferenceView() {
   /* ── Render: partnership tracker (interactive) ── */
 
   const renderPartnershipTracker = () => (
-    <div className="ref-subsection partnership-tracker">
+    <div className="partnership-tracker">
       <div className="partnership-tracker__header">
-        <h3 className="ref-subsection__heading">Partnership Tracker</h3>
+        <h3 className="ref-subsection__heading">Partnership tracker</h3>
         <button
-          className="btn btn--primary partnership-tracker__add"
+          type="button"
+          className="ref-btn ref-btn--primary"
           onClick={() => setShowPartnershipModal(true)}
         >
-          + Add Partnership
+          + Add partnership
         </button>
       </div>
 
       {partnerships.length === 0 ? (
         <EmptyState
-          icon="\uD83E\uDD1D"
+          icon={'\u2205'}
           message="No partnerships tracked yet."
           hint="Add one to get started."
-          actionLabel="+ Add Partnership"
+          actionLabel="+ Add partnership"
           onAction={() => setShowPartnershipModal(true)}
         />
       ) : (
@@ -212,17 +221,22 @@ export default function ReferenceView() {
             >
               <div className="partnership-card__header">
                 <span className="partnership-card__name">{p.name}</span>
-                <select
-                  className={`partnership-card__status partnership-card__status--${p.status}`}
-                  value={p.status}
-                  onChange={(e) => handlePartnershipStatus(p, e.target.value)}
-                >
-                  {PARTNERSHIP_STATUSES.map((s) => (
-                    <option key={s} value={s}>
-                      {s.charAt(0).toUpperCase() + s.slice(1)}
-                    </option>
-                  ))}
-                </select>
+                <div className="partnership-card__status-wrap">
+                  <select
+                    className="partnership-card__status"
+                    value={p.status}
+                    onChange={(e) =>
+                      handlePartnershipStatus(p, e.target.value)
+                    }
+                    aria-label={`Status for ${p.name}`}
+                  >
+                    {PARTNERSHIP_STATUSES.map((s) => (
+                      <option key={s} value={s}>
+                        {s.charAt(0).toUpperCase() + s.slice(1)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
               <span className="partnership-card__type">{p.type}</span>
               {p.notes && (
@@ -285,22 +299,31 @@ export default function ReferenceView() {
 
   return (
     <div className="view reference-view">
-      <h1 className="view-title">Reference</h1>
+      {/* ── Banner ──────────────────────────────── */}
+      <header className="ref-banner">
+        <h1 className="ref-banner__title">Reference</h1>
+        <p className="ref-banner__meta">
+          {SECTION_KEYS.length} sections{' '}
+          <span className="ref-banner__sep">{'\u00b7'}</span> operational
+          reference
+        </p>
 
-      {/* ── Pill navigation ── */}
-      <nav className="ref-pills">
-        {SECTION_KEYS.map((key) => (
-          <button
-            key={key}
-            className={`ref-pill${
-              activeSection === key ? ' ref-pill--active' : ''
-            }`}
-            onClick={() => handlePillClick(key)}
-          >
-            {referenceContent[key].title}
-          </button>
-        ))}
-      </nav>
+        {/* ── Quick nav pills ─────────────────────── */}
+        <nav className="ref-pills" aria-label="Section quick nav">
+          {SECTION_KEYS.map((key) => (
+            <button
+              key={key}
+              type="button"
+              className={`ref-pill${
+                activeSection === key ? ' ref-pill--active' : ''
+              }`}
+              onClick={() => handlePillClick(key)}
+            >
+              {referenceContent[key].title}
+            </button>
+          ))}
+        </nav>
+      </header>
 
       {/* ── Accordion sections ── */}
       <div className="ref-sections">
@@ -353,19 +376,33 @@ export default function ReferenceView() {
       {/* ── Partnership modal ── */}
       {showPartnershipModal && (
         <div
-          className="modal-overlay"
+          className="ref-modal-overlay"
           onClick={() => setShowPartnershipModal(false)}
         >
           <div
-            className="modal-container partnership-modal"
+            className="ref-modal"
             onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-label="Add partnership"
           >
-            <h2>Add Partnership</h2>
-            <div className="partnership-modal__form">
-              <label className="partnership-modal__field">
-                <span>Name</span>
+            <div className="ref-modal__header">
+              <span className="ref-modal__title">Add partnership</span>
+              <button
+                type="button"
+                className="ref-modal__close"
+                onClick={() => setShowPartnershipModal(false)}
+                aria-label="Close"
+              >
+                {'\u00d7'}
+              </button>
+            </div>
+
+            <div className="ref-form">
+              <label className="ref-form__field">
+                <span className="ref-form__label">Name</span>
                 <input
                   type="text"
+                  className="ref-form__control"
                   value={partnershipForm.name}
                   onChange={(e) =>
                     setPartnershipForm((prev) => ({
@@ -377,45 +414,55 @@ export default function ReferenceView() {
                   autoFocus
                 />
               </label>
-              <label className="partnership-modal__field">
-                <span>Type</span>
-                <select
-                  value={partnershipForm.type}
-                  onChange={(e) =>
-                    setPartnershipForm((prev) => ({
-                      ...prev,
-                      type: e.target.value,
-                    }))
-                  }
-                >
-                  {PARTNERSHIP_TYPES.map((t) => (
-                    <option key={t} value={t}>
-                      {t}
-                    </option>
-                  ))}
-                </select>
+
+              <label className="ref-form__field">
+                <span className="ref-form__label">Type</span>
+                <div className="ref-form__select-wrap">
+                  <select
+                    className="ref-form__control"
+                    value={partnershipForm.type}
+                    onChange={(e) =>
+                      setPartnershipForm((prev) => ({
+                        ...prev,
+                        type: e.target.value,
+                      }))
+                    }
+                  >
+                    {PARTNERSHIP_TYPES.map((t) => (
+                      <option key={t} value={t}>
+                        {t}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </label>
-              <label className="partnership-modal__field">
-                <span>Status</span>
-                <select
-                  value={partnershipForm.status}
-                  onChange={(e) =>
-                    setPartnershipForm((prev) => ({
-                      ...prev,
-                      status: e.target.value,
-                    }))
-                  }
-                >
-                  {PARTNERSHIP_STATUSES.map((s) => (
-                    <option key={s} value={s}>
-                      {s.charAt(0).toUpperCase() + s.slice(1)}
-                    </option>
-                  ))}
-                </select>
+
+              <label className="ref-form__field">
+                <span className="ref-form__label">Status</span>
+                <div className="ref-form__select-wrap">
+                  <select
+                    className="ref-form__control"
+                    value={partnershipForm.status}
+                    onChange={(e) =>
+                      setPartnershipForm((prev) => ({
+                        ...prev,
+                        status: e.target.value,
+                      }))
+                    }
+                  >
+                    {PARTNERSHIP_STATUSES.map((s) => (
+                      <option key={s} value={s}>
+                        {s.charAt(0).toUpperCase() + s.slice(1)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </label>
-              <label className="partnership-modal__field">
-                <span>Notes</span>
+
+              <label className="ref-form__field">
+                <span className="ref-form__label">Notes</span>
                 <textarea
+                  className="ref-form__control ref-form__control--textarea"
                   value={partnershipForm.notes}
                   onChange={(e) =>
                     setPartnershipForm((prev) => ({
@@ -427,19 +474,22 @@ export default function ReferenceView() {
                   rows={3}
                 />
               </label>
-              <div className="partnership-modal__actions">
+
+              <div className="ref-form__actions">
                 <button
-                  className="btn btn--outline"
+                  type="button"
+                  className="ref-btn"
                   onClick={() => setShowPartnershipModal(false)}
                 >
                   Cancel
                 </button>
                 <button
-                  className="btn btn--primary"
+                  type="button"
+                  className="ref-btn ref-btn--primary"
                   onClick={handleAddPartnership}
                   disabled={!partnershipForm.name.trim()}
                 >
-                  Save Partnership
+                  Save partnership
                 </button>
               </div>
             </div>
