@@ -1,191 +1,315 @@
-/* ── SettingsView ── */
+/* ── Settings view — visual layer per DESIGN_PRINCIPLES.md ── */
+/* Terminal-meets-journal. Hairline-ruled sections, transparent form
+   chrome, mono labels. No card backgrounds, no shadows, no pills. */
 
 .settings-view {
   display: flex;
   flex-direction: column;
-  gap: var(--section-gap);
 }
 
-/* ── Card ── */
+/* ── Section shell ────────────────────────────────────── */
+/* One style for every section. Hairline rules do the grouping. */
 
-.settings-card {
-  background: var(--bg-surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-card);
-  padding: var(--card-padding);
+.settings-section {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.settings-section:first-child {
+  padding-top: 8px;
+}
+
+.settings-section:last-child {
+  border-bottom: none;
+  padding-bottom: 8px;
+}
+
+.settings-section__heading {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.settings-card__title {
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-secondary);
-}
-
-.settings-card__actions {
-  display: flex;
-  align-items: center;
+  align-items: baseline;
+  justify-content: space-between;
   gap: 12px;
-  flex-wrap: wrap;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  margin: 0 0 14px 0;
 }
 
-/* ── Fields ── */
+/* ── Banner ───────────────────────────────────────────── */
+
+.settings-banner {
+  padding-top: 16px;
+}
+
+.settings-banner__title {
+  margin: 0 0 6px 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-md);
+  font-weight: 500;
+  color: var(--text);
+  letter-spacing: 0.02em;
+}
+
+.settings-banner__meta {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.settings-banner__sep {
+  display: inline-block;
+  padding: 0 2px;
+  color: var(--text-subtle);
+}
+
+/* ── Form grid ────────────────────────────────────────── */
+
+.settings-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 20px;
+  max-width: 72ch;
+}
+
+/* ── Field shell ──────────────────────────────────────── */
 
 .settings-field {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  min-width: 0;
 }
 
 .settings-field__label {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-subtle);
 }
 
 .settings-field__input {
   width: 100%;
-}
-
-.settings-field__hint {
-  font-size: 11px;
-  color: var(--text-muted);
   font-family: var(--font-mono);
-}
-
-.settings-row {
-  display: flex;
-  gap: 16px;
-}
-
-.settings-field--half {
-  flex: 1;
-}
-
-/* ── Buttons ── */
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 16px;
-  font-size: 13px;
-  font-weight: 500;
-  border-radius: var(--radius-button);
-  transition: background 0.15s, border-color 0.15s;
-}
-
-.btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.btn--primary {
-  background: var(--accent-blue);
-  color: #fff;
-}
-
-.btn--primary:hover:not(:disabled) {
-  background: #2563eb;
-}
-
-.btn--outline {
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--text-primary);
-}
-
-.btn--outline:hover:not(:disabled) {
-  border-color: var(--accent-blue);
-  color: var(--accent-blue);
-}
-
-/* ── Toast messages ── */
-
-.settings-toast {
-  font-size: 12px;
-  font-family: var(--font-mono);
-  color: var(--text-secondary);
-}
-
-.settings-toast--success {
-  color: var(--status-green);
-}
-
-.settings-toast--error {
-  color: var(--status-red);
-}
-
-/* ── Phase description ── */
-
-.settings-phase-desc {
-  background: var(--bg-primary);
-  border-radius: var(--radius-badge);
-  padding: 12px;
-}
-
-.settings-phase-desc__objective {
-  font-size: 13px;
-  color: var(--text-secondary);
+  font-size: var(--fs-sm);
   line-height: 1.5;
+  color: var(--text);
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 6px 10px;
+  transition: color 100ms, border-color 100ms;
+  font-variant-numeric: tabular-nums;
 }
 
-.settings-phase-desc__details {
-  margin-top: 8px;
+.settings-field__input::placeholder {
+  color: var(--text-subtle);
 }
 
-.settings-phase-desc__details summary {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--accent-blue);
+.settings-field__input:hover {
+  border-color: var(--rule-strong);
+}
+
+.settings-field__input:focus {
+  outline: none;
+  border-color: var(--text);
+}
+
+/* Strip native date-input chrome to match mono fields. */
+.settings-field__input[type='date']::-webkit-calendar-picker-indicator {
+  opacity: 0.5;
+  cursor: pointer;
+  filter: grayscale(1);
+}
+
+/* Select wrapper provides the custom chevron. */
+.settings-field__select-wrap {
+  position: relative;
+  display: block;
+}
+
+.settings-field__select-wrap::after {
+  content: '\25BE';  /* ▾ */
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: var(--fs-xs);
+  color: var(--text-subtle);
+  pointer-events: none;
+}
+
+.settings-field__select-wrap .settings-field__input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding-right: 26px;
   cursor: pointer;
 }
 
-.settings-phase-desc__list {
+.settings-field__hint {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  color: var(--text-subtle);
+  line-height: 1.5;
+}
+
+/* ── Phase panel (left-ruled block) ───────────────────── */
+
+.settings-phase-panel {
+  margin-top: 16px;
+  padding: 2px 0 2px 14px;
+  border-left: 2px solid var(--rule-strong);
+  max-width: 72ch;
+}
+
+.settings-phase-panel__objective {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.settings-phase-panel__details {
+  margin-top: 10px;
+}
+
+.settings-phase-panel__summary {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-subtle);
+  cursor: pointer;
   list-style: none;
-  margin-top: 6px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  transition: color 100ms;
 }
 
-.settings-phase-desc__list li {
-  font-size: 12px;
-  color: var(--text-secondary);
-  padding-left: 14px;
-  position: relative;
+.settings-phase-panel__summary::-webkit-details-marker {
+  display: none;
 }
 
-.settings-phase-desc__list li::before {
-  content: '\2014';
-  position: absolute;
-  left: 0;
+.settings-phase-panel__summary::before {
+  content: '+ ';
+  display: inline-block;
+  width: 1.25ch;
+  color: var(--text-subtle);
+}
+
+.settings-phase-panel__details[open] .settings-phase-panel__summary::before {
+  content: '\2212 ';  /* − */
+}
+
+.settings-phase-panel__summary:hover {
   color: var(--text-muted);
 }
 
-/* ── Transitions ── */
-
-.settings-card {
-  transition: box-shadow 0.2s ease;
+.settings-phase-panel__summary:focus-visible {
+  outline: 1px solid var(--rule-strong);
+  outline-offset: 2px;
 }
 
-.settings-card:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+.settings-phase-panel__list {
+  list-style: none;
+  margin: 8px 0 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }
 
-/* ── Responsive: Tablet ── */
+.settings-phase-panel__list li {
+  position: relative;
+  padding-left: 14px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  line-height: 1.6;
+}
 
-@media (max-width: 768px) {}
+.settings-phase-panel__list li::before {
+  content: '\2014';  /* — */
+  position: absolute;
+  left: 0;
+  color: var(--text-subtle);
+}
 
-/* ── Responsive: Mobile ── */
+/* ── Actions row ──────────────────────────────────────── */
+
+.settings-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.settings-btn {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  padding: 6px 14px;
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 100ms, border-color 100ms;
+}
+
+.settings-btn:hover:not(:disabled) {
+  color: var(--text);
+  border-color: var(--rule-strong);
+}
+
+.settings-btn:focus-visible {
+  outline: 1px solid var(--rule-strong);
+  outline-offset: 2px;
+}
+
+.settings-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.settings-btn--primary {
+  color: var(--text);
+  border-color: var(--rule-strong);
+}
+
+.settings-btn--primary:hover:not(:disabled) {
+  border-color: var(--text);
+}
+
+/* ── Toast messages ───────────────────────────────────── */
+
+.settings-toast {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+.settings-toast--success { color: var(--color-done); }
+.settings-toast--error   { color: var(--color-priority); }
+
+/* ── Responsive: Tablet ───────────────────────────────── */
+
+@media (max-width: 768px) {
+  .settings-section         { padding: 14px 0; }
+  .settings-section__heading { margin-bottom: 10px; }
+  .settings-banner__meta    { font-size: var(--fs-xs); }
+}
+
+/* ── Responsive: Mobile ───────────────────────────────── */
 
 @media (max-width: 480px) {
-  .settings-row { flex-direction: column; gap: 12px; }
-  .settings-card__actions { flex-direction: column; }
-  .settings-card__actions .btn { width: 100%; }
+  .settings-form-grid       { grid-template-columns: 1fr; gap: 12px; }
+  .settings-actions         { gap: 8px; }
+  .settings-btn             { flex: 1 1 auto; text-align: center; }
+  .settings-toast           { flex: 1 1 100%; }
 }
