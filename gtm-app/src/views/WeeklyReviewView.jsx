@@ -121,7 +121,7 @@ function Sparkline({ points, target, width = 200, height = 56 }) {
           key={i}
           cx={x(i)}
           cy={y(p.value)}
-          r="3"
+          r="2.5"
           className="sparkline__dot"
         />
       ))}
@@ -254,7 +254,8 @@ export default function WeeklyReviewView() {
     }))
     .filter((a) => a.level === 'amber' || a.level === 'red');
 
-  const hasRedAlert = gateAlerts.some((a) => a.level === 'red');
+  const redCount = gateAlerts.filter((a) => a.level === 'red').length;
+  const amberCount = gateAlerts.filter((a) => a.level === 'amber').length;
 
   /* week range display */
   const weekEnd = new Date(weekOf);
@@ -264,13 +265,13 @@ export default function WeeklyReviewView() {
   /* build plain-text summary for clipboard */
   const buildSummaryText = () => {
     const lines = [
-      `Weekly Review — ${PHASE_LABELS[currentPhase]}`,
-      `Week of ${formatDate(weekOf)} — ${formatDate(weekEnd)}`,
+      `Weekly Review \u2014 ${PHASE_LABELS[currentPhase]}`,
+      `Week of ${formatDate(weekOf)} \u2014 ${formatDate(weekEnd)}`,
       '',
-      '── Stage Gate Metrics ──',
+      '\u2500\u2500 Stage Gate Metrics \u2500\u2500',
     ];
     phaseMetrics.forEach((m) => {
-      const val = values[m.id] ?? '—';
+      const val = values[m.id] ?? '\u2014';
       const level = alertLevel(val, m);
       const flag =
         level === 'amber' || level === 'red'
@@ -280,9 +281,9 @@ export default function WeeklyReviewView() {
         `  ${m.label}: ${val}${m.unit === '%' ? '%' : ''} (target: ${m.target}${m.unit === '%' ? '%' : ''})${flag}`,
       );
     });
-    lines.push('', '── Cadence Check ──');
+    lines.push('', '\u2500\u2500 Cadence Check \u2500\u2500');
     CADENCE_CHECKS.forEach((c) => {
-      const val = cadenceValues[c.id] ?? '—';
+      const val = cadenceValues[c.id] ?? '\u2014';
       const level = cadenceStatus(val, c);
       const flag =
         level === 'amber' || level === 'red'
@@ -290,10 +291,10 @@ export default function WeeklyReviewView() {
           : '';
       lines.push(`  ${c.label}: ${val}${flag}`);
     });
-    if (blockers) lines.push('', '── Blockers ──', blockers);
-    if (priorities) lines.push('', '── Priorities ──', priorities);
+    if (blockers) lines.push('', '\u2500\u2500 Blockers \u2500\u2500', blockers);
+    if (priorities) lines.push('', '\u2500\u2500 Priorities \u2500\u2500', priorities);
     if (founderSummary)
-      lines.push('', '── Founder Summary ──', founderSummary);
+      lines.push('', '\u2500\u2500 Founder Summary \u2500\u2500', founderSummary);
     return lines.join('\n');
   };
 
@@ -312,7 +313,6 @@ export default function WeeklyReviewView() {
   if (loading && config === null) {
     return (
       <div className="view weekly-view">
-        <h1 className="view-title">Weekly Review</h1>
         <LoadingSpinner />
       </div>
     );
@@ -321,7 +321,6 @@ export default function WeeklyReviewView() {
   if (error && config === null) {
     return (
       <div className="view weekly-view">
-        <h1 className="view-title">Weekly Review</h1>
         <EmptyState
           icon="\u26A0"
           message="Failed to load data"
@@ -337,176 +336,186 @@ export default function WeeklyReviewView() {
   /* ── render ────────────────────────────────── */
   return (
     <div className="view weekly-view">
-      {/* ── Header ─────────────────────────── */}
-      <header className="weekly-header">
-        <div className="weekly-header__top">
-          <h1 className="weekly-header__title">Weekly Review</h1>
-          <span className="weekly-header__phase">
-            {PHASE_LABELS[currentPhase]}
-          </span>
-        </div>
-        <div className="weekly-week-nav">
+      {/* ── Banner ──────────────────────────────── */}
+      <header className="weekly-section weekly-banner">
+        <h1 className="weekly-banner__title">Weekly Review</h1>
+        <p className="weekly-banner__meta">
+          WK OF {weekKey}{' '}
+          <span className="weekly-banner__sep">{'\u00b7'}</span>{' '}
+          {PHASE_LABELS[currentPhase].toUpperCase()}
+        </p>
+        <div className="weekly-nav">
           <button
-            className="weekly-week-nav__btn"
+            type="button"
+            className="weekly-nav__btn"
             onClick={() => goWeek(-1)}
-            title="Previous week"
+            aria-label="Previous week"
           >
-            &#8249;
+            {'\u2039'}
           </button>
-          <span className="weekly-week-nav__label">
-            Week of {formatDate(weekOf)} &mdash; {formatDate(weekEnd)}
+          <span className="weekly-nav__label">
+            {formatDate(weekOf)} {'\u2013'} {formatDate(weekEnd)}
             {isCurrentWeek && (
-              <span className="weekly-week-nav__current">current</span>
+              <span className="weekly-nav__current">[CURRENT]</span>
             )}
           </span>
           <button
-            className="weekly-week-nav__btn"
+            type="button"
+            className="weekly-nav__btn"
             onClick={() => goWeek(1)}
-            title="Next week"
+            aria-label="Next week"
           >
-            &#8250;
+            {'\u203A'}
           </button>
         </div>
       </header>
 
-      {/* ── Stage Gate Metrics ─────────────── */}
-      <section className="weekly-card">
-        <h2 className="weekly-card__title">Stage Gate Metrics</h2>
+      {/* ── Stage Gate Metrics ──────────────────── */}
+      <section className="weekly-section">
+        <h2 className="weekly-section__heading">
+          <span>Stage gate metrics</span>
+        </h2>
         {loading ? (
           <LoadingSpinner label="Loading metrics\u2026" />
         ) : phaseMetrics.length === 0 ? (
           <EmptyState icon="\u2205" message="No metrics defined for this phase." />
         ) : (
-          <div className="weekly-metrics">
+          <ul className="weekly-metric-list">
             {phaseMetrics.map((m) => {
               const val = values[m.id] ?? '';
               const level = alertLevel(val, m);
               const isBool = m.unit === 'boolean';
               return (
-                <div key={m.id} className="weekly-metric">
-                  <div className="weekly-metric__info">
-                    <label className="weekly-metric__label" htmlFor={m.id}>
-                      {m.label}
-                    </label>
-                    <span className="weekly-metric__target">
-                      Target: {m.target}
-                      {m.unit === '%' ? '%' : ''}
-                    </span>
-                  </div>
-                  <div className="weekly-metric__input-group">
-                    {isBool ? (
+                <li
+                  key={m.id}
+                  className={`weekly-metric weekly-metric--${level}`}
+                >
+                  <label className="weekly-metric__label" htmlFor={m.id}>
+                    {m.label}
+                  </label>
+                  <span className="weekly-metric__leader" aria-hidden="true" />
+                  {isBool ? (
+                    <span className="weekly-metric__select-wrap">
                       <select
                         id={m.id}
-                        className="weekly-metric__select"
+                        className="weekly-metric__field"
                         value={val}
                         onChange={(e) => setMetricValue(m.id, e.target.value)}
                       >
-                        <option value="">&mdash;</option>
+                        <option value="">{'\u2014'}</option>
                         <option value="Yes">Yes</option>
                         <option value="No">No</option>
                       </select>
-                    ) : (
-                      <input
-                        id={m.id}
-                        type="number"
-                        className="weekly-metric__input"
-                        placeholder={String(m.target)}
-                        value={val}
-                        onChange={(e) => setMetricValue(m.id, e.target.value)}
-                      />
-                    )}
-                    {m.unit === '%' && (
-                      <span className="weekly-metric__unit">%</span>
-                    )}
-                    <span
-                      className={`weekly-metric__badge dot--${level}`}
-                      title={level}
+                    </span>
+                  ) : (
+                    <input
+                      id={m.id}
+                      type="number"
+                      className={`weekly-metric__field weekly-metric__field--${level}`}
+                      placeholder={String(m.target)}
+                      value={val}
+                      onChange={(e) => setMetricValue(m.id, e.target.value)}
                     />
-                  </div>
-                </div>
+                  )}
+                  <span className="weekly-metric__target">
+                    / {m.target}
+                    {m.unit === '%' ? '%' : ''}
+                  </span>
+                </li>
               );
             })}
-          </div>
+          </ul>
         )}
       </section>
 
-      {/* ── Cadence Check ──────────────────── */}
-      <section className="weekly-card">
-        <h2 className="weekly-card__title">Cadence Check</h2>
-        <div className="weekly-metrics">
+      {/* ── Cadence Check ──────────────────────── */}
+      <section className="weekly-section">
+        <h2 className="weekly-section__heading">
+          <span>Cadence check</span>
+        </h2>
+        <ul className="weekly-metric-list">
           {CADENCE_CHECKS.map((c) => {
             const val = cadenceValues[c.id] ?? '';
             const level = cadenceStatus(val, c);
             return (
-              <div key={c.id} className="weekly-metric">
-                <div className="weekly-metric__info">
-                  <label className="weekly-metric__label" htmlFor={c.id}>
-                    {c.label}
-                  </label>
-                  <span className="weekly-metric__target">
-                    Target: {c.target}
-                  </span>
-                </div>
-                <div className="weekly-metric__input-group">
-                  {c.type === 'select' ? (
-                    <select
-                      id={c.id}
-                      className="weekly-metric__select"
-                      value={val}
-                      onChange={(e) => setCadenceValue(c.id, e.target.value)}
-                    >
-                      <option value="">&mdash;</option>
-                      {c.options.map((o) => (
-                        <option key={o} value={o}>
-                          {o}
-                        </option>
-                      ))}
-                    </select>
-                  ) : (
-                    <select
-                      id={c.id}
-                      className="weekly-metric__select"
-                      value={val}
-                      onChange={(e) => setCadenceValue(c.id, e.target.value)}
-                    >
-                      <option value="">&mdash;</option>
-                      <option value="Yes">Yes</option>
-                      <option value="No">No</option>
-                    </select>
-                  )}
-                  <span
-                    className={`weekly-metric__badge dot--${level}`}
-                    title={level}
-                  />
-                </div>
-              </div>
+              <li
+                key={c.id}
+                className={`weekly-metric weekly-metric--${level}`}
+              >
+                <label className="weekly-metric__label" htmlFor={c.id}>
+                  {c.label}
+                </label>
+                <span className="weekly-metric__leader" aria-hidden="true" />
+                <span className="weekly-metric__select-wrap">
+                  <select
+                    id={c.id}
+                    className="weekly-metric__field"
+                    value={val}
+                    onChange={(e) => setCadenceValue(c.id, e.target.value)}
+                  >
+                    <option value="">{'\u2014'}</option>
+                    {c.type === 'select'
+                      ? c.options.map((o) => (
+                          <option key={o} value={o}>
+                            {o}
+                          </option>
+                        ))
+                      : [
+                          <option key="Yes" value="Yes">Yes</option>,
+                          <option key="No" value="No">No</option>,
+                        ]}
+                  </select>
+                </span>
+                <span className="weekly-metric__target">
+                  / {c.target}
+                </span>
+              </li>
             );
           })}
-        </div>
+        </ul>
       </section>
 
-      {/* ── Stage Gate Alerts (auto-computed) ── */}
+      {/* ── Stage Gate Alerts (auto-computed) ──── */}
       {gateAlerts.length > 0 && (
-        <section
-          className={`weekly-card weekly-card--alerts${hasRedAlert ? ' weekly-card--alerts-red' : ''}`}
-        >
-          <h2 className="weekly-card__title">Stage Gate Alerts</h2>
-          <ul className="weekly-gate-alerts">
+        <section className="weekly-section">
+          <h2 className="weekly-section__heading">
+            <span>Stage gate alerts</span>
+            <span className="weekly-section__heading-meta">
+              {redCount > 0 && (
+                <span className="weekly-heading-count weekly-heading-count--red">
+                  {redCount} priority
+                </span>
+              )}
+              {amberCount > 0 && (
+                <span className="weekly-heading-count weekly-heading-count--amber">
+                  {amberCount} active
+                </span>
+              )}
+            </span>
+          </h2>
+          <ul className="weekly-alerts">
             {gateAlerts.map((a) => (
               <li
                 key={a.id}
-                className={`weekly-gate-alert weekly-gate-alert--${a.level}`}
+                className={`weekly-alert weekly-alert--${a.level}`}
               >
-                <div className="weekly-gate-alert__header">
-                  <span className={`dot--${a.level} weekly-gate-alert__dot`} />
-                  <span className="weekly-gate-alert__label">
-                    {a.label} at {a.value}
-                    {a.unit === '%' ? '%' : ''} &mdash;{' '}
+                <div className="weekly-alert__header">
+                  <span className="weekly-alert__label">{a.label}</span>
+                  <span className="weekly-alert__leader" aria-hidden="true" />
+                  <span className="weekly-alert__value">
+                    {a.value}
+                    {a.unit === '%' ? '%' : ''}
+                  </span>
+                  <span className="weekly-alert__target">
+                    / {a.target}
+                    {a.unit === '%' ? '%' : ''}
+                  </span>
+                  <span className="weekly-alert__status">
                     {a.level.toUpperCase()}
                   </span>
                 </div>
-                <p className="weekly-gate-alert__action">
-                  <strong>Action:</strong>{' '}
+                <p className="weekly-alert__action">
+                  <span className="weekly-alert__action-label">Action</span>
                   {a.level === 'red' ? a.redAction : a.amberAction}
                 </p>
               </li>
@@ -515,9 +524,11 @@ export default function WeeklyReviewView() {
         </section>
       )}
 
-      {/* ── Blockers ───────────────────────── */}
-      <section className="weekly-card">
-        <h2 className="weekly-card__title">Blockers</h2>
+      {/* ── Blockers ───────────────────────────── */}
+      <section className="weekly-section">
+        <h2 className="weekly-section__heading">
+          <span>Blockers</span>
+        </h2>
         <textarea
           className="weekly-textarea"
           placeholder="What&rsquo;s stuck? Who do you need to poke?"
@@ -527,9 +538,11 @@ export default function WeeklyReviewView() {
         />
       </section>
 
-      {/* ── Priorities ─────────────────────── */}
-      <section className="weekly-card">
-        <h2 className="weekly-card__title">This Week&rsquo;s Priorities</h2>
+      {/* ── Priorities ─────────────────────────── */}
+      <section className="weekly-section">
+        <h2 className="weekly-section__heading">
+          <span>This week&rsquo;s priorities</span>
+        </h2>
         <textarea
           className="weekly-textarea"
           placeholder="Top 3 priorities for this week"
@@ -539,9 +552,11 @@ export default function WeeklyReviewView() {
         />
       </section>
 
-      {/* ── Founder Summary ────────────────── */}
-      <section className="weekly-card">
-        <h2 className="weekly-card__title">Founder Summary</h2>
+      {/* ── Founder Summary ────────────────────── */}
+      <section className="weekly-section">
+        <h2 className="weekly-section__heading">
+          <span>Founder summary</span>
+        </h2>
         <textarea
           className="weekly-textarea"
           placeholder="3 sentences: what&rsquo;s working, what&rsquo;s not, what I need from you"
@@ -551,40 +566,42 @@ export default function WeeklyReviewView() {
         />
       </section>
 
-      {/* ── Save + Copy ────────────────────── */}
-      <div className="weekly-save-row">
+      {/* ── Save + Copy ────────────────────────── */}
+      <div className="weekly-actions">
         <button
-          className="btn btn--primary"
+          type="button"
+          className="weekly-btn weekly-btn--primary"
           onClick={handleSave}
           disabled={saving}
         >
-          {saving ? 'Saving\u2026' : 'Save Weekly Review'}
+          {saving ? 'Saving\u2026' : 'Save'}
         </button>
         <button
-          className={`weekly-copy-btn${copied ? ' weekly-copy-btn--copied' : ''}`}
+          type="button"
+          className={`weekly-btn${copied ? ' weekly-btn--done' : ''}`}
           onClick={handleCopy}
         >
-          {copied ? 'Copied!' : 'Copy Summary'}
+          {copied ? 'Copied' : 'Copy summary'}
         </button>
         {saveMsg && (
-          <span
-            className={`settings-toast ${saveMsg.type === 'success' ? 'settings-toast--success' : ''}`}
-          >
+          <span className={`weekly-msg weekly-msg--${saveMsg.type}`}>
             {saveMsg.text}
           </span>
         )}
       </div>
 
-      {/* ── Trend ──────────────────────────── */}
-      <section className="weekly-card">
-        <h2 className="weekly-card__title">Trend (last 8 weeks)</h2>
+      {/* ── Trend ──────────────────────────────── */}
+      <section className="weekly-section">
+        <h2 className="weekly-section__heading">
+          <span>Trend {'\u2014'} last 8 weeks</span>
+        </h2>
         {trendRows.length < 2 ? (
           <EmptyState
             icon="\u2014"
             message="Need at least 2 weeks of data to show trends."
           />
         ) : (
-          <div className="trend-grid">
+          <div className="weekly-trend-grid">
             {phaseMetrics
               .filter((m) => m.unit !== 'boolean' && m.unit !== 'currency')
               .map((m) => {
@@ -593,8 +610,8 @@ export default function WeeklyReviewView() {
                   .filter((p) => !isNaN(p.value));
                 if (pts.length < 2) return null;
                 return (
-                  <div key={m.id} className="trend-item">
-                    <span className="trend-item__label">{m.label}</span>
+                  <div key={m.id} className="weekly-trend-item">
+                    <span className="weekly-trend-item__label">{m.label}</span>
                     <Sparkline points={pts} target={m.target} />
                   </div>
                 );
