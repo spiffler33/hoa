@@ -1,347 +1,376 @@
-/* ── TodayView ── */
+/* ── Today view — visual layer per DESIGN_PRINCIPLES.md ── */
+/* Terminal-meets-journal. Density over whitespace. Hairline rules over
+   background fills. No shadows. No pills. Monospace throughout. */
 
 .today-view {
   display: flex;
   flex-direction: column;
-  gap: var(--section-gap);
 }
 
-/* ── Phase Banner ── */
+/* ── Section shell ────────────────────────────────────── */
+/* One style for all sections. Hairline dividers do the work of grouping. */
+
+.today-section {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.today-section:first-child {
+  padding-top: 8px;
+}
+
+.today-section:last-child {
+  border-bottom: none;
+  padding-bottom: 8px;
+}
+
+.today-section__heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  margin: 0 0 14px 0;
+}
+
+.today-section__heading-meta {
+  display: inline-flex;
+  gap: 14px;
+  font-size: var(--fs-micro);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+}
+
+.today-heading-count {
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+.today-heading-count--red   { color: var(--color-priority); }
+.today-heading-count--amber { color: var(--color-active); }
+
+/* ── Banner ───────────────────────────────────────────── */
 
 .today-banner {
-  background: var(--bg-surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-card);
-  padding: var(--card-padding);
+  padding-top: 16px;
 }
 
 .today-banner__greeting {
-  font-family: var(--font-display);
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 1.3;
+  margin: 0 0 6px 0;
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  line-height: 1.4;
 }
 
-.today-banner__phase {
-  color: var(--accent-blue);
+.today-banner__meta {
+  margin: 0;
+  font-size: var(--fs-md);
+  font-weight: 500;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.4;
 }
 
-.today-banner__sub {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  color: var(--text-secondary);
-  margin-top: 4px;
+.today-banner__sep {
+  display: inline-block;
+  padding: 0 2px;
+  color: var(--text-subtle);
+  font-weight: 400;
 }
 
 .today-banner__objective {
-  font-size: 13px;
+  margin: 14px 0 0 0;
+  padding: 2px 0 2px 14px;
+  border-left: 2px solid var(--rule-strong);
+  font-size: var(--fs-sm);
   color: var(--text-muted);
-  margin-top: 8px;
-  line-height: 1.5;
+  line-height: 1.6;
+  max-width: 72ch;
 }
 
-/* ── Cards (shared pattern) ── */
-
-.today-card {
-  background: var(--bg-surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-card);
-  padding: var(--card-padding);
-}
-
-.today-card__title {
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-secondary);
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.today-card__badge-group {
-  display: inline-flex;
-  gap: 6px;
-}
-
-.today-empty {
-  color: var(--text-muted);
-  font-size: 13px;
-}
-
-/* ── Badges ── */
-
-.badge {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 500;
-  padding: 2px 6px;
-  border-radius: var(--radius-badge);
-}
-
-.badge--red {
-  background: var(--status-red-bg);
-  color: var(--status-red);
-}
-
-.badge--amber {
-  background: var(--status-amber-bg);
-  color: var(--status-amber);
-}
-
-/* ── Alert list ── */
+/* ── Stage Gate Alerts ────────────────────────────────── */
 
 .today-alerts {
   list-style: none;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
 }
 
 .today-alert {
-  padding: 8px;
-  border-radius: var(--radius-badge);
-  cursor: pointer;
-  transition: background 0.1s;
+  border-left: 2px solid transparent;
+  padding-left: 12px;
 }
 
-.today-alert:hover {
-  background: var(--bg-surface-hover);
-}
-
-.today-alert--red {
-  background: var(--status-red-bg);
-}
-
-.today-alert--amber {
-  background: var(--status-amber-bg);
-}
+.today-alert--red    { border-left-color: var(--color-priority); }
+.today-alert--amber  { border-left-color: var(--color-active); }
+.today-alert--green  { border-left-color: var(--color-done); }
+.today-alert--none   { border-left-color: var(--rule); }
 
 .today-alert__row {
   display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.today-alert__dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.dot--green  { background: var(--status-green); }
-.dot--amber  { background: var(--status-amber); }
-.dot--red    { background: var(--status-red); }
-.dot--none   { background: var(--text-muted); }
-
-.today-alert__label {
-  flex: 1;
-  font-size: 13px;
-  min-width: 0;
-}
-
-.today-alert__value {
+  align-items: baseline;
+  gap: 10px;
+  width: 100%;
+  padding: 6px 0;
+  background: none;
+  border: none;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
   font-family: var(--font-mono);
-  font-size: 13px;
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-.today-alert__target {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--text-muted);
-  white-space: nowrap;
-}
-
-.today-alert__detail {
-  margin-top: 6px;
-  padding: 8px;
-  background: var(--bg-primary);
-  border-radius: var(--radius-badge);
-  font-size: 12px;
-  color: var(--text-secondary);
+  font-size: var(--fs-sm);
   line-height: 1.5;
 }
 
-.today-alert__ok {
-  color: var(--status-green);
+.today-alert__row:hover .today-alert__label {
+  color: var(--text);
 }
 
-/* ── Daily Checklist ── */
+.today-alert__row:focus-visible {
+  outline: 1px solid var(--rule-strong);
+  outline-offset: 2px;
+}
+
+.today-alert__label {
+  flex: 0 1 auto;
+  color: var(--text-muted);
+  transition: color 100ms;
+  min-width: 0;
+}
+
+.today-alert__leader {
+  flex: 1 1 auto;
+  align-self: center;
+  height: 0;
+  min-width: 12px;
+  border-bottom: 1px dotted var(--rule);
+  transform: translateY(-2px);
+}
+
+.today-alert__value {
+  flex: 0 0 auto;
+  color: var(--text);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.today-alert__target {
+  flex: 0 0 auto;
+  color: var(--text-subtle);
+  font-size: var(--fs-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.today-alert__detail {
+  padding: 6px 0 10px 0;
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  line-height: 1.6;
+  animation: slideDown 0.12s ease;
+}
+
+.today-alert__detail p {
+  margin: 0;
+}
+
+.today-alert__detail-label {
+  display: inline-block;
+  margin-right: 10px;
+  font-size: var(--fs-micro);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-subtle);
+}
+
+.today-alert__ok {
+  color: var(--color-done);
+}
+
+/* ── Today's Cadence ──────────────────────────────────── */
 
 .today-checklist {
   list-style: none;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
 }
 
 .today-checklist__item {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 8px;
-  border-radius: var(--radius-badge);
-  transition: background 0.1s;
-}
-
-.today-checklist__item:hover {
-  background: var(--bg-surface-hover);
+  padding: 2px 0;
 }
 
 .today-checklist__label {
   display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  flex: 1;
+  align-items: baseline;
+  gap: 10px;
   cursor: pointer;
-  min-width: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  color: var(--text);
 }
 
-.today-checklist__cb {
-  accent-color: var(--accent-blue);
-  margin-top: 3px;
-  flex-shrink: 0;
+/* Visually-hidden real checkbox — keeps keyboard/screen-reader semantics. */
+.today-checklist__cb-native {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.today-checklist__cb-text {
+  flex: 0 0 auto;
+  color: var(--text-muted);
+  user-select: none;
+  transition: color 100ms;
+}
+
+.today-checklist__label:hover .today-checklist__cb-text {
+  color: var(--text);
+}
+
+.today-checklist__cb-native:focus-visible + .today-checklist__cb-text {
+  outline: 1px solid var(--rule-strong);
+  outline-offset: 2px;
 }
 
 .today-checklist__text {
-  font-size: 13px;
-  line-height: 1.4;
+  flex: 0 1 auto;
+  min-width: 0;
+  transition: color 100ms;
 }
 
 .today-checklist__text--done {
   text-decoration: line-through;
-  color: var(--text-muted);
+  color: var(--text-subtle);
 }
 
-.today-checklist__meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
+.today-checklist__leader {
+  flex: 1 1 auto;
+  align-self: center;
+  height: 0;
+  min-width: 12px;
+  border-bottom: 1px dotted var(--rule);
+  transform: translateY(-2px);
 }
 
 .today-checklist__time {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--accent-blue);
-  white-space: nowrap;
+  flex: 0 0 auto;
+  font-size: var(--fs-xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-active);
 }
 
 .today-checklist__owner {
-  font-size: 11px;
-  color: var(--text-muted);
-  white-space: nowrap;
+  flex: 0 0 auto;
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-subtle);
 }
 
-/* ── Content Due ── */
+/* ── Content Due ──────────────────────────────────────── */
 
 .today-content-list {
   list-style: none;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
 }
 
 .today-content-item {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px;
-  background: var(--bg-primary);
-  border-radius: var(--radius-badge);
+  align-items: baseline;
+  gap: 10px;
+  padding: 3px 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  color: var(--text);
 }
 
-.today-content-item--overdue {
-  border-left: 3px solid var(--status-red);
+.today-content-item__prefix {
+  flex: 0 0 auto;
+  width: 1ch;
+  text-align: center;
+  color: var(--text-subtle);
+  user-select: none;
+}
+
+.today-content-item--overdue .today-content-item__prefix {
+  color: var(--color-priority);
+  font-weight: 500;
 }
 
 .today-content-item__title {
-  flex: 1;
-  font-size: 13px;
+  flex: 0 1 auto;
   min-width: 0;
 }
 
+.today-content-item__leader {
+  flex: 1 1 auto;
+  align-self: center;
+  height: 0;
+  min-width: 12px;
+  border-bottom: 1px dotted var(--rule);
+  transform: translateY(-2px);
+}
+
 .today-content-item__channel {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--text-secondary);
+  flex: 0 0 auto;
+  font-size: var(--fs-xs);
   text-transform: uppercase;
-  white-space: nowrap;
+  letter-spacing: 0.06em;
+  color: var(--text-subtle);
 }
 
-/* ── Status badges ── */
-
-.status-badge {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  padding: 2px 6px;
-  border-radius: var(--radius-badge);
-  white-space: nowrap;
+.today-content-tag {
+  flex: 0 0 auto;
+  font-size: var(--fs-micro);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-neutral);
+  font-variant-numeric: tabular-nums;
 }
 
-.status-badge--drafted {
-  background: var(--status-amber-bg);
-  color: var(--status-amber);
-}
+.today-content-tag--drafted   { color: var(--color-active); }
+.today-content-tag--scheduled { color: var(--color-deferred); }
+.today-content-tag--published { color: var(--color-done); }
+.today-content-tag--pending   { color: var(--text-subtle); }
 
-.status-badge--scheduled {
-  background: var(--accent-blue-soft);
-  color: var(--accent-blue);
-}
-
-.status-badge--published {
-  background: var(--status-green-bg);
-  color: var(--status-green);
-}
-
-.status-badge--pending {
-  background: var(--bg-surface-hover);
-  color: var(--text-muted);
-}
-
-.status-badge--overdue {
-  background: var(--status-red-bg);
-  color: var(--status-red);
-}
-
-/* ── Transitions ── */
-
-.today-card {
-  transition: box-shadow 0.2s ease;
-}
-
-.today-card:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-}
-
-.today-alert__detail {
-  animation: slideDown 0.15s ease;
-}
-
-.status-badge {
-  transition: background-color 0.2s, color 0.2s;
-}
-
-/* ── Responsive: Tablet ── */
+/* ── Responsive: Tablet ───────────────────────────────── */
 
 @media (max-width: 768px) {
-  .today-banner__greeting { font-size: 18px; }
-  .today-alert__row { flex-wrap: wrap; }
+  .today-section           { padding: 14px 0; }
+  .today-section__heading  { margin-bottom: 10px; }
+  .today-banner__meta      { font-size: var(--fs-sm); }
+  .today-alert__row        { flex-wrap: wrap; gap: 6px; }
+  .today-alert__leader     { display: none; }
+  .today-checklist__label  { flex-wrap: wrap; }
+  .today-checklist__leader { display: none; }
 }
 
-/* ── Responsive: Mobile ── */
+/* ── Responsive: Mobile ───────────────────────────────── */
 
 @media (max-width: 480px) {
-  .today-banner__greeting { font-size: 16px; }
-  .today-banner__phase { display: block; margin-top: 4px; }
-  .today-content-item { flex-wrap: wrap; gap: 4px; }
-  .today-checklist__item { flex-direction: column; gap: 4px; }
-  .today-checklist__meta { align-self: flex-start; padding-left: 26px; }
+  .today-banner__greeting      { font-size: var(--fs-xs); }
+  .today-banner__meta          { font-size: var(--fs-sm); line-height: 1.5; }
+  .today-content-item          { flex-wrap: wrap; gap: 6px; }
+  .today-content-item__leader  { display: none; }
+  .today-content-item__prefix  { width: auto; }
 }

@@ -5,4 +5,11 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   base: '/hoa/',
+  server: {
+    // Pinned to 5174 because 5173 is owned by another app on this machine.
+    // strictPort: fail loudly if 5174 is taken rather than silently falling
+    // back to 5175+. See memory: feedback_ports.md.
+    port: 5174,
+    strictPort: true,
+  },
 })

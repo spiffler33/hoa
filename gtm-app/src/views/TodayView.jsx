@@ -12,6 +12,7 @@ const DAY_NAMES = [
   'Sunday', 'Monday', 'Tuesday', 'Wednesday',
   'Thursday', 'Friday', 'Saturday',
 ];
+const DAY_SHORT = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 const PHASE_KEYS = ['phase_0', 'phase_1', 'phase_2', 'phase_3'];
 const PHASE_LABELS = [
   'Phase 0 — Foundation',
@@ -120,7 +121,9 @@ export default function TodayView() {
   const phaseKey = PHASE_KEYS[currentPhase];
   const phase = phaseChecklists[phaseKey];
   const weekNum = getWeekNumber(config?.phaseStartDate);
-  const dayName = DAY_NAMES[new Date().getDay()];
+  const dayIdx = new Date().getDay();
+  const dayName = DAY_NAMES[dayIdx];
+  const dayShort = DAY_SHORT[dayIdx];
 
   // Cadence tasks
   const todayTasks = getTodayTasks(phaseKey, weekNum);
@@ -172,33 +175,39 @@ export default function TodayView() {
   /* ── render ────────────────────────────────── */
   return (
     <div className="view today-view">
-      {/* ── Phase Banner ────────────────────── */}
-      <header className="today-banner">
-        <h1 className="today-banner__greeting">
-          {getGreeting()}.{' '}
-          <span className="today-banner__phase">
-            {PHASE_LABELS[currentPhase]}
-          </span>
-        </h1>
-        <p className="today-banner__sub">
-          {weekNum != null ? `Week ${weekNum}, ${dayName}` : dayName}
+      {/* ── Banner ──────────────────────────────── */}
+      <header className="today-section today-banner">
+        <p className="today-banner__greeting">{getGreeting()}.</p>
+        <p className="today-banner__meta">
+          {today} <span className="today-banner__sep">·</span> {dayShort}
+          {weekNum != null && (
+            <>
+              {' '}
+              <span className="today-banner__sep">·</span> WK {weekNum}
+            </>
+          )}{' '}
+          <span className="today-banner__sep">·</span> {PHASE_LABELS[currentPhase]}
         </p>
         {phase && (
           <p className="today-banner__objective">{phase.objective}</p>
         )}
       </header>
 
-      {/* ── Alerts ──────────────────────────── */}
-      <section className="today-card">
-        <h2 className="today-card__title">
-          Stage Gate Alerts
+      {/* ── Stage Gate Alerts ───────────────────── */}
+      <section className="today-section">
+        <h2 className="today-section__heading">
+          <span>Stage gate alerts</span>
           {(redCount > 0 || amberCount > 0) && (
-            <span className="today-card__badge-group">
+            <span className="today-section__heading-meta">
               {redCount > 0 && (
-                <span className="badge badge--red">{redCount} red</span>
+                <span className="today-heading-count today-heading-count--red">
+                  {redCount} priority
+                </span>
               )}
               {amberCount > 0 && (
-                <span className="badge badge--amber">{amberCount} amber</span>
+                <span className="today-heading-count today-heading-count--amber">
+                  {amberCount} active
+                </span>
               )}
             </span>
           )}
@@ -214,56 +223,67 @@ export default function TodayView() {
           <EmptyState icon="\u2205" message="No stage gates defined for this phase." />
         ) : (
           <ul className="today-alerts">
-            {alerts.map((a) => (
-              <li
-                key={a.id}
-                className={`today-alert today-alert--${a.level}`}
-                onClick={() =>
-                  setExpandedAlert(expandedAlert === a.id ? null : a.id)
-                }
-              >
-                <div className="today-alert__row">
-                  <span className={`today-alert__dot dot--${a.level}`} />
-                  <span className="today-alert__label">{a.label}</span>
-                  <span className="today-alert__value">
-                    {a.value != null ? a.value : '\u2014'}
-                    {a.unit === '%' && a.value != null ? '%' : ''}
-                  </span>
-                  <span className="today-alert__target">
-                    / {a.target}
-                    {a.unit === '%' ? '%' : ''}
-                  </span>
-                </div>
+            {alerts.map((a) => {
+              const expanded = expandedAlert === a.id;
+              return (
+                <li
+                  key={a.id}
+                  className={`today-alert today-alert--${a.level}${expanded ? ' today-alert--expanded' : ''}`}
+                >
+                  <button
+                    type="button"
+                    className="today-alert__row"
+                    onClick={() =>
+                      setExpandedAlert(expanded ? null : a.id)
+                    }
+                    aria-expanded={expanded}
+                  >
+                    <span className="today-alert__label">{a.label}</span>
+                    <span className="today-alert__leader" aria-hidden="true" />
+                    <span className="today-alert__value">
+                      {a.value != null ? a.value : '\u2014'}
+                      {a.unit === '%' && a.value != null ? '%' : ''}
+                    </span>
+                    <span className="today-alert__target">
+                      / {a.target}
+                      {a.unit === '%' ? '%' : ''}
+                    </span>
+                  </button>
 
-                {expandedAlert === a.id && (
-                  <div className="today-alert__detail">
-                    {a.level === 'red' && a.redAction && (
-                      <p>
-                        <strong>Action:</strong> {a.redAction}
-                      </p>
-                    )}
-                    {a.level === 'amber' && a.amberAction && (
-                      <p>
-                        <strong>Action:</strong> {a.amberAction}
-                      </p>
-                    )}
-                    {a.level === 'green' && (
-                      <p className="today-alert__ok">On track</p>
-                    )}
-                    {a.level === 'none' && (
-                      <p>No data entered for this metric.</p>
-                    )}
-                  </div>
-                )}
-              </li>
-            ))}
+                  {expanded && (
+                    <div className="today-alert__detail">
+                      {a.level === 'red' && a.redAction && (
+                        <p>
+                          <span className="today-alert__detail-label">Action</span>
+                          {a.redAction}
+                        </p>
+                      )}
+                      {a.level === 'amber' && a.amberAction && (
+                        <p>
+                          <span className="today-alert__detail-label">Action</span>
+                          {a.amberAction}
+                        </p>
+                      )}
+                      {a.level === 'green' && (
+                        <p className="today-alert__ok">On track.</p>
+                      )}
+                      {a.level === 'none' && (
+                        <p>No data entered for this metric.</p>
+                      )}
+                    </div>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         )}
       </section>
 
-      {/* ── Daily Checklist ─────────────────── */}
-      <section className="today-card">
-        <h2 className="today-card__title">Today&rsquo;s Cadence</h2>
+      {/* ── Today's Cadence ─────────────────────── */}
+      <section className="today-section">
+        <h2 className="today-section__heading">
+          <span>Today&rsquo;s cadence</span>
+        </h2>
 
         {todayTasks.length === 0 ? (
           <EmptyState
@@ -276,38 +296,47 @@ export default function TodayView() {
           />
         ) : (
           <ul className="today-checklist">
-            {todayTasks.map((task, i) => (
-              <li key={i} className="today-checklist__item">
-                <label className="today-checklist__label">
-                  <input
-                    type="checkbox"
-                    checked={!!checked[i]}
-                    onChange={() => toggleCheck(i)}
-                    className="today-checklist__cb"
-                  />
-                  <span
-                    className={
-                      checked[i] ? 'today-checklist__text today-checklist__text--done' : 'today-checklist__text'
-                    }
-                  >
-                    {task.activity}
-                  </span>
-                </label>
-                <div className="today-checklist__meta">
-                  {task.time && (
-                    <span className="today-checklist__time">{task.time}</span>
-                  )}
-                  <span className="today-checklist__owner">{task.owner}</span>
-                </div>
-              </li>
-            ))}
+            {todayTasks.map((task, i) => {
+              const done = !!checked[i];
+              return (
+                <li key={i} className="today-checklist__item">
+                  <label className="today-checklist__label">
+                    <input
+                      type="checkbox"
+                      checked={done}
+                      onChange={() => toggleCheck(i)}
+                      className="today-checklist__cb-native"
+                    />
+                    <span className="today-checklist__cb-text" aria-hidden="true">
+                      {done ? '[x]' : '[ ]'}
+                    </span>
+                    <span
+                      className={
+                        done
+                          ? 'today-checklist__text today-checklist__text--done'
+                          : 'today-checklist__text'
+                      }
+                    >
+                      {task.activity}
+                    </span>
+                    <span className="today-checklist__leader" aria-hidden="true" />
+                    {task.time && (
+                      <span className="today-checklist__time">{task.time}</span>
+                    )}
+                    <span className="today-checklist__owner">{task.owner}</span>
+                  </label>
+                </li>
+              );
+            })}
           </ul>
         )}
       </section>
 
-      {/* ── Content Due ─────────────────────── */}
-      <section className="today-card">
-        <h2 className="today-card__title">Content Due Today</h2>
+      {/* ── Content Due ─────────────────────────── */}
+      <section className="today-section">
+        <h2 className="today-section__heading">
+          <span>Content due</span>
+        </h2>
 
         {contentDue.length === 0 ? (
           <EmptyState icon="\u2713" message="No content due today." />
@@ -316,27 +345,25 @@ export default function TodayView() {
             {contentDue.map((item, i) => {
               const due = item.dueDate || item.date;
               const overdue = due && due < today;
+              const statusKey = (item.status || 'pending').toLowerCase();
               return (
                 <li
                   key={item.id || i}
                   className={`today-content-item${overdue ? ' today-content-item--overdue' : ''}`}
                 >
+                  <span className="today-content-item__prefix" aria-hidden="true">
+                    {overdue ? '!' : '\u00b7'}
+                  </span>
                   <span className="today-content-item__title">
                     {item.title || 'Untitled'}
                   </span>
+                  <span className="today-content-item__leader" aria-hidden="true" />
                   <span className="today-content-item__channel">
                     {item.channel || '\u2014'}
                   </span>
-                  <span
-                    className={`status-badge status-badge--${(item.status || 'pending').toLowerCase()}`}
-                  >
-                    {item.status || 'pending'}
+                  <span className={`today-content-tag today-content-tag--${statusKey}`}>
+                    [{(item.status || 'pending').toUpperCase()}]
                   </span>
-                  {overdue && (
-                    <span className="status-badge status-badge--overdue">
-                      overdue
-                    </span>
-                  )}
                 </li>
               );
             })}

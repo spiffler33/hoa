@@ -1,49 +1,95 @@
-/* ── Yes Lifers GTM — Design Tokens ── */
+/* ── Yes Lifers GTM — Design Tokens (Day Mode / Warm Paper) ── */
+/* Night mode + DAY|NIGHT toggle deferred to a follow-up task. */
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrainsMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrainsMono-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
-  /* Backgrounds */
-  --bg-primary: #0F172A;
-  --bg-surface: #1E293B;
-  --bg-surface-hover: #334155;
-  --bg-elevated: #0F172A;
+  /* ── Surfaces (warm paper, not pure white) ── */
+  --bg:              oklch(95% 0.010 80);
+  --bg-elevated:     oklch(97% 0.010 80);
+  --bg-sunken:       oklch(92% 0.012 80);
+  --bg-hover:        oklch(93% 0.012 80);
 
-  /* Text */
-  --text-primary: #F1F5F9;
-  --text-secondary: #94A3B8;
-  --text-muted: #64748B;
+  /* ── Text (deep espresso, not pure black) ── */
+  --text:            oklch(22% 0.020 50);
+  --text-muted:      oklch(48% 0.015 60);
+  --text-subtle:     oklch(62% 0.012 70);
 
-  /* Accent */
-  --accent-blue: #3B82F6;
-  --accent-blue-soft: #1E3A5F;
+  /* ── Rules / borders (hairline) ── */
+  --rule:            oklch(82% 0.012 70);
+  --rule-strong:     oklch(70% 0.015 60);
 
-  /* Status */
-  --status-green: #22C55E;
-  --status-green-bg: #052E16;
-  --status-amber: #F59E0B;
-  --status-amber-bg: #451A03;
-  --status-red: #EF4444;
-  --status-red-bg: #450A0A;
+  /* ── Semantic color roles (muted pastels, information channels only) ── */
+  --color-active:    oklch(60% 0.09 75);   /* muted ochre     — "doing now"    */
+  --color-waiting:   oklch(58% 0.08 20);   /* dusty rose      — "not my move"  */
+  --color-done:      oklch(58% 0.08 150);  /* sage            — "finished"     */
+  --color-priority:  oklch(55% 0.13 40);   /* terracotta      — "attention"    */
+  --color-deferred:  oklch(55% 0.06 280);  /* slate lavender  — "parked"       */
+  --color-neutral:   oklch(52% 0.02 80);   /* weathered stone — "just is"      */
 
-  /* Borders */
-  --border: #334155;
-  --border-active: #3B82F6;
+  /* ── Semantic soft tints (used sparingly, e.g. expanded detail backgrounds) ── */
+  --color-active-soft:   oklch(92% 0.025 75);
+  --color-waiting-soft:  oklch(92% 0.020 20);
+  --color-done-soft:     oklch(92% 0.020 150);
+  --color-priority-soft: oklch(92% 0.025 40);
 
-  /* Typography */
-  --font-display: 'DM Sans', sans-serif;
-  --font-body: 'DM Sans', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  /* ── Legacy aliases — other views reference these names;                ── */
+  /* ── remapping them here is how the aesthetic shift propagates for free ── */
+  --bg-primary:         var(--bg);
+  --bg-surface:         var(--bg-elevated);
+  --bg-surface-hover:   var(--bg-hover);
+  --text-primary:       var(--text);
+  --text-secondary:     var(--text-muted);
+  --accent-blue:        var(--color-active);
+  --accent-blue-soft:   var(--color-active-soft);
+  --status-green:       var(--color-done);
+  --status-green-bg:    var(--color-done-soft);
+  --status-amber:       var(--color-active);
+  --status-amber-bg:    var(--color-active-soft);
+  --status-red:         var(--color-priority);
+  --status-red-bg:      var(--color-priority-soft);
+  --border:             var(--rule);
+  --border-active:      var(--rule-strong);
 
-  /* Spacing */
-  --space-unit: 4px;
-  --card-padding: 16px;
-  --section-gap: 24px;
+  /* ── Typography (monospace throughout — principles doc, Typography) ── */
+  --font-mono:    'JetBrains Mono', ui-monospace, Menlo, Monaco, monospace;
+  --font-display: 'JetBrains Mono', ui-monospace, Menlo, Monaco, monospace;
+  --font-body:    'JetBrains Mono', ui-monospace, Menlo, Monaco, monospace;
+
+  /* ── Type scale (strict: 11/12/13/14/16/20/24) ── */
+  --fs-micro: 11px;
+  --fs-xs:    12px;
+  --fs-sm:    13px;
+  --fs-md:    14px;
+  --fs-lg:    16px;
+  --fs-xl:    20px;
+  --fs-xxl:   24px;
+
+  /* ── Spacing rhythm (multiples of 4) ── */
+  --space-unit:     4px;
+  --card-padding:   16px;
+  --section-gap:    24px;
   --page-padding-x: 24px;
   --page-padding-y: 32px;
 
-  /* Radius */
-  --radius-card: 10px;
-  --radius-badge: 4px;
-  --radius-button: 6px;
+  /* ── Radius (4–8px, no pills) ── */
+  --radius-card:   6px;
+  --radius-badge:  4px;
+  --radius-button: 4px;
 }
 
 /* ── Reset & Base ── */
@@ -147,9 +193,8 @@ input:focus, select:focus, textarea:focus {
 }
 
 .navbar-tab--active {
-  color: var(--accent-blue);
-  border-bottom-color: var(--accent-blue);
-  background: rgba(59, 130, 246, 0.06);
+  color: var(--color-active);
+  border-bottom-color: var(--color-active);
 }
 
 /* ── Layout ── */
