@@ -334,3 +334,50 @@ If the build passes, the plan is mechanically correct. Visual verification happe
 3. Rebuild of the remaining views to match the new aesthetic. Done: TodayView (4e98456), WeeklyReviewView (d4ed34e), PlaybookView (7d5cd36), ContentView (983fb4a), ControlView (0fb1812), ReferenceView (160712b), SettingsView. All seven views rebuilt.
 4. Possibly adding JetBrains Mono weight 700 if emphasis needs a third weight beyond 400/500
 5. Verifying AA contrast in both modes after night mode ships
+
+---
+
+## Post-rebuild polish (2026-04-11)
+
+Two defects surfaced once the seven views were live and the operator started using the app:
+
+### Defect 1 — Literal `\uXXXX` escapes rendering as text
+
+The rebuild used ASCII unicode escapes (`\u2014` for em dash, `\u2205` for empty-set, `\u2713` for check, etc.) to keep source ASCII-clean per the DESIGN_PRINCIPLES.md icons rule. Most usages worked because they sat inside JavaScript string literals, template literals, or `{...}` expressions — all contexts where ECMAScript escape-processing runs at parse time. But 15 sites had escapes in positions where JSX does *not* run escape processing:
+
+- **JSX attribute string quotes** (14 sites) — `<EmptyState icon="\u2014" />`. Per the JSX spec, `JSXDoubleStringCharacters` are raw source chars, not `StringLiteral`, so the six-character sequence `\`, `u`, `2`, `0`, `1`, `4` got passed to the `icon` prop and rendered verbatim.
+- **JSX text children** (1 site) — `<option>Phase {i} \u2014 Weeks {weeks}</option>` in SettingsView. Same rule applies to JSX text between tags.
+
+**Fix:** Wrap each offending escape in a JSX expression brace — `icon={'\u2014'}` and `<option>Phase {i} {'\u2014'} Weeks {weeks}</option>` — so the JavaScript parser sees a real string literal.
+
+**Rule added to `DESIGN_PRINCIPLES.md`** under "Icons and Decoration": `\uXXXX` escapes decode only in JavaScript context, never in JSX attribute quotes or JSX text children. Either use brace-wrapped expressions or paste the literal character; source-ASCII form is preferred for grep-friendliness.
+
+### Defect 2 — Muted pastels present but invisible
+
+The semantic color tokens (`--color-active`, `--color-priority`, etc. plus their `-soft` variants) were defined correctly in `index.css` and referenced 107 times across 8 view CSS files — but every application was on a surface too small for the eye to pattern-match on:
+
+- **2px `border-left` stripes** on alert/metric cards (all 12 card selectors)
+- **Text color on 11-14px labels** at 0.06-0.13 chroma (reads as "tinted gray")
+- **1.25px sparkline stroke** (too thin to signal direction)
+- **3px progress bar fill** (PlaybookView only)
+
+The `--color-*-soft` tokens at 92% lightness — the actual pastels the doc spec prescribes — were defined and then used exactly once in the whole codebase (`EmptyState.css` error variant). "Color is an information channel" had stopped transmitting.
+
+**Fix** — applied the same pattern to six semantic card selectors across four view CSS files:
+
+| File | Selector | Change |
+|---|---|---|
+| `TodayView.css` | `.today-alert` | 2px→4px border, `gap: 1px`→`4px`, radius 4px, soft tints on red/amber/green |
+| `WeeklyReviewView.css` | `.weekly-metric` | 2px→4px border, radius, soft tints on red/amber/green |
+| `WeeklyReviewView.css` | `.weekly-alert` | 2px→4px border, radius, soft tints on red/amber |
+| `ControlView.css` | `.control-metric` | 2px→4px border, radius, soft tints on red/amber/green |
+| `ControlView.css` | `.control-kill` | 2px→4px border, radius, soft tints on triggered/clear |
+| `ContentView.css` | `.content-buffer__row` | 2px→4px border, radius, soft tints on red/amber/green |
+| `ReferenceView.css` | `.partnership-card` | 2px→4px border, radius, soft tints on active/completed |
+| `WeeklyReviewView.css` | `.sparkline__line` | `stroke-width` 1.25→1.75 |
+
+**Padding discipline:** Every padding change is strictly horizontal and strictly structural. Left padding drops by 2px to compensate exactly for the 2px border-left bump (keeping text position pixel-identical). Right padding adds 12px so the tinted background has a defined right edge. **No vertical padding was introduced anywhere** — the "breathe through line-height, not padding" rule in `DESIGN_PRINCIPLES.md` is the single most important typographic rule and applies even when the padding would be for background cosmetic breathing, not text spacing. Pre-existing vertical padding on these cards (`5px`, `6px`, `8px`, `10px`) was deliberately not touched per scope discipline.
+
+**Principled absences:** Variants that represent absence of state stay uncolored: `--none` on alerts/metrics/buffer rows, `--prospect` on partnership cards (also lacks a `--color-neutral-soft` token by design), `--pending` on control kill switches (stays at `opacity: 0.6` with neutral rule border). Per the principle: no state, no color.
+
+**18 soft-tint backgrounds now live** across six view files, verified by `grep 'background:\s*var(--color-.*-soft)'`. Zero `border-left: 2px solid transparent` remain in the views directory.

@@ -380,17 +380,28 @@
 }
 
 .partnership-card {
-  padding: 8px 0 8px 12px;
-  border-left: 2px solid var(--rule);
+  padding: 8px 12px 8px 10px;
+  border-left: 4px solid var(--rule);
+  border-radius: 4px;
   font-family: var(--font-mono);
   font-size: var(--fs-sm);
   line-height: 1.5;
   max-width: 80ch;
 }
 
-.partnership-card--prospect  { border-left-color: var(--color-neutral); }
-.partnership-card--active    { border-left-color: var(--color-active); }
-.partnership-card--completed { border-left-color: var(--color-done); }
+.partnership-card--prospect {
+  border-left-color: var(--color-neutral);
+}
+
+.partnership-card--active {
+  border-left-color: var(--color-active);
+  background: var(--color-active-soft);
+}
+
+.partnership-card--completed {
+  border-left-color: var(--color-done);
+  background: var(--color-done-soft);
+}
 
 .partnership-card__header {
   display: flex;

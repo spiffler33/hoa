@@ -322,7 +322,7 @@ export default function WeeklyReviewView() {
     return (
       <div className="view weekly-view">
         <EmptyState
-          icon="\u26A0"
+          icon={'\u26A0'}
           message="Failed to load data"
           hint={error}
           actionLabel="Retry"
@@ -376,9 +376,9 @@ export default function WeeklyReviewView() {
           <span>Stage gate metrics</span>
         </h2>
         {loading ? (
-          <LoadingSpinner label="Loading metrics\u2026" />
+          <LoadingSpinner label={'Loading metrics\u2026'} />
         ) : phaseMetrics.length === 0 ? (
-          <EmptyState icon="\u2205" message="No metrics defined for this phase." />
+          <EmptyState icon={'\u2205'} message="No metrics defined for this phase." />
         ) : (
           <ul className="weekly-metric-list">
             {phaseMetrics.map((m) => {
@@ -597,7 +597,7 @@ export default function WeeklyReviewView() {
         </h2>
         {trendRows.length < 2 ? (
           <EmptyState
-            icon="\u2014"
+            icon={'\u2014'}
             message="Need at least 2 weeks of data to show trends."
           />
         ) : (

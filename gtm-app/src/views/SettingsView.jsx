@@ -107,7 +107,7 @@ export default function SettingsView() {
               >
                 {PHASE_KEYS.map((key, i) => (
                   <option key={key} value={i}>
-                    Phase {i} \u2014 Weeks {phaseChecklists[key].weeks}
+                    Phase {i} {'\u2014'} Weeks {phaseChecklists[key].weeks}
                   </option>
                 ))}
               </select>
@@ -170,7 +170,7 @@ export default function SettingsView() {
           <input
             type="password"
             className="settings-field__input"
-            placeholder="ghp_\u2026"
+            placeholder={'ghp_\u2026'}
             value={githubToken}
             onChange={(e) => setGithubToken(e.target.value)}
           />

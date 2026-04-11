@@ -119,14 +119,29 @@
 }
 
 .control-metric {
-  padding: 6px 0 6px 12px;
-  border-left: 2px solid transparent;
+  padding: 6px 12px 6px 10px;
+  border-left: 4px solid transparent;
+  border-radius: 4px;
 }
 
-.control-metric--red   { border-left-color: var(--color-priority); }
-.control-metric--amber { border-left-color: var(--color-active); }
-.control-metric--green { border-left-color: var(--color-done); }
-.control-metric--none  { border-left-color: var(--rule); }
+.control-metric--red {
+  border-left-color: var(--color-priority);
+  background: var(--color-priority-soft);
+}
+
+.control-metric--amber {
+  border-left-color: var(--color-active);
+  background: var(--color-active-soft);
+}
+
+.control-metric--green {
+  border-left-color: var(--color-done);
+  background: var(--color-done-soft);
+}
+
+.control-metric--none {
+  border-left-color: var(--rule);
+}
 
 .control-metric__row {
   display: flex;
@@ -205,15 +220,23 @@
 }
 
 .control-kill {
-  padding: 10px 0 10px 12px;
-  border-left: 2px solid var(--rule);
+  padding: 10px 12px 10px 10px;
+  border-left: 4px solid var(--rule);
+  border-radius: 4px;
   font-family: var(--font-mono);
   font-size: var(--fs-sm);
   line-height: 1.5;
 }
 
-.control-kill--triggered { border-left-color: var(--color-priority); }
-.control-kill--clear     { border-left-color: var(--color-done); }
+.control-kill--triggered {
+  border-left-color: var(--color-priority);
+  background: var(--color-priority-soft);
+}
+
+.control-kill--clear {
+  border-left-color: var(--color-done);
+  background: var(--color-done-soft);
+}
 
 .control-kill--pending {
   border-left-color: var(--rule);

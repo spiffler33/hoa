@@ -172,6 +172,13 @@ Aim for AA contrast against the background at a minimum, AAA where feasible.
   - `│ ─ ┌ ┐ └ ┘ ├ ┤` for ASCII box drawing where structurally useful
   - `…` for truncation
   - `§ †` for notes / footnotes
+- **`\uXXXX` escapes decode only in JavaScript context.** They work inside
+  JS strings, template literals, and `{...}` expressions. They do NOT work
+  inside JSX attribute quotes or JSX text children — there they render as
+  literal backslash-u-hex. Write `icon={'\u2014'}` not `icon="\u2014"`, and
+  `<span>a {'\u2014'} b</span>` not `<span>a \u2014 b</span>`. Or paste the
+  literal character directly — both are acceptable, the source-ASCII form is
+  preferred for grep-friendliness.
 - **Functional iconography only**, if any at all. Default to text labels first.
   If icons are unavoidable, use Lucide or Heroicons at hairline stroke weight.
 - **No illustrations.** No mascots. No spot illustrations. No "empty state art."

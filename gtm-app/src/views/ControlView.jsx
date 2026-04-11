@@ -251,7 +251,7 @@ export default function ControlView() {
       <div className="view control-view">
         <h1 className="view-title">Control</h1>
         <EmptyState
-          icon="\u26A0"
+          icon={'\u26A0'}
           message="Failed to load control data"
           hint={error}
           actionLabel="Retry"
@@ -312,7 +312,7 @@ export default function ControlView() {
         </h2>
 
         {metricGroups.length === 0 ? (
-          <EmptyState icon="\u2205" message="No metrics defined for this phase." />
+          <EmptyState icon={'\u2205'} message="No metrics defined for this phase." />
         ) : (
           metricGroups.map((group) => (
             <div key={group.category} className="control-category">

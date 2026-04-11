@@ -95,7 +95,7 @@ export default function PlaybookView() {
       <div className="view">
         <h1 className="view-title">Playbook</h1>
         <EmptyState
-          icon="\u26A0"
+          icon={'\u26A0'}
           message="Failed to load checklist data"
           hint={error}
           actionLabel="Retry"

@@ -587,7 +587,7 @@ export default function ContentView() {
     return (
       <div className="view content-view">
         <EmptyState
-          icon="\u26A0"
+          icon={'\u26A0'}
           message="Failed to load content calendar"
           hint={error}
           actionLabel="Retry"

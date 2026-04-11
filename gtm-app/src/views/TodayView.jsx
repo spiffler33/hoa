@@ -161,7 +161,7 @@ export default function TodayView() {
       <div className="view today-view">
         <h1 className="view-title">Today</h1>
         <EmptyState
-          icon="\u26A0"
+          icon={'\u26A0'}
           message="Failed to load data"
           hint={error}
           actionLabel="Retry"
@@ -215,12 +215,12 @@ export default function TodayView() {
 
         {metrics === null ? (
           <EmptyState
-            icon="\u2014"
+            icon={'\u2014'}
             message="No metrics data yet"
             hint="Connect a sheet in Settings or enter data in Weekly Review."
           />
         ) : alerts.length === 0 ? (
-          <EmptyState icon="\u2205" message="No stage gates defined for this phase." />
+          <EmptyState icon={'\u2205'} message="No stage gates defined for this phase." />
         ) : (
           <ul className="today-alerts">
             {alerts.map((a) => {
@@ -287,7 +287,7 @@ export default function TodayView() {
 
         {todayTasks.length === 0 ? (
           <EmptyState
-            icon="\u2713"
+            icon={'\u2713'}
             message={
               cadence[phaseKey]
                 ? 'No tasks scheduled for today.'
@@ -339,7 +339,7 @@ export default function TodayView() {
         </h2>
 
         {contentDue.length === 0 ? (
-          <EmptyState icon="\u2713" message="No content due today." />
+          <EmptyState icon={'\u2713'} message="No content due today." />
         ) : (
           <ul className="today-content-list">
             {contentDue.map((item, i) => {
