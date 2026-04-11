@@ -16,11 +16,12 @@ const CHANNEL_LABELS = {
   community: 'Community',
 };
 
-const CHANNEL_COLORS = {
-  linkedin: '#0A66C2',
-  instagram: '#E4405F',
-  email: '#14B8A6',
-  community: '#8B5CF6',
+/** Channel → semantic color role (CSS modifier class on .content-channel). */
+const CHANNEL_CLASS = {
+  linkedin: 'content-channel--linkedin',
+  instagram: 'content-channel--instagram',
+  email: 'content-channel--email',
+  community: 'content-channel--community',
 };
 
 /* ── helpers ─────────────────────────────────── */
@@ -124,6 +125,7 @@ function BriefModal({ item, onClose }) {
   const postType = item.post_type || item.postType || '';
   const brief = findBrief(channel, postType);
   const channelLabel = CHANNEL_LABELS[channel] || item.channel;
+  const channelClass = CHANNEL_CLASS[channel] || '';
   const channelData = contentBriefs[channel];
 
   useEffect(() => {
@@ -139,20 +141,22 @@ function BriefModal({ item, onClose }) {
       <div className="content-modal" onClick={(e) => e.stopPropagation()}>
         <header className="content-modal__header">
           <div className="content-modal__header-left">
-            <span
-              className="content-item__channel"
-              style={{
-                background: CHANNEL_COLORS[channel] || 'var(--text-muted)',
-              }}
-            >
-              {channelLabel}
+            <span className={`content-channel ${channelClass}`}>
+              {(channelLabel || '').toUpperCase()}
             </span>
             <h2 className="content-modal__title">
-              {formatPostType(postType)} Brief
+              {formatPostType(postType).toUpperCase()}
+              <span className="content-modal__title-sep">{'\u00b7'}</span>
+              BRIEF
             </h2>
           </div>
-          <button className="content-modal__close" onClick={onClose}>
-            ✕
+          <button
+            type="button"
+            className="content-modal__close"
+            onClick={onClose}
+            aria-label="Close"
+          >
+            {'\u2715'}
           </button>
         </header>
 
@@ -167,10 +171,12 @@ function BriefModal({ item, onClose }) {
             {/* Meta tags */}
             <div className="brief-meta">
               {brief.day && (
-                <span className="brief-meta__tag">Day: {brief.day}</span>
+                <span className="brief-meta__tag">
+                  DAY {'\u00b7'} {brief.day}
+                </span>
               )}
               <span className="brief-meta__tag">
-                Frequency: {brief.frequency}
+                FREQ {'\u00b7'} {brief.frequency}
               </span>
             </div>
 
@@ -232,9 +238,7 @@ function BriefModal({ item, onClose }) {
               postType === 'engagement' &&
               channelData?.engagementExamples && (
                 <section className="brief-section">
-                  <h3 className="brief-section__label">
-                    Engagement Examples
-                  </h3>
+                  <h3 className="brief-section__label">Engagement Examples</h3>
                   <ul className="brief-prompts">
                     {channelData.engagementExamples.map((ex, i) => (
                       <li key={i}>{ex}</li>
@@ -333,44 +337,56 @@ function AddContentModal({ weekDays, itemsByDate, onSave, onClose }) {
         onClick={(e) => e.stopPropagation()}
       >
         <header className="content-modal__header">
-          <h2 className="content-modal__title">Add Content Item</h2>
-          <button className="content-modal__close" onClick={onClose}>
-            ✕
+          <h2 className="content-modal__title">ADD CONTENT ITEM</h2>
+          <button
+            type="button"
+            className="content-modal__close"
+            onClick={onClose}
+            aria-label="Close"
+          >
+            {'\u2715'}
           </button>
         </header>
 
-        <form className="content-add-form" onSubmit={handleSubmit}>
-          <label className="content-add-form__field">
-            <span className="content-add-form__label">Channel</span>
-            <select
-              value={channel}
-              onChange={(e) => handleChannelChange(e.target.value)}
-            >
-              {CHANNELS.map((ch) => (
-                <option key={ch} value={ch}>
-                  {CHANNEL_LABELS[ch]}
-                </option>
-              ))}
-            </select>
+        <form className="content-form" onSubmit={handleSubmit}>
+          <label className="content-form__field">
+            <span className="content-form__label">Channel</span>
+            <span className="content-form__select-wrap">
+              <select
+                className="content-form__control"
+                value={channel}
+                onChange={(e) => handleChannelChange(e.target.value)}
+              >
+                {CHANNELS.map((ch) => (
+                  <option key={ch} value={ch}>
+                    {CHANNEL_LABELS[ch]}
+                  </option>
+                ))}
+              </select>
+            </span>
           </label>
 
-          <label className="content-add-form__field">
-            <span className="content-add-form__label">Post Type</span>
-            <select
-              value={postType}
-              onChange={(e) => setPostType(e.target.value)}
-            >
-              {postTypes.map((pt) => (
-                <option key={pt} value={pt}>
-                  {formatPostType(pt)}
-                </option>
-              ))}
-            </select>
+          <label className="content-form__field">
+            <span className="content-form__label">Post type</span>
+            <span className="content-form__select-wrap">
+              <select
+                className="content-form__control"
+                value={postType}
+                onChange={(e) => setPostType(e.target.value)}
+              >
+                {postTypes.map((pt) => (
+                  <option key={pt} value={pt}>
+                    {formatPostType(pt)}
+                  </option>
+                ))}
+              </select>
+            </span>
           </label>
 
-          <label className="content-add-form__field">
-            <span className="content-add-form__label">Day</span>
+          <label className="content-form__field">
+            <span className="content-form__label">Day</span>
             <input
+              className="content-form__control"
               type="date"
               value={dueDate}
               min={minDate}
@@ -379,9 +395,10 @@ function AddContentModal({ weekDays, itemsByDate, onSave, onClose }) {
             />
           </label>
 
-          <label className="content-add-form__field">
-            <span className="content-add-form__label">Title</span>
+          <label className="content-form__field">
+            <span className="content-form__label">Title</span>
             <input
+              className="content-form__control"
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -389,34 +406,33 @@ function AddContentModal({ weekDays, itemsByDate, onSave, onClose }) {
             />
           </label>
 
-          <label className="content-add-form__field">
-            <span className="content-add-form__label">Status</span>
-            <select
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-            >
-              {STATUSES.map((s) => (
-                <option key={s} value={s}>
-                  {s.replace(/_/g, ' ')}
-                </option>
-              ))}
-            </select>
+          <label className="content-form__field">
+            <span className="content-form__label">Status</span>
+            <span className="content-form__select-wrap">
+              <select
+                className="content-form__control"
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+              >
+                {STATUSES.map((s) => (
+                  <option key={s} value={s}>
+                    {s.replace(/_/g, ' ')}
+                  </option>
+                ))}
+              </select>
+            </span>
           </label>
 
-          <div className="content-add-form__actions">
-            <button
-              type="button"
-              className="btn btn--outline"
-              onClick={onClose}
-            >
+          <div className="content-form__actions">
+            <button type="button" className="content-btn" onClick={onClose}>
               Cancel
             </button>
             <button
               type="submit"
-              className="btn btn--primary"
+              className="content-btn content-btn--primary"
               disabled={saving || !channel || !postType || !dueDate}
             >
-              {saving ? 'Saving\u2026' : 'Add Item'}
+              {saving ? 'Saving\u2026' : 'Add item'}
             </button>
           </div>
         </form>
@@ -507,6 +523,15 @@ export default function ContentView() {
   ).length;
   const thisWeekTotal = weekItems.length;
 
+  const thisWeekLevel =
+    thisWeekTotal === 0
+      ? 'none'
+      : thisWeekDraftedCount === thisWeekTotal
+        ? 'green'
+        : thisWeekDraftedCount * 2 >= thisWeekTotal
+          ? 'amber'
+          : 'red';
+
   const futureBufferItems = allItems.filter((item) => {
     const d = item.dueDate || item.date;
     if (!d) return false;
@@ -521,6 +546,9 @@ export default function ContentView() {
     bufferWeekSet.add(toISO(getMonday(new Date(d + 'T00:00:00'))));
   });
   const bufferWeekCount = bufferWeekSet.size;
+
+  const bufferLevel =
+    bufferWeekCount >= 2 ? 'green' : bufferWeekCount === 1 ? 'amber' : 'red';
 
   /* ── handlers ──────────────────────────────── */
 
@@ -545,12 +573,11 @@ export default function ContentView() {
   /* ── render ──────────────────────────────────── */
 
   const sunday = weekDays[6];
-  const weekLabel = `${formatShort(weekOf)} \u2013 ${formatDate(sunday)}`;
+  const weekRangeLabel = `${formatShort(weekOf)} \u2013 ${formatDate(sunday)}`;
 
   if (loading) {
     return (
       <div className="view content-view">
-        <h1 className="view-title">Content</h1>
         <LoadingSpinner />
       </div>
     );
@@ -559,7 +586,6 @@ export default function ContentView() {
   if (error) {
     return (
       <div className="view content-view">
-        <h1 className="view-title">Content</h1>
         <EmptyState
           icon="\u26A0"
           message="Failed to load content calendar"
@@ -574,147 +600,180 @@ export default function ContentView() {
 
   return (
     <div className="view content-view">
-      {/* ── Header + Week Nav ──────────────── */}
-      <header className="content-header">
-        <h1 className="content-header__title">Content Calendar</h1>
-        <div className="content-week-nav">
+      {/* ── Banner ─────────────────────────── */}
+      <header className="content-section content-banner">
+        <h1 className="content-banner__title">Content Calendar</h1>
+        <p className="content-banner__meta">
+          WK OF {toISO(weekOf)}{' '}
+          <span className="content-banner__sep">{'\u00b7'}</span>{' '}
+          {weekRangeLabel.toUpperCase()}
+        </p>
+        <div className="content-nav">
           <button
-            className="content-week-nav__btn"
+            type="button"
+            className="content-nav__btn"
             onClick={prevWeek}
             aria-label="Previous week"
           >
-            &#9664;
+            {'\u2039'}
           </button>
-          <span className="content-week-nav__label">{weekLabel}</span>
-          {isCurrentWeek && (
-            <span className="content-week-nav__current">current</span>
-          )}
+          <span className="content-nav__label">
+            {formatShort(weekOf)} {'\u2013'} {formatShort(sunday)}
+            {isCurrentWeek && (
+              <span className="content-nav__current">[CURRENT]</span>
+            )}
+          </span>
           <button
-            className="content-week-nav__btn"
+            type="button"
+            className="content-nav__btn"
             onClick={nextWeek}
             aria-label="Next week"
           >
-            &#9654;
+            {'\u203A'}
           </button>
         </div>
       </header>
 
-      {/* ── Calendar Grid or Empty State ───── */}
-      {weekItems.length === 0 ? (
-        <EmptyState
-          icon="\uD83D\uDCC5"
-          message="No content scheduled for this week."
-          hint="Content items will appear here once added to the calendar."
-          actionLabel="+ Add Content Item"
-          onAction={() => setShowAddForm(true)}
-        />
-      ) : (
-        <div className="content-calendar">
-          {weekDays.map((day, i) => {
-            const iso = toISO(day);
-            const items = itemsByDate[iso] || [];
-            const isToday = iso === toISO(new Date());
-
-            return (
-              <div
-                key={iso}
-                className={`content-day${isToday ? ' content-day--today' : ''}${items.length === 0 ? ' content-day--empty' : ''}`}
-              >
-                <div className="content-day__label">
-                  <span className="content-day__name">{DAY_LABELS[i]}</span>
-                  <span className="content-day__date">{day.getDate()}</span>
-                </div>
-
-                <div className="content-day__items">
-                  {items.map((item, j) => {
-                    const channel = (item.channel || '').toLowerCase();
-                    const channelColor =
-                      CHANNEL_COLORS[channel] || 'var(--text-muted)';
-                    const statusKey = norm(item.status || 'planned');
-
-                    return (
-                      <div key={item.id || j} className="content-item">
-                        <span
-                          className="content-item__channel"
-                          style={{ background: channelColor }}
-                        >
-                          {item.channel || '\u2014'}
-                        </span>
-                        <span className="content-item__type">
-                          {item.post_type || item.postType || '\u2014'}
-                        </span>
-                        {item.title && (
-                          <span className="content-item__title">
-                            {item.title}
-                          </span>
-                        )}
-                        <div className="content-item__row">
-                          <select
-                            className={`content-item__status content-item__status--${statusKey}`}
-                            value={item.status || 'planned'}
-                            onChange={(e) =>
-                              handleStatusChange(item, e.target.value)
-                            }
-                            disabled={saving === item.id}
-                          >
-                            {STATUSES.map((s) => (
-                              <option key={s} value={s}>
-                                {s.replace(/_/g, ' ')}
-                              </option>
-                            ))}
-                          </select>
-                          <button
-                            className="content-item__brief-btn"
-                            onClick={() => setBriefItem(item)}
-                            title="View content brief"
-                          >
-                            Brief
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-
-      {/* ── Buffer Status Bar ──────────────── */}
-      <div className="content-buffer">
-        <div className="content-buffer__row">
-          <span className="content-buffer__label">This week</span>
-          <span className="content-buffer__stat">
-            {thisWeekDraftedCount}/{thisWeekTotal} drafted
+      {/* ── Calendar ───────────────────────── */}
+      <section className="content-section">
+        <h2 className="content-section__heading">
+          Calendar
+          <span className="content-section__heading-meta">
+            <span className="content-heading-count">
+              {weekItems.length} ITEM{weekItems.length !== 1 ? 'S' : ''}
+            </span>
           </span>
-        </div>
-        <div className="content-buffer__row">
-          <span className="content-buffer__label">Buffer</span>
-          <span className="content-buffer__stat">
-            <span
-              className={`content-buffer__dot${
-                bufferWeekCount >= 2
-                  ? ' content-buffer__dot--green'
-                  : bufferWeekCount === 1
-                    ? ' content-buffer__dot--amber'
-                    : ' content-buffer__dot--red'
-              }`}
-            />
-            {futureBufferItems.length} item
-            {futureBufferItems.length !== 1 ? 's' : ''} across{' '}
-            {bufferWeekCount} week{bufferWeekCount !== 1 ? 's' : ''} ahead
-          </span>
-        </div>
-      </div>
+        </h2>
 
-      {/* ── Add Content Button ─────────────── */}
-      <button
-        className="btn btn--primary content-add-btn"
-        onClick={() => setShowAddForm(true)}
-      >
-        + Add Content Item
-      </button>
+        {weekItems.length === 0 ? (
+          <EmptyState
+            icon={'\u00b7'}
+            message="No content scheduled for this week."
+            hint="Content items appear here once added to the calendar."
+            actionLabel="+ Add content item"
+            onAction={() => setShowAddForm(true)}
+          />
+        ) : (
+          <div className="content-calendar">
+            {weekDays.map((day, i) => {
+              const iso = toISO(day);
+              const items = itemsByDate[iso] || [];
+              const isToday = iso === toISO(new Date());
+
+              return (
+                <div
+                  key={iso}
+                  className={`content-day${isToday ? ' content-day--today' : ''}${items.length === 0 ? ' content-day--empty' : ''}`}
+                >
+                  <div className="content-day__label">
+                    <span className="content-day__name">
+                      {DAY_LABELS[i].toUpperCase()}
+                    </span>
+                    <span className="content-day__date">
+                      {String(day.getDate()).padStart(2, '0')}
+                    </span>
+                  </div>
+
+                  <ul className="content-day__items">
+                    {items.length === 0 && (
+                      <li className="content-day__blank">{'\u2014'}</li>
+                    )}
+                    {items.map((item, j) => {
+                      const ch = (item.channel || '').toLowerCase();
+                      const channelClass = CHANNEL_CLASS[ch] || '';
+                      const statusKey = norm(item.status || 'planned');
+
+                      return (
+                        <li key={item.id || j} className="content-item">
+                          <div className="content-item__head">
+                            <span className={`content-channel ${channelClass}`}>
+                              {(item.channel || '\u2014').toUpperCase()}
+                            </span>
+                            <span className="content-item__type">
+                              {formatPostType(
+                                item.post_type || item.postType || '',
+                              ) || '\u2014'}
+                            </span>
+                          </div>
+                          {item.title && (
+                            <p className="content-item__title">{item.title}</p>
+                          )}
+                          <div className="content-item__row">
+                            <span className="content-item__select-wrap">
+                              <select
+                                className={`content-item__status content-item__status--${statusKey}`}
+                                value={item.status || 'planned'}
+                                onChange={(e) =>
+                                  handleStatusChange(item, e.target.value)
+                                }
+                                disabled={saving === item.id}
+                              >
+                                {STATUSES.map((s) => (
+                                  <option key={s} value={s}>
+                                    {s.replace(/_/g, ' ')}
+                                  </option>
+                                ))}
+                              </select>
+                            </span>
+                            <button
+                              type="button"
+                              className="content-item__brief-btn"
+                              onClick={() => setBriefItem(item)}
+                              title="View content brief"
+                            >
+                              Brief {'\u2192'}
+                            </button>
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </section>
+
+      {/* ── Buffer ─────────────────────────── */}
+      <section className="content-section">
+        <h2 className="content-section__heading">Buffer</h2>
+        <ul className="content-buffer">
+          <li
+            className={`content-buffer__row content-buffer__row--${thisWeekLevel}`}
+          >
+            <span className="content-buffer__label">This week</span>
+            <span className="content-buffer__leader" />
+            <span className="content-buffer__value">
+              {thisWeekDraftedCount}/{thisWeekTotal}
+            </span>
+            <span className="content-buffer__target">drafted</span>
+          </li>
+          <li
+            className={`content-buffer__row content-buffer__row--${bufferLevel}`}
+          >
+            <span className="content-buffer__label">Ahead</span>
+            <span className="content-buffer__leader" />
+            <span className="content-buffer__value">
+              {futureBufferItems.length}
+            </span>
+            <span className="content-buffer__target">
+              / {bufferWeekCount} wk{bufferWeekCount !== 1 ? 's' : ''}
+            </span>
+          </li>
+        </ul>
+      </section>
+
+      {/* ── Add ────────────────────────────── */}
+      <section className="content-section content-section--actions">
+        <button
+          type="button"
+          className="content-btn content-btn--primary"
+          onClick={() => setShowAddForm(true)}
+        >
+          + Add content item
+        </button>
+      </section>
 
       {/* ── Modals ─────────────────────────── */}
       {briefItem && (
