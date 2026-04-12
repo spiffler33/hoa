@@ -83,7 +83,7 @@ export default function SignInScreen() {
                 maxLength={8}
                 value={code}
                 onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
-                placeholder="000000"
+                placeholder="00000000"
                 disabled={busy}
               />
             </label>
