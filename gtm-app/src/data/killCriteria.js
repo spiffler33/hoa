@@ -12,7 +12,7 @@ const killCriteria = [
     id: "kill_wedge_wrong",
     condition: "Wedge is wrong",
     signal:
-      "<40% of community matches ICP by Week 12 AND organic referrals from tech networks = 0",
+      "<40% of community matches ICP by Week 12 AND organic referrals from parent/professional networks = 0",
     action:
       "Stop. Redefine ICP. Restart Phase 1 content with new wedge.",
   },

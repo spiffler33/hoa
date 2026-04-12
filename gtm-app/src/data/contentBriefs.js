@@ -118,9 +118,9 @@ const contentBriefs = {
     ],
 
     examplePosts: [
-      "You optimise your sprint velocity, your CI/CD pipeline, your system architecture. When did you last optimise your money? Not 'invest more.' Optimise. As in: know where every rupee is going, why, and what it's building toward. Most high earners I know can tell you their AWS bill to the rupee. Ask them their term cover gap and they'll change the subject.",
-      "Guilt-free spending is a financial outcome, not a personality trait. You can engineer it. It starts with knowing — with certainty — that your retirement SIP is running, your protection is in place, and your goals are funded. After that? The trip, the dinner, the upgrade — it's not reckless. It's the entire point.",
-      "The FIRE spreadsheet on your Google Drive assumes 14% returns for 11 years. When did equity markets last delivered 14% CAGR for 11 consecutive years? The plan isn't wrong. It's fragile. And fragile plans don't survive the journey.",
+      "You've been responsible for 15 years. SIPs running. Insurance in place. Kids in good schools. Career on track. When did you last ask what it's all for? Not 'am I saving enough.' But — what am I building toward? Most parents I speak to can tell you their child's board exam date. Ask them when they plan to retire and you'll get a shrug. The plan isn't missing because you're careless. It's missing because no one taught responsible people how to want things without guilt.",
+      "Guilt-free spending is a financial outcome, not a personality trait. You can engineer it. It starts with knowing — with certainty — that your child's education is funded, your retirement SIP is running, your protection is in place, and your parents are covered. After that? The family trip, the anniversary dinner, the home upgrade — it's not irresponsible. It's the entire point. You didn't work this hard to feel guilty about a holiday.",
+      "Your daughter turns 18 in 5 years. You want to retire in 12. Your parents need support now. Three timelines. One income. Zero framework. Most families I work with have done everything right — SIPs, term cover, PPF, even some direct equity. But they've never sat down and asked: can all three of these things happen? And if not, what do we trade? That's not a spreadsheet question. That's a life design question.",
     ],
 
     engagementExamples: [
@@ -267,7 +267,7 @@ const contentBriefs = {
         structure: [
           "Email 1 (Day 0) — Welcome: manifesto in short form, who we are, what we believe",
           "Email 2 (Day 3) — The Method: 7-step journey overview, one line per step",
-          "Email 3 (Day 7) — The Story: one profile card story (Nisha — most relatable for wedge)",
+          "Email 3 (Day 7) — The Story: one profile card story (Deepika & Sanjay — most relatable for the wedge)",
           "Email 4 (Day 10) — The Invite: direct community invite, what to expect, what to post first",
         ],
         briefTemplate: {
@@ -301,9 +301,9 @@ const contentBriefs = {
             number: 3,
             day: 7,
             subject:
-              "She earned ₹1.85L/month and had no plan",
+              "They earned well for 15 years and had no plan",
             content:
-              "One profile card story (Nisha — most relatable for the wedge)",
+              "One profile card story (Deepika & Sanjay — most relatable for the wedge)",
             cta: "Join the community",
           },
           {
@@ -373,6 +373,9 @@ const contentBriefs = {
           "What's on your Yes List that you haven't said yes to yet? What's holding you back?",
           "What's one financial win from this week — even a tiny one?",
           "What would you say yes to if money wasn't the question?",
+          "What's one thing you want your kids to see you say yes to?",
+          "What's something you deferred for your family that you're ready to reclaim?",
+          "What decision are you putting off because it affects your whole family?",
         ],
       },
       /* Hell Yes! Decision Thread */

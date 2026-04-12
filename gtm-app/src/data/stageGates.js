@@ -168,13 +168,13 @@ const stageGates = {
     },
     {
       id: "p1_organic_referrals",
-      label: "Organic tech-network referrals",
+      label: "Organic parent/professional-network referrals",
       target: 5,
       unit: "count",
       amberThreshold: 2,
       redThreshold: 0,
       amberAction:
-        "Activate corporate workshops, ask members for intros",
+        "Activate corporate workshops, ask members for intros within school/parent networks",
       redAction:
         "Wedge distribution hypothesis failed. Expand or pivot ICP.",
       applicableFrom: "phase_1",

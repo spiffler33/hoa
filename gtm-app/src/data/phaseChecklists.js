@@ -226,7 +226,7 @@ const phaseChecklists = {
       { id: "p1_e3", item: "20+ active pods" },
       {
         id: "p1_e4",
-        item: "5+ organic referrals from within tech company networks",
+        item: "5+ organic referrals from within parent/professional networks",
       },
       {
         id: "p1_e5",
