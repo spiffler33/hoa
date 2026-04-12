@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import phaseChecklists from '../data/phaseChecklists';
-import { loadPhaseChecklist, saveChecklistEntry, saveConfig } from '../utils/dataLayer';
-import { getConfig, setConfig } from '../utils/localStore';
+import { loadPhaseChecklist, saveChecklistEntry, saveConfig, loadConfig } from '../utils/dataLayer';
 import LoadingSpinner from '../components/LoadingSpinner';
 import EmptyState from '../components/EmptyState';
 import './PlaybookView.css';
@@ -21,7 +20,7 @@ export default function PlaybookView() {
     setLoading(true);
     setError(null);
     try {
-      const cfg = getConfig();
+      const { data: cfg } = await loadConfig();
       if (cfg?.currentPhase !== undefined) {
         setActivePhase(Number(cfg.currentPhase));
       }
@@ -72,10 +71,7 @@ export default function PlaybookView() {
   const handleAdvance = async () => {
     if (activePhase >= 3 || !allExitMet) return;
     const next = activePhase + 1;
-    const cfg = getConfig() || {};
-    cfg.currentPhase = next;
-    setConfig(cfg);
-    await saveConfig(cfg);
+    await saveConfig({ currentPhase: next });
     setActivePhase(next);
     setAdvanceMsg(`Advanced to Phase ${next} — ${PHASE_NAMES[next]}`);
     setTimeout(() => setAdvanceMsg(''), 3000);

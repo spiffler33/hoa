@@ -311,3 +311,116 @@ input:focus, select:focus, textarea:focus {
     border-radius: 0;
   }
 }
+
+/* ── Sign-in screen ────────────────────────────── */
+
+.signin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--bg);
+  padding: var(--page-padding-x);
+}
+
+.signin__card {
+  width: 100%;
+  max-width: 360px;
+  padding: var(--card-padding);
+}
+
+.signin__title {
+  font: 500 var(--fs-xxl) / 1.2 var(--font-display);
+  color: var(--text);
+  letter-spacing: 0.04em;
+  margin: 0 0 4px;
+}
+
+.signin__subtitle {
+  font: 400 var(--fs-sm) / 1.4 var(--font-body);
+  color: var(--text-muted);
+  margin: 0 0 32px;
+}
+
+.signin__form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.signin__label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.signin__label-text {
+  font: 500 var(--fs-xs) / 1 var(--font-mono);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.signin__input {
+  font: 400 var(--fs-md) / 1.4 var(--font-mono);
+  color: var(--text);
+  background: var(--bg-elevated);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-card);
+  padding: 10px 12px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.signin__input:focus {
+  border-color: var(--color-active);
+}
+
+.signin__input--code {
+  font-size: var(--fs-xl);
+  letter-spacing: 0.3em;
+  text-align: center;
+}
+
+.signin__hint {
+  font: 400 var(--fs-sm) / 1.4 var(--font-body);
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.signin__hint strong {
+  color: var(--text);
+}
+
+.signin__error {
+  font: 400 var(--fs-sm) / 1.4 var(--font-body);
+  color: var(--color-priority);
+  margin: 0;
+}
+
+.signin__btn {
+  font: 500 var(--fs-md) / 1 var(--font-mono);
+  color: var(--bg-elevated);
+  background: var(--text);
+  border: none;
+  border-radius: var(--radius-button);
+  padding: 12px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.signin__btn:hover { opacity: 0.85; }
+.signin__btn:disabled { opacity: 0.4; cursor: default; }
+
+.signin__link {
+  font: 400 var(--fs-xs) / 1 var(--font-mono);
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+  align-self: center;
+}
+
+.signin__link:hover { color: var(--text); }

@@ -1,4 +1,6 @@
 import { createHashRouter, RouterProvider } from 'react-router-dom';
+import { AuthProvider, useAuth } from './lib/authContext';
+import SignInScreen from './components/SignInScreen';
 import Layout from './components/Layout';
 import TodayView from './views/TodayView';
 import WeeklyReviewView from './views/WeeklyReviewView';
@@ -23,6 +25,17 @@ const router = createHashRouter([
   },
 ]);
 
-export default function App() {
+function AuthGate() {
+  const { session, loading } = useAuth();
+  if (loading) return null;
+  if (!session) return <SignInScreen />;
   return <RouterProvider router={router} />;
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <AuthGate />
+    </AuthProvider>
+  );
 }

@@ -45,24 +45,30 @@ export default function ReferenceView() {
     notes: '',
   });
 
+  const [loadError, setLoadError] = useState(null);
+
   /* ── Load saved data on mount ── */
   useEffect(() => {
     async function loadData() {
-      const [compRes, partRes] = await Promise.all([
-        loadPhaseChecklist({ tab: 'compliance_log' }),
-        loadPartnerships(),
-      ]);
+      try {
+        const [compRes, partRes] = await Promise.all([
+          loadPhaseChecklist({ tab: 'compliance_log' }),
+          loadPartnerships(),
+        ]);
 
-      if (compRes.data && Array.isArray(compRes.data)) {
-        const map = {};
-        compRes.data.forEach((row) => {
-          map[row.id] = row.completed;
-        });
-        setCheckedItems(map);
-      }
+        if (compRes.data && Array.isArray(compRes.data)) {
+          const map = {};
+          compRes.data.forEach((row) => {
+            map[row.id] = row.completed;
+          });
+          setCheckedItems(map);
+        }
 
-      if (partRes.data && Array.isArray(partRes.data)) {
-        setPartnerships(partRes.data);
+        if (partRes.data && Array.isArray(partRes.data)) {
+          setPartnerships(partRes.data);
+        }
+      } catch (err) {
+        setLoadError(err.message || 'Failed to load reference data.');
       }
     }
     loadData();
@@ -299,6 +305,14 @@ export default function ReferenceView() {
 
   return (
     <div className="view reference-view">
+      {loadError && (
+        <EmptyState
+          variant="error"
+          icon={'\u26a0'}
+          message={loadError}
+          action={{ label: 'Retry', onClick: () => window.location.reload() }}
+        />
+      )}
       {/* ── Banner ──────────────────────────────── */}
       <header className="ref-banner">
         <h1 className="ref-banner__title">Reference</h1>

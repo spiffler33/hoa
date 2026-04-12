@@ -1,78 +1,48 @@
 import { useState, useEffect, useCallback } from 'react';
-import { setConfig, getConfig } from '../utils/localStore';
-import { syncToGitHub, syncFromGitHub } from '../utils/githubSync';
+import { loadConfig, saveConfig } from '../utils/dataLayer';
+import { useAuth } from '../lib/authContext';
 import phaseChecklists from '../data/phaseChecklists';
 import './SettingsView.css';
 
 const PHASE_KEYS = ['phase_0', 'phase_1', 'phase_2', 'phase_3'];
 
 export default function SettingsView() {
+  const { user, signOut } = useAuth();
+
   /* ── phase fields ──────────────────────────── */
   const [currentPhase, setCurrentPhase] = useState(0);
   const [phaseStartDate, setPhaseStartDate] = useState('');
 
-  /* ── github sync fields ────────────────────── */
-  const [githubToken, setGithubToken] = useState('');
-
   /* ── transient UI state ────────────────────── */
   const [saveMessage, setSaveMessage] = useState('');
-  const [syncing, setSyncing] = useState(false);
-  const [syncMessage, setSyncMessage] = useState(null); // { text, type }
+  const [error, setError] = useState(null);
 
   /* ── load saved config on mount ────────────── */
   useEffect(() => {
-    const cfg = getConfig();
-    if (cfg) {
-      setCurrentPhase(cfg.currentPhase ?? 0);
-      setPhaseStartDate(cfg.phaseStartDate || '');
-      setGithubToken(cfg.githubToken || '');
+    async function init() {
+      try {
+        const { data: cfg } = await loadConfig();
+        if (cfg) {
+          setCurrentPhase(cfg.currentPhase ?? 0);
+          setPhaseStartDate(cfg.phaseStartDate || '');
+        }
+      } catch (err) {
+        setError(err.message || 'Failed to load settings.');
+      }
     }
+    init();
   }, []);
 
   /* ── save settings ─────────────────────────── */
-  const handleSave = useCallback(() => {
-    const cfg = getConfig() || {};
-    setConfig({ ...cfg, currentPhase, phaseStartDate, githubToken });
-    setSaveMessage('Saved');
-    setTimeout(() => setSaveMessage(''), 2000);
-  }, [currentPhase, phaseStartDate, githubToken]);
-
-  /* ── github sync handlers ──────────────────── */
-  const handleSyncTo = useCallback(async () => {
-    const token = githubToken || getConfig()?.githubToken;
-    if (!token) {
-      setSyncMessage({ text: 'Token required', type: 'error' });
-      return;
-    }
-    setSyncing(true);
-    setSyncMessage(null);
+  const handleSave = useCallback(async () => {
     try {
-      const result = await syncToGitHub(token);
-      setSyncMessage({ text: result.message, type: 'success' });
+      await saveConfig({ currentPhase, phaseStartDate });
+      setSaveMessage('Saved');
+      setTimeout(() => setSaveMessage(''), 2000);
     } catch (err) {
-      setSyncMessage({ text: err.message, type: 'error' });
-    } finally {
-      setSyncing(false);
+      setSaveMessage('Save failed: ' + (err.message || 'Unknown error'));
     }
-  }, [githubToken]);
-
-  const handleSyncFrom = useCallback(async () => {
-    const token = githubToken || getConfig()?.githubToken;
-    if (!token) {
-      setSyncMessage({ text: 'Token required', type: 'error' });
-      return;
-    }
-    setSyncing(true);
-    setSyncMessage(null);
-    try {
-      const result = await syncFromGitHub(token);
-      setSyncMessage({ text: result.message, type: 'success' });
-    } catch (err) {
-      setSyncMessage({ text: err.message, type: 'error' });
-    } finally {
-      setSyncing(false);
-    }
-  }, [githubToken]);
+  }, [currentPhase, phaseStartDate]);
 
   /* ── derived ───────────────────────────────── */
   const phaseKey = PHASE_KEYS[currentPhase];
@@ -85,10 +55,15 @@ export default function SettingsView() {
       <header className="settings-section settings-banner">
         <p className="settings-banner__title">Settings</p>
         <p className="settings-banner__meta">
-          Local storage <span className="settings-banner__sep">·</span>{' '}
-          sync to GitHub on demand
+          Synced to Supabase
         </p>
       </header>
+
+      {error && (
+        <div className="settings-section">
+          <p className="settings-toast settings-toast--error">{error}</p>
+        </div>
+      )}
 
       {/* ── Phase ───────────────────────────────── */}
       <section className="settings-section">
@@ -152,62 +127,28 @@ export default function SettingsView() {
             Save
           </button>
           {saveMessage && (
-            <span className="settings-toast settings-toast--success">
+            <span className={`settings-toast ${saveMessage.startsWith('Save failed') ? 'settings-toast--error' : 'settings-toast--success'}`}>
               {saveMessage}
             </span>
           )}
         </div>
       </section>
 
-      {/* ── GitHub Sync ─────────────────────────── */}
+      {/* ── Account ─────────────────────────────── */}
       <section className="settings-section">
         <h2 className="settings-section__heading">
-          <span>GitHub sync</span>
+          <span>Account</span>
         </h2>
-
-        <label className="settings-field">
-          <span className="settings-field__label">Personal access token</span>
-          <input
-            type="password"
-            className="settings-field__input"
-            placeholder={'ghp_\u2026'}
-            value={githubToken}
-            onChange={(e) => setGithubToken(e.target.value)}
-          />
-          <span className="settings-field__hint">
-            Repo scope. Stored locally only.
-          </span>
-        </label>
-
-        <div className="settings-actions">
-          <button
-            type="button"
-            className="settings-btn settings-btn--primary"
-            onClick={handleSyncTo}
-            disabled={syncing}
-          >
-            {syncing ? 'Syncing\u2026' : 'Push to GitHub'}
-          </button>
-          <button
-            type="button"
-            className="settings-btn"
-            onClick={handleSyncFrom}
-            disabled={syncing}
-          >
-            Pull from GitHub
-          </button>
-          {syncMessage && (
-            <span
-              className={`settings-toast ${
-                syncMessage.type === 'success'
-                  ? 'settings-toast--success'
-                  : 'settings-toast--error'
-              }`}
-            >
-              {syncMessage.text}
-            </span>
-          )}
-        </div>
+        <p className="settings-field__hint" style={{ marginBottom: '12px' }}>
+          {user?.email}
+        </p>
+        <button
+          type="button"
+          className="settings-btn"
+          onClick={signOut}
+        >
+          Sign out
+        </button>
       </section>
     </div>
   );
